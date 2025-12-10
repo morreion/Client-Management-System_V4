@@ -1,0 +1,311 @@
+<UserControl x:Class="Client_Management_System_V4.View.BodySystemsOverview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Client_Management_System_V4.ViewModel"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             Style="{StaticResource Page_Style}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <UserControl.DataContext>
+        <vm:BodySystemsOverviewVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <Style TargetType="DatePickerTextBox">
+            <Setter Property="Background" Value="#3F4347"/>
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+        </Style>
+        <!-- Standard label style for fields -->
+        <Style TargetType="TextBlock" x:Key="FieldLabel">
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="15,60,15,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="14" Padding="10,8" Background="#2D3035"
+                     Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
+            <Button Grid.Column="1" Content="🔍 Search Systems" Command="{Binding SearchCommand}"
+                    Margin="10,0,0,0" Padding="15,8" Background="#3B82F6" Foreground="White" BorderThickness="0"/>
+        </Grid>
+
+        <!-- List -->
+        <Border Grid.Row="1" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="10">
+            <DataGrid ItemsSource="{Binding OverviewList}"
+                      SelectedItem="{Binding SelectedOverview}"
+                      AutoGenerateColumns="False" CanUserAddRows="False"
+                      Background="#2D3035" Foreground="#DBDBDB"
+                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
+                      HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
+                
+                   <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="SeparatorVisibility" Value="Visible"/>
+                            <Setter Property="SeparatorBrush" Value="Red"/> <!-- Temporarily Red to prove it works, user can change back -->
+                            <Setter Property="Background" Value="#3F4347"/>
+                            <Setter Property="Foreground" Value="#DBDBDB"/>
+                            <Setter Property="Padding" Value="10,5"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/> <!-- Bottom border only -->
+                            <Setter Property="BorderBrush" Value="#555"/>
+                            
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridColumnHeader">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                            
+                                            <!-- The Separator (Right Side) -->
+                                            <Thumb x:Name="PART_RightHeaderGripper"
+                                                   HorizontalAlignment="Right"
+                                                   Cursor="SizeWE"
+                                                   Width="1"
+                                                   Background="{TemplateBinding SeparatorBrush}"
+                                                   Visibility="{TemplateBinding SeparatorVisibility}"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Client" Binding="{Binding ClientName}" Width="1.5*"/>
+                    <DataGridTextColumn Header="Date" Binding="{Binding Assessment_Date, StringFormat=d}" Width="*"/>
+                    <DataGridTextColumn Header="Immune" Binding="{Binding Immune}" Width="*"/>
+                    <DataGridTextColumn Header="Digestion" Binding="{Binding Digestion}" Width="*"/>
+                    <DataGridTextColumn Header="Sleep" Binding="{Binding Sleep}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Actions -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+            <Button Content="➕ Add New" Command="{Binding AddCommand}" Padding="15,8" Background="#10B981" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+            <Button Content="💾 Save" Command="{Binding SaveCommand}" Padding="15,8" Background="#3B82F6" Foreground="White" BorderThickness="0" Margin="0,0,10,0" IsEnabled="{Binding IsSelectionActive}"/>
+            <Button Content="🗑️ Delete" Command="{Binding DeleteCommand}" Padding="15,8" Background="#EF4444" Foreground="White" BorderThickness="0" Margin="0,0,10,0" IsEnabled="{Binding IsSelectionActive}"/>
+            <Button Content="❌ Cancel" Command="{Binding CancelCommand}" Padding="15,8" Background="#6B7280" Foreground="White" BorderThickness="0"/>
+        </StackPanel>
+
+        <!-- Form (Using ScrollViewer for large number of fields) -->
+        <Border Grid.Row="3" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="15">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                         <RowDefinition Height="Auto"/> <!-- Client/Date -->
+                         <RowDefinition Height="Auto"/> <!-- Lifestyle -->
+                         <RowDefinition Height="Auto"/> <!-- Digestive -->
+                         <RowDefinition Height="Auto"/> <!-- Structural -->
+                         <RowDefinition Height="Auto"/> <!-- Other -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0: Header Info -->
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Client *" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox ItemsSource="{Binding Clients}"
+                                      SelectedValue="{Binding SelectedOverview.ClientID}"
+                                      SelectedValuePath="ClientID"
+                                      DisplayMemberPath="Name"
+                                      Style="{StaticResource MyCustomComboBoxStyle}"
+                                      Height="35"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Date" Style="{StaticResource FieldLabel}"/>
+                             <DatePicker SelectedDate="{Binding SelectedOverview.Assessment_Date}" Height="35"
+                                        Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Group 1: Lifestyle & Habits -->
+                    <GroupBox Grid.Row="1" Header="Lifestyle &amp; Habits" Foreground="#3B82F6" BorderBrush="#4B5563" Margin="0,0,0,15">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="15"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Sleep" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Sleep}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Snore" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Snore}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Exercise" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Exercise}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Smoke / Alcohol" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Smoke_Alc}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2">
+                                <TextBlock Text="Cravings" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Cravings}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="4">
+                                <TextBlock Text="Beverages" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Beverages}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Group 2: Digestive & Elimination -->
+                    <GroupBox Grid.Row="2" Header="Digestive &amp; Elimination" Foreground="#10B981" BorderBrush="#4B5563" Margin="0,0,0,15">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="15"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Digestion" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Digestion}" Background="#2D3035" Foreground="#DBDBDB" Padding="5" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Bowels" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Bowels}" Background="#2D3035" Foreground="#DBDBDB" Padding="5" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Urination" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Urination}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2">
+                                <TextBlock Text="Tongue Analysis" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Tongue}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Group 3: Structural & Physical -->
+                    <GroupBox Grid.Row="3" Header="Structural &amp; Physical" Foreground="#F59E0B" BorderBrush="#4B5563" Margin="0,0,0,15">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Backache" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Backache}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Joint Pain" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Joint_Pain}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Skin &amp; Hair" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Skin_Hair}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                    
+                     <!-- Group 4: Other Systems -->
+                    <GroupBox Grid.Row="4" Header="Other Systems" Foreground="#EC4899" BorderBrush="#4B5563" Margin="0,0,0,15">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="15"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Head (Headaches/Dizziness)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Head}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="ENT (Ear, Nose, Throat)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.ENT}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Immune" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Immune}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Allergies" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Allergy}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2">
+                                <TextBlock Text="Thyroid" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Thyroid}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="4">
+                                <TextBlock Text="Mind &amp; Emotional" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedOverview.Mind_Emotional}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

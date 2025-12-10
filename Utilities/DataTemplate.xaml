@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Client_Management_System_V4.ViewModel"
+                    xmlns:view="clr-namespace:Client_Management_System_V4.View">
+
+    <DataTemplate DataType="{x:Type vm:ClientVM}">
+        <view:Clients />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:MedHxVM}">
+        <view:MedHx />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AntropometricsVM}">
+        <view:Antropometrics />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:BodySystemsOverviewVM}">
+        <view:BodySystemsOverview />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:EyeAnalysisVM}">
+        <view:EyeAnalysis />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:DietVM}">
+        <view:Diet />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TreatmentVM}">
+        <view:Treatment />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PrescriptionVM}">
+        <view:Prescription />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SupplementsVM}">
+        <view:Supplements />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:DistributorVM}">
+        <view:Distributor />
+    </DataTemplate>
+    
+</ResourceDictionary>

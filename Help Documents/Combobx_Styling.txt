@@ -1,0 +1,1510 @@
+i've got a combobox  control in a C# wpf application and want 
+to set its background and foreground. 
+
+The dropdown items have to have a dark background and a light 
+foreground, and when the selected items appear in the combobox, 
+the combobox background and foreground, with the selected item 
+in it, have to have the same dark background and light foreground 
+as the dropdown items, how do i do that?
+
+
+This is a common styling challenge in WPF ComboBox controls because 
+the dropdown part and the selected item's display part are handled 
+by different visual elements within the ComboBox's template.
+
+To achieve the consistent dark background/light foreground across 
+both the dropdown items and the selected item display in the 
+ComboBox itself, you'll need to use a combination of properties 
+and a custom ItemContainerStyle and potentially a ControlTemplate 
+if you want very specific control over the selected item's 
+presentation within the ComboBox header.
+
+Let's break down the most straightforward approach:
+
+Approach: Using Background, Foreground, ItemContainerStyle and 
+StaysOpenOnEdit
+
+This approach leverages the ComboBox's built-in styling capabilities.
+
+Assumptions:
+
+You have a ComboBox named MyComboBox.
+
+You want a DarkGray background and LightGray foreground for all items and the selected item display.
+
+XAML Code:
+
+code
+Xml
+download
+content_copy
+expand_less
+<Window x:Class="WpfComboBoxStyling.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ComboBox Styling Demo" Height="250" Width="400">
+    <Grid>
+        <ComboBox x:Name="MyComboBox" 
+                  Width="200" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"
+                  SelectedIndex="0"
+                  
+                  Background="DarkGray"         <!-- Background for the ComboBox itself -->
+                  Foreground="LightGray"        <!-- Foreground for the selected item in the ComboBox itself -->
+                  BorderBrush="Gray"
+                  BorderThickness="1"
+                  
+                  SnapsToDevicePixels="True"    <!-- Improves rendering for sharp edges -->
+                  
+                  >
+            
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Background" Value="DarkGray"/> <!-- Background for dropdown items -->
+                    <Setter Property="Foreground" Value="LightGray"/> <!-- Foreground for dropdown items -->
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/> <!-- Optional: separator lines between items -->
+                    <Setter Property="Padding" Value="5"/>
+                    
+                    <!-- Optional: Hover/Selection Visuals -->
+                    <Style.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter Property="Background" Value="Gray"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Gray"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.ItemContainerStyle>
+
+            <ComboBoxItem Content="Item One"/>
+            <ComboBoxItem Content="Item Two"/>
+            <ComboBoxItem Content="Item Three"/>
+            <ComboBoxItem Content="Item Four"/>
+        </ComboBox>
+    </Grid>
+</Window>
+
+Explanation:
+
+ComboBox.Background="DarkGray" and ComboBox.Foreground="LightGray":
+
+These properties directly apply to the non-dropdown part of the ComboBox control.
+
+Background sets the background color of the area where the selected item is displayed.
+
+Foreground sets the text color of the selected item when it's displayed in the ComboBox's header.
+
+ComboBox.ItemContainerStyle:
+
+This is the key to styling the individual items within the dropdown list.
+
+TargetType="ComboBoxItem" ensures this style applies to each item in the dropdown.
+
+Inside this style:
+
+<Setter Property="Background" Value="DarkGray"/>: Sets the background for each item in the dropdown.
+
+<Setter Property="Foreground" Value="LightGray"/>: Sets the text color for each item in the dropdown.
+
+Style.Triggers for IsHighlighted and IsSelected: These are important for usability. They define how an item looks when the mouse hovers over it (IsHighlighted) or when it's actively selected in the dropdown list (IsSelected). Without these, your items might not visually change when hovered, making selection difficult. I've set them to a slightly different Gray and White for clarity.
+
+
+
+
+
+
+
+
+i've got this code now -->   <ComboBox Grid.Row="2" Grid.Column="2" 
+Text="{Binding SelectedClient.Marital_Status}"
+IsEditable="True"
+Margin="0,20,0,10" 
+Padding="8" 
+Background="#3F4347" 
+Foreground="#DBDBDB" 
+BorderBrush="#555"> Could you apply the suggested changes to this code?
+<ComboBox.Resources>
+<Style TargetType="ComboBoxItem">
+<Setter Property="Background" Value="#3F4347"/>
+<Setter Property="Foreground" Value="#DBDBDB"/>
+</Style>
+</ComboBox.Resources>
+<ComboBoxItem Content="Single"/>
+<ComboBoxItem Content="Married"/>
+<ComboBoxItem Content="In Relationship"/>
+<ComboBoxItem Content="Divorced"/>
+<ComboBoxItem Content="Widowed"/>
+</ComboBox>
+
+
+
+Okay, I understand. You've provided a ComboBox with IsEditable="True", 
+specific background/foreground colors, and ComboBox.Resources to 
+style the items.
+
+Let's apply the suggested changes, ensuring consistent styling 
+for the dropdown items and the selected item display, including 
+hover/selection visuals for a better user experience.
+
+The key change is moving the Style TargetType="ComboBoxItem" from 
+ComboBox.Resources to ComboBox.ItemContainerStyle. While 
+ComboBox.Resources can contain styles, ItemContainerStyle is the 
+dedicated property for styling the container of individual items 
+in an ItemsControl like ComboBox.
+
+Here's the updated XAML code:
+
+
+<ComboBox Grid.Row="2" Grid.Column="2" 
+          Text="{Binding SelectedClient.Marital_Status}"
+          IsEditable="True"
+          Margin="0,20,0,10" 
+          Padding="8" 
+          Background="#3F4347"        <!-- Background for the ComboBox itself -->
+          Foreground="#DBDBDB"       <!-- Foreground for the selected item text in the ComboBox itself -->
+          BorderBrush="#555"
+          BorderThickness="1"         <!-- Added for clarity, consistent with BorderBrush -->
+          SnapsToDevicePixels="True"  <!-- Good practice for crisp rendering -->
+          >
+    
+    <ComboBox.ItemContainerStyle>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="#3F4347"/> <!-- Background for dropdown items -->
+            <Setter Property="Foreground" Value="#DBDBDB"/> <!-- Foreground for dropdown items -->
+            <Setter Property="Padding" Value="8,5,8,5"/>   <!-- Added padding for dropdown items -->
+            <Setter Property="BorderBrush" Value="#555"/>
+            <Setter Property="BorderThickness" Value="0,0,0,0.5"/> <!-- Optional: subtle separator -->
+
+            <!-- Optional: Hover/Selection Visuals for dropdown items -->
+            <Style.Triggers>
+                <!-- When mouse hovers over a dropdown item -->
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#555"/>   <!-- Slightly lighter dark gray -->
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <!-- When a dropdown item is selected in the list (before the dropdown closes) -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#555"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ComboBox.ItemContainerStyle>
+
+    <ComboBoxItem Content="Single"/>
+    <ComboBoxItem Content="Married"/>
+    <ComboBoxItem Content="In Relationship"/>
+    <ComboBoxItem Content="Divorced"/>
+    <ComboBoxItem Content="Widowed"/>
+</ComboBox>
+
+Key Changes and Explanations:
+
+ComboBox.Resources removed, ComboBox.ItemContainerStyle used:
+
+This is the primary change. ItemContainerStyle is the correct 
+and more explicit way to style the ComboBoxItem controls that 
+appear in the dropdown.
+
+The Background and Foreground setters are now directly within 
+ComboBox.ItemContainerStyle.
+
+BorderThickness="1" added to ComboBox:
+
+Ensures the border is visible and consistent with BorderBrush="#555".
+
+SnapsToDevicePixels="True" added to ComboBox:
+
+A good practice for WPF to ensure sharper rendering of elements, 
+especially borders.
+
+Padding="8,5,8,5" for ComboBoxItem:
+
+Added padding to the individual dropdown items to give them a bit 
+more space, matching the Padding="8" on the ComboBox itself 
+horizontally, and adding some vertical padding.
+
+BorderThickness="0,0,0,0.5" for ComboBoxItem (Optional Separator):
+
+I've added a subtle bottom border to each dropdown item using 
+BorderThickness. This creates a thin separator line between 
+items, which can improve readability in a dark theme. You can 
+adjust or remove this if you prefer.
+
+Style.Triggers for IsHighlighted and IsSelected:
+
+These are crucial for user experience. When you hover over an 
+item or select it in the dropdown, it needs to visually change. 
+I've set a slightly different dark background (#555) and White 
+foreground for these states to make them stand out. You can 
+adjust these colors to your preference.
+
+Now, your ComboBox will have the specified dark background 
+and light foreground for both its display area and all items 
+in the dropdown, with clear hover/selection feedback.
+
+
+
+
+
+I applied the code and The dropdown items look perfect now, 
+the dropdown items have a dark background and light foreground, 
+but after the selected item appears in the combobox, the combobox 
+background is still light and foreground is hardly visible therefore. 
+Can you fix that?
+
+
+Ah, I see the issue! This is a common pitfall with ComboBox when 
+IsEditable="True".
+
+When IsEditable="True", the ComboBox's visual tree contains a 
+TextBox (or a similar editable control) where the selected item's 
+text is displayed. The ComboBox.Background and 
+ComboBox.Foreground properties apply to the outer ComboBox control, 
+but they don't automatically "tunnel" into the TextBox inside the 
+template. The TextBox has its own default template and styles, 
+which are often light-themed.
+
+To fix this, we need to explicitly target the TextBox within the 
+ComboBox's template when IsEditable is true. We'll achieve this by 
+creating a simple Style for TextBox elements within the scope of the 
+ComboBox.
+
+Here's the corrected XAML:
+
+
+<ComboBox Grid.Row="2" Grid.Column="2" 
+          Text="{Binding SelectedClient.Marital_Status}"
+          IsEditable="True"
+          Margin="0,20,0,10" 
+          Padding="8" 
+          Background="#3F4347"        
+          Foreground="#DBDBDB"       
+          BorderBrush="#555"
+          BorderThickness="1"        
+          SnapsToDevicePixels="True" 
+          >
+    
+    <ComboBox.Resources>
+        <!-- Style for the internal TextBox when IsEditable is true -->
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="Transparent"/> <!-- Make textbox background transparent to show ComboBox.Background -->
+            <Setter Property="Foreground" Value="#DBDBDB"/>    <!-- Set textbox foreground to match dropdown -->
+            <Setter Property="CaretBrush" Value="#DBDBDB"/>    <!-- Optional: set the blinking cursor color -->
+            <Setter Property="BorderThickness" Value="0"/>     <!-- Remove default TextBox border -->
+            <Setter Property="Padding" Value="0"/>             <!-- Reset padding, ComboBox's padding will apply -->
+        </Style>
+    </ComboBox.Resources>
+
+    <ComboBox.ItemContainerStyle>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="#3F4347"/> 
+            <Setter Property="Foreground" Value="#DBDBDB"/> 
+            <Setter Property="Padding" Value="8,5,8,5"/>   
+            <Setter Property="BorderBrush" Value="#555"/>
+            <Setter Property="BorderThickness" Value="0,0,0,0.5"/> 
+
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#555"/>   
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#555"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ComboBox.ItemContainerStyle>
+
+    <ComboBoxItem Content="Single"/>
+    <ComboBoxItem Content="Married"/>
+    <ComboBoxItem Content="In Relationship"/>
+    <ComboBoxItem Content="Divorced"/>
+    <ComboBoxItem Content="Widowed"/>
+</ComboBox>
+
+What changed and why it fixes the issue:
+
+Added ComboBox.Resources back, but for TextBox:
+
+We now define a Style TargetType="{x:Type TextBox}" directly within the ComboBox.Resources. Because this style is defined within the ComboBox's scope, it will only apply to TextBox elements that are children of this specific ComboBox in its visual tree (which includes the internal TextBox used for editing/display when IsEditable="True").
+
+Setter Property="Background" Value="Transparent" for TextBox:
+
+This is the critical fix for the background. 
+By making the internal TextBox's background Transparent, 
+it allows the ComboBox's Background="#3F4347" to show through.
+
+Setter Property="Foreground" Value="#DBDBDB" for TextBox:
+
+This explicitly sets the text color of the internal TextBox 
+to your desired light foreground, making the selected item's text visible.
+
+Setter Property="CaretBrush" Value="#DBDBDB" (Optional):
+
+This sets the color of the blinking text cursor within the TextBox 
+to match your foreground, which looks better in a dark theme.
+
+Setter Property="BorderThickness" Value="0" and Padding="0" for TextBox:
+
+TextBox controls often have default borders and padding. 
+Setting these to 0 removes any default styling that might conflict with the ComboBox's overall appearance, 
+allowing the ComboBox's own BorderBrush and Padding to govern the outer look.
+
+Now, the selected item's text inside the ComboBox should have 
+the #DBDBDB foreground, and the background of the entire display 
+area (where the text appears) will be #3F4347, just like your 
+dropdown items.
+
+
+
+
+
+the display area, where the selected item appears, 
+is still having a light background after applying the updated code. 
+Is there another approach that could work?
+
+
+You are absolutely right to point that out! My apologies. 
+The TextBox Background="Transparent" trick works perfectly 
+for the text area, but if the ComboBox template has a 
+separate Border or Panel wrapping that TextBox that still 
+has a default light background, then the light background 
+will persist.
+
+This is where dealing with default WPF control templates can 
+get tricky. To truly guarantee the background and foreground 
+are consistent when IsEditable="True", the most robust approach 
+is to modify the ControlTemplate of the ComboBox itself.
+
+We'll grab the default ComboBox template and make targeted changes. 
+Don't worry, we don't need to rewrite the whole thing, just identify 
+the relevant parts.
+
+Robust Approach: Customizing the ComboBox ControlTemplate
+
+This approach ensures you have full control.
+
+Get the Default ComboBox Template:
+
+The easiest way to do this is in Visual Studio.
+
+Drag a ComboBox onto your designer.
+
+Right-click the ComboBox -> "Edit Template" -> "Edit a Copy...".
+
+Choose where to define the style (e.g., in Window.Resources or Application.Resources) 
+and give it a key (e.g., CustomComboBoxStyle).
+
+Visual Studio will generate the entire default ControlTemplate 
+for you.
+
+Identify and Modify the Key Elements:
+
+Inside the template, you'll look for elements related to the 
+TextBox when IsEditable is true.
+
+The crucial element is usually a Border or a ContentPresenter 
+that wraps the TextBox (or the ToggleButton which often contains 
+the selected item text).
+
+Look for elements with names like PART_EditableTextBox, 
+templateRoot, border, contentPresenter which have Background 
+or BorderBrush properties set.
+
+Here's the combined XAML for your ComboBox, including the necessary 
+parts of the default ControlTemplate to fix the background issue 
+for an editable ComboBox.
+
+Explanation of the ControlTemplate changes:
+
+<Style TargetType="{x:Type ComboBox}" x:Key="MyCustomComboBoxStyle">: 
+We define a full style for the ComboBox and give it a key.
+
+<ControlTemplate TargetType="{x:Type ComboBox}">: 
+This is where the visual structure of the ComboBox is defined.
+
+PART_EditableTextBox: This is the TextBox that appears when 
+IsEditable="True". We'll target its Background and Foreground 
+directly within the template.
+
+PART_ContentPresenter: This is the ContentPresenter that displays 
+the selected item when IsEditable="False".
+
+templateRoot / outer Border: There's an outer Border (often named 
+templateRoot) or other panels that might have a default background. 
+We'll ensure these are set correctly.
+
+
+<Window x:Class="WpfComboBoxStyling.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ComboBox Styling Demo" Height="300" Width="500">
+    <Window.Resources>
+        <!-- Define your solid colors once for consistency -->
+        <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#3F4347"/>
+        <SolidColorBrush x:Key="LightForegroundBrush" Color="#DBDBDB"/>
+        <SolidColorBrush x:Key="MediumBorderBrush" Color="#555"/>
+        <SolidColorBrush x:Key="HoverSelectionBackgroundBrush" Color="#555"/> <!-- Slightly lighter dark gray -->
+        <SolidColorBrush x:Key="HoverSelectionForegroundBrush" Color="White"/>
+
+        <!--
+        ========================================================================================
+        CUSTOM COMBOBOX STYLE WITH CONTROL TEMPLATE MODIFICATION
+        This ensures consistent background/foreground for editable ComboBox header.
+        ========================================================================================
+        -->
+        <Style x:Key="MyCustomComboBoxStyle" TargetType="{x:Type ComboBox}">
+            <!-- Base ComboBox properties -->
+            <Setter Property="Background" Value="{StaticResource DarkBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MediumBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            
+            <!-- Style for dropdown items -->
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ComboBoxItem}">
+                        <Setter Property="Background" Value="{StaticResource DarkBackgroundBrush}"/>
+                        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
+                        <Setter Property="Padding" Value="8,5,8,5"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource MediumBorderBrush}"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="Background" Value="{StaticResource HoverSelectionBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource HoverSelectionForegroundBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource HoverSelectionBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource HoverSelectionForegroundBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+
+            <!-- ControlTemplate to explicitly style the editable TextBox and other internal elements -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- This Border wraps the content of the ComboBox (selected item or editable TextBox) -->
+                            <Border x:Name="Background" 
+                                    Grid.ColumnSpan="2" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}"/>
+                            
+                            <!-- This is the ToggleButton that displays the dropdown arrow -->
+                            <ToggleButton x:Name="toggleButton" 
+                                          Grid.ColumnSpan="2" 
+                                          Background="{TemplateBinding Background}" 
+                                          BorderBrush="{TemplateBinding BorderBrush}" 
+                                          BorderThickness="{TemplateBinding BorderThickness}" 
+                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Style="{StaticResource ComboBoxToggleButton}"/> <!-- Use default ToggleButton style -->
+
+                            <!-- This is the ContentPresenter for the selected item when NOT editable -->
+                            <ContentPresenter x:Name="contentPresenter" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                              Content="{TemplateBinding SelectionBoxItem}" 
+                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
+                                              IsHitTestVisible="False" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              Visibility="{Binding Path=IsEditable, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+
+                            <!-- This is the Editable TextBox -->
+                            <TextBox x:Name="PART_EditableTextBox" 
+                                     Grid.ColumnSpan="2"
+                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                     Margin="{TemplateBinding Padding}" 
+                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                     Focusable="True" 
+                                     IsReadOnly="{TemplateBinding IsReadOnly}" 
+                                     Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                     
+                                     Background="Transparent"           <!-- KEY FIX: Make TextBox background transparent -->
+                                     Foreground="{TemplateBinding Foreground}" <!-- KEY FIX: Ensure TextBox foreground matches ComboBox foreground -->
+                                     BorderThickness="0"                 <!-- KEY FIX: Remove TextBox's default border -->
+                                     CaretBrush="{TemplateBinding Foreground}"  <!-- Optional: Make caret match foreground -->
+                                     Padding="0"                         <!-- Remove default TextBox padding -->
+                                     Visibility="{Binding Path=IsEditable, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                            <!-- The PopUp for the dropdown items -->
+                            <Popup x:Name="PART_Popup" 
+                                   AllowsTransparency="True" 
+                                   IsOpen="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" 
+                                   Placement="Bottom" 
+                                   PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" 
+                                   Grid.ColumnSpan="2" 
+                                   Margin="1">
+                                <Border x:Name="dropDownBorder" 
+                                        BorderBrush="{StaticResource MediumBorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        Background="{StaticResource DarkBackgroundBrush}"> <!-- Background for the dropdown itself -->
+                                    <ScrollViewer x:Name="DropDownScrollViewer" SnapsToDevicePixels="True">
+                                        <Grid RenderOptions.ClearTypeHint="Enabled">
+                                            <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                <Rectangle x:Name="OpaqueRect" Fill="{StaticResource DarkBackgroundBrush}" Height="{Binding Path=ActualHeight, ElementName=dropDownBorder}" Width="{Binding Path=ActualWidth, ElementName=dropDownBorder}"/>
+                                            </Canvas>
+                                            <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <!-- Triggers for the template (e.g., when ComboBox is disabled) -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter Property="Height" TargetName="dropDownBorder" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="True">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable" Value="True">
+                                <Setter Property="IsTabStop" Value="False" TargetName="PART_EditableTextBox"/>
+                                <Setter Property="Visibility" Value="Hidden" TargetName="contentPresenter"/>
+                                <Setter Property="Visibility" Value="Visible" TargetName="PART_EditableTextBox"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Default style for ComboBoxToggleButton (required by ComboBox template) -->
+        <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="Transparent" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" >
+                            <Path x:Name="Arrow" 
+                                  Fill="{TemplateBinding Foreground}" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center" 
+                                  Data="M0,0 L4,4 L8,0 Z"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Converter for visibility when IsEditable is false (to show ContentPresenter) -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Marital Status:" VerticalAlignment="Center" Foreground="#DBDBDB" Margin="0,20,0,10"/>
+        
+        <ComboBox Grid.Row="2" Grid.Column="2" 
+                  Text="{Binding SelectedClient.Marital_Status}"
+                  IsEditable="True"
+                  Margin="0,20,0,10" 
+                  Style="{StaticResource MyCustomComboBoxStyle}" <!-- APPLY THE CUSTOM STYLE HERE -->
+                  >
+            <ComboBoxItem Content="Single"/>
+            <ComboBoxItem Content="Married"/>
+            <ComboBoxItem Content="In Relationship"/>
+            <ComboBoxItem Content="Divorced"/>
+            <ComboBoxItem Content="Widowed"/>
+        </ComboBox>
+    </Grid>
+</Window>
+
+Crucial Modifications to the ControlTemplate (search for KEY FIX comments):
+
+PART_EditableTextBox:
+
+Background="Transparent": This is critical. It makes the TextBox's own background transparent, allowing the Background of the outer Border x:Name="Background" (which is bound to TemplateBinding Background) to show through.
+
+Foreground="{TemplateBinding Foreground}": This binds the TextBox's foreground directly to the ComboBox's Foreground property.
+
+BorderThickness="0": Removes any default border the TextBox might have.
+
+Border x:Name="Background" (Outer Border):
+
+Ensure this Border has its Background property bound to TemplateBinding Background. This is where the overall ComboBox background is applied.
+
+dropDownBorder (Popup Border):
+
+Ensure Background is set to your dark color ({StaticResource DarkBackgroundBrush}). This sets the background of the actual dropdown container.
+
+How to use this:
+
+Place the entire <Style x:Key="MyCustomComboBoxStyle" ...> 
+section into your Window.Resources (or Application.Resources if you want it app-wide).
+
+Apply the style to your ComboBox using Style="{StaticResource MyCustomComboBoxStyle}".
+
+This approach is more involved, but it grants you precise control
+over every visual aspect of the ComboBox, guaranteeing the 
+consistent dark background and light foreground across all its states, 
+even when IsEditable="True".
+
+
+
+
+ I'm not using Visual Studio, but am using the antigravity ide, 
+ so i can't drag and drop an combobox onto the designer. 
+ Is there another way to do it in the code files? 
+ If so,and it involves multiple files, tell me how to do it, 
+ where to place it and give me the full code for each file if it has to go in different files. 
+ If it can go all in the view xaml file, tell me how to do that as well with the full code.
+
+
+
+ Okay, understood. If you don't have a designer tool to extract 
+ the default ControlTemplate, you'll have to either find a copy 
+ of it online (which is common) or construct it by hand, which is not practical.
+
+Fortunately, the default WPF ControlTemplate for ComboBox is 
+fairly standard and widely available. I will provide a streamlined 
+version of the default template that focuses on the necessary 
+modifications to achieve your dark theme, and explain where to put it.
+
+The best way to organize this in a WPF MVVM application without
+a designer is to put the Style (which contains the ControlTemplate) 
+into a separate XAML file called a ResourceDictionary. This keeps 
+your main View.xaml cleaner and makes the style reusable.
+
+Let's break down the files and their content.
+
+File 1: Styles/DarkThemeComboBox.xaml (Resource Dictionary for your ComboBox Style)
+
+Create a new folder named Styles in your project, and inside it, create a new XAML file named DarkThemeComboBox.xaml.
+
+
+<!-- Styles/DarkThemeComboBox.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Define reusable colors/brushes for your dark theme -->
+    <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#3F4347"/>
+    <SolidColorBrush x:Key="LightForegroundBrush" Color="#DBDBDB"/>
+    <SolidColorBrush x:Key="MediumBorderBrush" Color="#555"/>
+    <SolidColorBrush x:Key="HoverSelectionBackgroundBrush" Color="#555"/>
+    <SolidColorBrush x:Key="HoverSelectionForegroundBrush" Color="White"/>
+
+    <!-- BooleanToVisibilityConverter is needed by the ComboBox template -->
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+    <!-- ============================================================================ -->
+    <!-- Default Style for ComboBox ToggleButton (Required by ComboBox Template)      -->
+    <!-- This ensures the dropdown arrow button also uses your dark theme colors      -->
+    <!-- ============================================================================ -->
+    <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Background="{StaticResource DarkBackgroundBrush}"
+                            BorderBrush="{StaticResource MediumBorderBrush}"
+                            BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="18"/> <!-- Width for the arrow icon -->
+                            </Grid.ColumnDefinitions>
+                            <Path x:Name="Arrow" 
+                                  Grid.Column="1"
+                                  Fill="{StaticResource LightForegroundBrush}" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center" 
+                                  Data="M0,0 L4,4 L8,0 Z"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============================================================================ -->
+    <!-- Custom ComboBox Style with ControlTemplate Modifications                     -->
+    <!-- This ensures consistent dark theme for both selected item and dropdown items -->
+    <!-- ============================================================================ -->
+    <Style x:Key="MyCustomComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <!-- Base ComboBox properties -->
+        <Setter Property="Background" Value="{StaticResource DarkBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource MediumBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="IsEditable" Value="True"/> <!-- Assuming you want it always editable by default with this style -->
+
+        <!-- Style for individual dropdown items (ComboBoxItem) -->
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="Background" Value="{StaticResource DarkBackgroundBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
+                    <Setter Property="Padding" Value="8,5,8,5"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource MediumBorderBrush}"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter Property="Background" Value="{StaticResource HoverSelectionBackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource HoverSelectionForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource HoverSelectionBackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource HoverSelectionForegroundBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <!-- The actual ControlTemplate that defines the visual structure of the ComboBox -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- This Border acts as the main background of the ComboBox header area -->
+                        <Border x:Name="Background" 
+                                Grid.ColumnSpan="2" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"/>
+                        
+                        <!-- The ToggleButton for the dropdown arrow -->
+                        <ToggleButton x:Name="toggleButton" 
+                                      Grid.ColumnSpan="2" 
+                                      Background="{TemplateBinding Background}" 
+                                      BorderBrush="{TemplateBinding BorderBrush}" 
+                                      BorderThickness="{TemplateBinding BorderThickness}" 
+                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Style="{StaticResource ComboBoxToggleButton}"/>
+
+                        <!-- ContentPresenter for when IsEditable is FALSE (displays selected item) -->
+                        <ContentPresenter x:Name="contentPresenter" 
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                          Margin="{TemplateBinding Padding}" 
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                          Content="{TemplateBinding SelectionBoxItem}" 
+                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
+                                          IsHitTestVisible="False" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                          Visibility="{Binding Path=IsEditable, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+
+                        <!-- The Editable TextBox for when IsEditable is TRUE -->
+                        <TextBox x:Name="PART_EditableTextBox" 
+                                 Grid.ColumnSpan="2"
+                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                 Margin="{TemplateBinding Padding}" 
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                 Focusable="True" 
+                                 IsReadOnly="{TemplateBinding IsReadOnly}" 
+                                 Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                 
+                                 Background="Transparent"           <!-- KEY FIX: Make TextBox background transparent -->
+                                 Foreground="{TemplateBinding Foreground}" <!-- KEY FIX: Ensure TextBox foreground matches ComboBox foreground -->
+                                 BorderThickness="0"                 <!-- KEY FIX: KEY FIX: Remove TextBox's default border -->
+                                 CaretBrush="{TemplateBinding Foreground}"  <!-- Optional: Make caret match foreground -->
+                                 Padding="0"                         <!-- Remove default TextBox padding -->
+                                 Visibility="{Binding Path=IsEditable, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                        <!-- The PopUp for the dropdown list of items -->
+                        <Popup x:Name="PART_Popup" 
+                               AllowsTransparency="True" 
+                               IsOpen="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" 
+                               Placement="Bottom" 
+                               PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" 
+                               Grid.ColumnSpan="2" 
+                               Margin="1">
+                            <Border x:Name="dropDownBorder" 
+                                    BorderBrush="{StaticResource MediumBorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    Background="{StaticResource DarkBackgroundBrush}"> <!-- Background for the dropdown container -->
+                                <ScrollViewer x:Name="DropDownScrollViewer" SnapsToDevicePixels="True">
+                                    <Grid RenderOptions.ClearTypeHint="Enabled">
+                                        <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                            <Rectangle x:Name="OpaqueRect" Fill="{StaticResource DarkBackgroundBrush}" Height="{Binding Path=ActualHeight, ElementName=dropDownBorder}" Width="{Binding Path=ActualWidth, ElementName=dropDownBorder}"/>
+                                        </Canvas>
+                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Grid>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <!-- ControlTemplate Triggers (e.g., for disabled state, editable state) -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter Property="Height" TargetName="dropDownBorder" Value="95"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="True">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="True">
+                            <Setter Property="IsTabStop" Value="False" TargetName="PART_EditableTextBox"/>
+                            <Setter Property="Visibility" Value="Hidden" TargetName="contentPresenter"/>
+                            <Setter Property="Visibility" Value="Visible" TargetName="PART_EditableTextBox"/>
+                        </Trigger>
+                        <!-- Add other triggers as needed for visual states like IsMouseOver, IsFocused etc. -->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
+File 2: App.xaml (To make the style globally available)
+
+To avoid repeating the style in every Window or UserControl, the best place to reference DarkThemeComboBox.xaml is in your App.xaml file. This makes the MyCustomComboBoxStyle available to all ComboBox controls in your entire application.
+
+<!-- App.xaml -->
+<Application x:Class="YourAppName.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:YourAppName"
+             StartupUri="MainWindow.xaml"> <!-- Your main window -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Merge your custom ComboBox style dictionary -->
+                <ResourceDictionary Source="Styles/DarkThemeComboBox.xaml"/>
+                
+                <!-- Add other global resource dictionaries here if you have them -->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+
+Important: Replace YourAppName with the actual namespace of your project.
+
+File 3: Your View File (e.g., MainWindow.xaml or ClientDetailsView.xaml)
+
+Now, in the XAML file where you actually use your ComboBox, 
+you simply apply the StaticResource for the style.
+
+
+<!-- YourView.xaml (e.g., MainWindow.xaml) -->
+<Window x:Class="YourAppName.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Your Application" Height="450" Width="800">
+    <Grid Background="#2A2A2A"> <!-- Example dark window background -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Marital Status:" VerticalAlignment="Center" Foreground="#DBDBDB" Margin="0,20,0,10"/>
+        
+        <ComboBox Grid.Row="2" Grid.Column="2" 
+                  Text="{Binding SelectedClient.Marital_Status}"
+                  Margin="0,20,0,10" 
+                  Style="{StaticResource MyCustomComboBoxStyle}" <!-- APPLY THE CUSTOM STYLE HERE -->
+                  >
+            <ComboBoxItem Content="Single"/>
+            <ComboBoxItem Content="Married"/>
+            <ComboBoxItem Content="In Relationship"/>
+            <ComboBoxItem Content="Divorced"/>
+            <ComboBoxItem Content="Widowed"/>
+        </ComboBox>
+    </Grid>
+</Window>
+If it can all go in the view XAML file (without App.xaml):
+
+If you prefer to keep everything in one file for a specific view (e.g., MainWindow.xaml), you can place the entire ResourceDictionary content directly within Window.Resources (or UserControl.Resources).
+
+code
+Xml
+download
+content_copy
+expand_less
+<!-- YourView.xaml (e.g., MainWindow.xaml) - ALL IN ONE FILE -->
+<Window x:Class="YourAppName.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Your Application" Height="450" Width="800">
+    <Window.Resources>
+        <!-- Paste the ENTIRE content of Styles/DarkThemeComboBox.xaml here -->
+        <!-- Start from <ResourceDictionary xmlns... and end with </ResourceDictionary> -->
+
+        <!-- Define reusable colors/brushes for your dark theme -->
+        <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#3F4347"/>
+        <SolidColorBrush x:Key="LightForegroundBrush" Color="#DBDBDB"/>
+        <SolidColorBrush x:Key="MediumBorderBrush" Color="#555"/>
+        <SolidColorBrush x:Key="HoverSelectionBackgroundBrush" Color="#555"/>
+        <SolidColorBrush x:Key="HoverSelectionForegroundBrush" Color="White"/>
+
+        <!-- BooleanToVisibilityConverter is needed by the ComboBox template -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <!-- ComboBoxToggleButton Style -->
+        <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <!-- ... (paste content from DarkThemeComboBox.xaml) ... -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="{StaticResource DarkBackgroundBrush}"
+                                BorderBrush="{StaticResource MediumBorderBrush}"
+                                BorderThickness="1" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="18"/>
+                                </Grid.ColumnDefinitions>
+                                <Path x:Name="Arrow" 
+                                      Grid.Column="1"
+                                      Fill="{StaticResource LightForegroundBrush}" 
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center" 
+                                      Data="M0,0 L4,4 L8,0 Z"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- MyCustomComboBoxStyle (main ComboBox style) -->
+        <Style x:Key="MyCustomComboBoxStyle" TargetType="{x:Type ComboBox}">
+            <!-- ... (paste content from DarkThemeComboBox.xaml) ... -->
+            <Setter Property="Background" Value="{StaticResource DarkBackgroundBrush}"/>
+            <!-- ... and so on for all setters and the ControlTemplate ... -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
+                            <!-- ... (paste the entire ControlTemplate content here) ... -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Border x:Name="Background" 
+                                    Grid.ColumnSpan="2" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}"/>
+                            
+                            <ToggleButton x:Name="toggleButton" 
+                                          Grid.ColumnSpan="2" 
+                                          Background="{TemplateBinding Background}" 
+                                          BorderBrush="{TemplateBinding BorderBrush}" 
+                                          BorderThickness="{TemplateBinding BorderThickness}" 
+                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Style="{StaticResource ComboBoxToggleButton}"/>
+
+                            <ContentPresenter x:Name="contentPresenter" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                              Content="{TemplateBinding SelectionBoxItem}" 
+                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
+                                              IsHitTestVisible="False" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              Visibility="{Binding Path=IsEditable, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+
+                            <TextBox x:Name="PART_EditableTextBox" 
+                                     Grid.ColumnSpan="2"
+                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                     Margin="{TemplateBinding Padding}" 
+                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                     Focusable="True" 
+                                     IsReadOnly="{TemplateBinding IsReadOnly}" 
+                                     Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                     
+                                     Background="Transparent"           
+                                     Foreground="{TemplateBinding Foreground}" 
+                                     BorderThickness="0"                 
+                                     CaretBrush="{TemplateBinding Foreground}"  
+                                     Padding="0"                         
+                                     Visibility="{Binding Path=IsEditable, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                            <Popup x:Name="PART_Popup" 
+                                   AllowsTransparency="True" 
+                                   IsOpen="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" 
+                                   Placement="Bottom" 
+                                   PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" 
+                                   Grid.ColumnSpan="2" 
+                                   Margin="1">
+                                <Border x:Name="dropDownBorder" 
+                                        BorderBrush="{StaticResource MediumBorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        Background="{StaticResource DarkBackgroundBrush}">
+                                    <ScrollViewer x:Name="DropDownScrollViewer" SnapsToDevicePixels="True">
+                                        <Grid RenderOptions.ClearTypeHint="Enabled">
+                                            <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                <Rectangle x:Name="OpaqueRect" Fill="{StaticResource DarkBackgroundBrush}" Height="{Binding Path=ActualHeight, ElementName=dropDownBorder}" Width="{Binding Path=ActualWidth, ElementName=dropDownBorder}"/>
+                                            </Canvas>
+                                            <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter Property="Height" TargetName="dropDownBorder" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="True">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable" Value="True">
+                                <Setter Property="IsTabStop" Value="False" TargetName="PART_EditableTextBox"/>
+                                <Setter Property="Visibility" Value="Hidden" TargetName="contentPresenter"/>
+                                <Setter Property="Visibility" Value="Visible" TargetName="PART_EditableTextBox"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- End of pasted content -->
+    </Window.Resources>
+
+    <Grid Background="#2A2A2A">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Marital Status:" VerticalAlignment="Center" Foreground="#DBDBDB" Margin="0,20,0,10"/>
+        
+        <ComboBox Grid.Row="2" Grid.Column="2" 
+                  Text="{Binding SelectedClient.Marital_Status}"
+                  Margin="0,20,0,10" 
+                  Style="{StaticResource MyCustomComboBoxStyle}" 
+                  >
+            <ComboBoxItem Content="Single"/>
+            <ComboBoxItem Content="Married"/>
+            <ComboBoxItem Content="In Relationship"/>
+            <ComboBoxItem Content="Divorced"/>
+            <ComboBoxItem Content="Widowed"/>
+        </ComboBox>
+    </Grid>
+</Window>
+
+Recommendation:
+
+The separate ResourceDictionary (Styles/DarkThemeComboBox.xaml) merged into App.xaml is the cleaner and more maintainable approach for any substantial WPF application, especially when using MVVM. It promotes reusability and separation of concerns. The "all in one file" approach quickly becomes unwieldy for larger projects.
+
+
+
+
+
+********************Styling scrollbar********************
+
+in my  C# wpf naturopathic clinic application i want to change the 
+color of the scrollbar of a combobox, is that possible and if 
+so, how do i style the properties of the scrollbar and what 
+are the properties of the scrollbar i can style? . 
+At the moment the scrollbar itself has a dark grey color 
+and it slides over a light grey scrollbar background.
+
+
+
+
+Yes, absolutely! Changing the color of the ComboBox's scrollbar is 
+definitely possible in WPF. Like many other controls, the ScrollViewer 
+(which contains the scrollbar) and the ScrollBar control itself have 
+default templates that you can override.
+
+Your current description ("dark grey color" for the scrollbar, "light grey scrollbar background") 
+indicates the default system scrollbar colors are probably clashing with your 
+dark theme.
+
+How to Style the ScrollBar
+
+To style the ScrollBar, you need to target the ScrollBar control's ControlTemplate. 
+Since the ComboBox uses a ScrollViewer internally, we'll need to modify the 
+ScrollViewer's template to then apply a custom ScrollBar style within it.
+
+This is a multi-step process, but I'll guide you through it. We'll continue the 
+pattern of using a ResourceDictionary for cleaner organization.
+
+Understanding ScrollBar Properties You Can Style
+
+The ScrollBar is composed of several visual elements, each with properties 
+you can change:
+
+Track: The long area the thumb slides along.
+
+Background: Color of the track itself.
+
+Thumb: The draggable part of the scrollbar.
+
+Background: Color of the thumb.
+
+BorderBrush, BorderThickness: For the thumb's border.
+
+Width/Height: (for vertical/horizontal scrollbars respectively).
+
+RepeatButton: The up/down or left/right arrow buttons at the ends of the scrollbar.
+
+Background, Foreground: For the button's background and arrow icon color.
+
+Style: You can completely redefine their appearance.
+
+
+
+
+Steps and Code
+
+We'll add a new ResourceDictionary for the scrollbar styles.
+
+1. Create Styles/DarkThemeScrollBar.xaml
+
+Create a new XAML file in your Styles folder (e.g., Styles/DarkThemeScrollBar.xaml).
+
+
+<!-- Styles/DarkThemeScrollBar.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Re-use or define your common dark theme colors -->
+    <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#3F4347"/>
+    <SolidColorBrush x:Key="LightForegroundBrush" Color="#DBDBDB"/>
+    <SolidColorBrush x:Key="MediumBorderBrush" Color="#555"/>
+    <SolidColorBrush x:Key="ScrollBarTrackBackground" Color="#2A2A2A"/> <!-- A slightly darker shade for the track -->
+    <SolidColorBrush x:Key="ScrollBarThumbBackground" Color="#6E7780"/> <!-- Color for the draggable thumb -->
+    <SolidColorBrush x:Key="ScrollBarThumbHoverBackground" Color="#8C939A"/> <!-- Thumb on hover -->
+    <SolidColorBrush x:Key="ScrollBarArrowBackground" Color="#6E7780"/> <!-- Background for scroll arrow buttons -->
+    <SolidColorBrush x:Key="ScrollBarArrowForeground" Color="#DBDBDB"/> <!-- Foreground for scroll arrow icons -->
+    <SolidColorBrush x:Key="ScrollBarArrowHoverBackground" Color="#8C939A"/>
+
+    <!-- ============================================================================ -->
+    <!-- Style for the ScrollBar control (Thumb and Buttons)                          -->
+    <!-- ============================================================================ -->
+    <Style x:Key="DarkScrollBarRepeatButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DarkScrollBarThumb" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Background="{StaticResource ScrollBarThumbBackground}"
+                            BorderBrush="{StaticResource MediumBorderBrush}"
+                            BorderThickness="0"
+                            CornerRadius="2"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ScrollBarThumbHoverBackground}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ScrollBarThumbHoverBackground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DarkScrollBar" TargetType="{x:Type ScrollBar}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Width" Value="10"/> <!-- Default width for vertical scrollbar -->
+        <Setter Property="Height" Value="10"/> <!-- Default height for horizontal scrollbar -->
+        
+        <!-- Vertical ScrollBar Template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    <Grid x:Name="GridRoot" Width="{TemplateBinding Width}" Background="{StaticResource ScrollBarTrackBackground}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.00001*"/>
+                        </Grid.RowDefinitions>
+                        <!-- Scrollbar track area -->
+                        <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true">
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource DarkScrollBarThumb}"/>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Horizontal ScrollBar template -->
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Height" Value="10"/>
+                            <Setter Property="Width" Value="Auto"/>
+                            <Setter Property="LayoutTransform" TargetName="GridRoot">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Margin" TargetName="PART_Track" Value="0,1,0,1"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============================================================================ -->
+    <!-- Style for ScrollViewer control                                             -->
+    <!-- This applies the custom ScrollBar style to any ScrollViewer in your theme  -->
+    <!-- ============================================================================ -->
+    <Style x:Key="DarkScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" 
+                                                Grid.Row="0" Grid.Column="0" 
+                                                CanContentScroll="{TemplateBinding CanContentScroll}" 
+                                                CanHorizontallyScroll="False" 
+                                                CanVerticallyScroll="False" 
+                                                ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                                Content="{TemplateBinding Content}" 
+                                                KeyboardNavigation.DirectionalNavigation="Local"/>
+                        
+                        <ScrollBar x:Name="PART_VerticalScrollBar" 
+                                   Grid.Row="0" Grid.Column="1" 
+                                   AutomationProperties.AutomationId="VerticalScrollBar" 
+                                   Cursor="Arrow" 
+                                   Maximum="{TemplateBinding ScrollableHeight}" 
+                                   Minimum="0" 
+                                   ViewportSize="{TemplateBinding ViewportHeight}" 
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
+                                   Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                   Style="{StaticResource DarkScrollBar}"/> <!-- Apply custom ScrollBar style -->
+                        
+                        <ScrollBar x:Name="PART_HorizontalScrollBar" 
+                                   Grid.Row="1" Grid.Column="0" 
+                                   AutomationProperties.AutomationId="HorizontalScrollBar" 
+                                   Cursor="Arrow" 
+                                   Maximum="{TemplateBinding ScrollableWidth}" 
+                                   Minimum="0" 
+                                   Orientation="Horizontal" 
+                                   ViewportSize="{TemplateBinding ViewportWidth}" 
+                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" 
+                                   Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                   Style="{StaticResource DarkScrollBar}"/> <!-- Apply custom ScrollBar style -->
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
+
+Key Points in DarkThemeScrollBar.xaml:
+
+Color Resources: Defined at the top for easy modification.
+
+DarkScrollBarRepeatButton: This style defines how the arrow buttons look. 
+I've stripped it down slightly but made sure it accepts a background. 
+(Note: for ComboBox, these buttons might not always be visible depending 
+on how the scrollbar is templated, but it's good practice to have it).
+
+DarkScrollBarThumb: This is the draggable part of the scrollbar.
+
+Background="{StaticResource ScrollBarThumbBackground}" sets its default color.
+
+BorderBrush="{StaticResource MediumBorderBrush}": A subtle border.
+
+CornerRadius="2": Gives it slightly rounded corners.
+
+Triggers for IsMouseOver and IsDragging change its background when interacted with.
+
+DarkScrollBar: This is the main style for the ScrollBar control itself.
+
+It contains the ControlTemplate for the ScrollBar.
+
+Crucially, within its Track.Thumb, it applies {StaticResource DarkScrollBarThumb}.
+
+Width and Height are set to 10 for a slightly thinner scrollbar.
+
+The Background of the main GridRoot (which is the track) is set to ScrollBarTrackBackground.
+
+DarkScrollViewerStyle: This is the style for the ScrollViewer itself.
+
+Within its ControlTemplate, it explicitly applies Style="{StaticResource DarkScrollBar}" to both the PART_VerticalScrollBar and PART_HorizontalScrollBar. 
+This is how our custom ScrollBar styling gets injected into controls that use a ScrollViewer.
+
+
+
+
+
+2. Update App.xaml to Merge the New Resource Dictionary
+
+Now, merge this new DarkThemeScrollBar.xaml into your application's resources 
+so it's globally available.
+
+<!-- App.xaml -->
+<Application x:Class="YourAppName.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:YourAppName"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Merge your custom ComboBox style dictionary -->
+                <ResourceDictionary Source="Styles/DarkThemeComboBox.xaml"/>
+                
+                <!-- NEW: Merge your custom ScrollBar style dictionary -->
+                <ResourceDictionary Source="Styles/DarkThemeScrollBar.xaml"/>
+                
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+
+
+
+
+
+3. Update Styles/DarkThemeComboBox.xaml to Apply the DarkScrollViewerStyle
+
+The ComboBox itself uses a ScrollViewer internally for its dropdown. 
+We need to tell this ScrollViewer to use our custom style.
+
+Go back to your Styles/DarkThemeComboBox.xaml file and find the 
+ScrollViewer element within the ControlTemplate of MyCustomComboBoxStyle.
+
+It will look something like this:
+
+<!-- Styles/DarkThemeComboBox.xaml -->
+<Border x:Name="dropDownBorder" 
+                                        BorderBrush="{StaticResource MediumBorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        Background="{StaticResource DarkBackgroundBrush}">
+                                    <ScrollViewer x:Name="DropDownScrollViewer" SnapsToDevicePixels="True">
+                                        <!-- ... content ... -->
+                                    </ScrollViewer>
+                                </Border>
+
+Change the ScrollViewer line to apply the style:
+
+<Border x:Name="dropDownBorder" 
+                                        BorderBrush="{StaticResource MediumBorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        Background="{StaticResource DarkBackgroundBrush}">
+                                    <ScrollViewer x:Name="DropDownScrollViewer" 
+                                                  SnapsToDevicePixels="True" 
+                                                  Style="{StaticResource DarkScrollViewerStyle}"> <!-- ADD THIS LINE -->
+                                        <Grid RenderOptions.ClearTypeHint="Enabled">
+                                            <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                <Rectangle x:Name="OpaqueRect" Fill="{StaticResource DarkBackgroundBrush}" Height="{Binding Path=ActualHeight, ElementName=dropDownBorder}" Width="{Binding Path=ActualWidth, ElementName=dropDownBorder}"/>
+                                            </Canvas>
+                                            <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+
+That's it!
+
+Now, any ComboBox using MyCustomComboBoxStyle will have its internal ScrollViewer 
+(and thus its ScrollBar) styled according to your DarkThemeScrollBar.xaml. 
+This will give you the consistent dark grey scrollbar track and a medium grey thumb, 
+matching your dark theme.
+
+
+***************Old style***************
+ <Border x:Name="dropDownBorder" 
+                                    BorderBrush="{StaticResource MediumBorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    Background="{StaticResource DarkBackgroundBrush}"> <!-- Background for the dropdown container -->
+                                <ScrollViewer x:Name="DropDownScrollViewer" SnapsToDevicePixels="True">
+                                    <Grid RenderOptions.ClearTypeHint="Enabled">
+                                        <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                            <Rectangle x:Name="OpaqueRect" Fill="{StaticResource DarkBackgroundBrush}" Height="{Binding Path=ActualHeight, ElementName=dropDownBorder}" Width="{Binding Path=ActualWidth, ElementName=dropDownBorder}"/>
+                                        </Canvas>
+                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Grid>
+                                </ScrollViewer>
+                            </Border>
+*************************End of old style*************************

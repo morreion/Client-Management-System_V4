@@ -1,0 +1,154 @@
+<!-- Styles/DarkThemeScrollBar.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Re-use or define your common dark theme colors -->
+    <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#3F4347"/>
+    <SolidColorBrush x:Key="LightForegroundBrush" Color="#DBDBDB"/>
+    <SolidColorBrush x:Key="MediumBorderBrush" Color="#555"/>
+    <SolidColorBrush x:Key="ScrollBarTrackBackground" Color="#2A2A2A"/> <!-- A slightly darker shade for the track -->
+    <SolidColorBrush x:Key="ScrollBarThumbBackground" Color="#6E7780"/> <!-- Color for the draggable thumb -->
+    <SolidColorBrush x:Key="ScrollBarThumbHoverBackground" Color="#8C939A"/> <!-- Thumb on hover -->
+    <SolidColorBrush x:Key="ScrollBarArrowBackground" Color="#6E7780"/> <!-- Background for scroll arrow buttons -->
+    <SolidColorBrush x:Key="ScrollBarArrowForeground" Color="#DBDBDB"/> <!-- Foreground for scroll arrow icons -->
+    <SolidColorBrush x:Key="ScrollBarArrowHoverBackground" Color="#8C939A"/>
+
+    <!-- ============================================================================ -->
+    <!-- Style for the ScrollBar control (Thumb and Buttons)                          -->
+    <!-- ============================================================================ -->
+    <Style x:Key="DarkScrollBarRepeatButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DarkScrollBarThumb" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Background="{StaticResource ScrollBarThumbBackground}"
+                            BorderBrush="{StaticResource MediumBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="2"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ScrollBarThumbHoverBackground}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ScrollBarThumbHoverBackground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type ScrollBar}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Width" Value="20"/> <!-- Default width for vertical scrollbar -->
+        <Setter Property="Height" Value="auto"/> <!-- Default height for horizontal scrollbar -->
+        
+        <!-- Vertical ScrollBar Template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    <Grid x:Name="GridRoot" Width="{TemplateBinding Width}" Background="{StaticResource ScrollBarTrackBackground}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.00001*"/>
+                        </Grid.RowDefinitions>
+                        <!-- Scrollbar track area -->
+                        <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true">
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource DarkScrollBarThumb}"/>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Horizontal ScrollBar template -->
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Height" Value="10"/>
+                            <Setter Property="Width" Value="Auto"/>
+                            <Setter Property="LayoutTransform" TargetName="GridRoot">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Margin" TargetName="PART_Track" Value="0,1,0,1"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============================================================================ -->
+    <!-- Style for ScrollViewer control                                             -->
+    <!-- This applies the custom ScrollBar style to any ScrollViewer in your theme  -->
+    <!-- ============================================================================ -->
+    <Style x:Key="DarkScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" 
+                                                Grid.Row="0" Grid.Column="0" 
+                                                CanContentScroll="{TemplateBinding CanContentScroll}" 
+                                                CanHorizontallyScroll="False" 
+                                                CanVerticallyScroll="False" 
+                                                ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                                Content="{TemplateBinding Content}" 
+                                                KeyboardNavigation.DirectionalNavigation="Local"/>
+                        
+                        <ScrollBar x:Name="PART_VerticalScrollBar" 
+                                   Grid.Row="0" Grid.Column="1" 
+                                   AutomationProperties.AutomationId="VerticalScrollBar" 
+                                   Cursor="Arrow" 
+                                   Maximum="{TemplateBinding ScrollableHeight}" 
+                                   Minimum="0" 
+                                   ViewportSize="{TemplateBinding ViewportHeight}" 
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
+                                   Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/> 
+                                   <!-- Removed Explicit Style Ref, will pick up implicit -->
+                        
+                        <ScrollBar x:Name="PART_HorizontalScrollBar" 
+                                   Grid.Row="1" Grid.Column="0" 
+                                   AutomationProperties.AutomationId="HorizontalScrollBar" 
+                                   Cursor="Arrow" 
+                                   Maximum="{TemplateBinding ScrollableWidth}" 
+                                   Minimum="0" 
+                                   Orientation="Horizontal" 
+                                   ViewportSize="{TemplateBinding ViewportWidth}" 
+                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" 
+                                   Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                   <!-- Removed Explicit Style Ref, will pick up implicit -->
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

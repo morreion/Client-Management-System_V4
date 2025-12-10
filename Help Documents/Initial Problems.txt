@@ -1,0 +1,322 @@
+﻿i've got an exception when launching the application --> 
+
+System.Windows.Markup.XamlParseException HResult=0x80131501 Message='Provide value on 'System.Windows.Baml2006.TypeConverterMarkupExtension' threw an exception.' Line number '111' and line position '6'. Source=PresentationFramework StackTrace: at System.Windows.Markup.XamlReader.RewrapException(Exception e, IXamlLineInfo lineInfo, Uri baseUri) at System.Windows.Markup.WpfXamlLoader.Load(XamlReader xamlReader, IXamlObjectWriterFactory writerFactory, Boolean skipJournaledProperties, Object rootObject, XamlObjectWriterSettings settings, Uri baseUri) at System.Windows.Markup.WpfXamlLoader.LoadBaml(XamlReader xamlReader, Boolean skipJournaledProperties, Object rootObject, XamlAccessLevel accessLevel, Uri baseUri) at System.Windows.Markup.XamlReader.LoadBaml(Stream stream, ParserContext parserContext, Object parent, Boolean closeStream) at System.Windows.Application.LoadComponent(Object component, Uri resourceLocator) at Page_Navigation_App.MainWindow.InitializeComponent() in C:\Users\admin\Documents\GitHub\Page-Navigation-using-MVVM-C#-Design-Pro\Source Code\Page Navigation App\Page Navigation App\Page Navigation App\MainWindow.xaml:line 1
+This exception was originally thrown at this call stack: [External Code]
+Inner Exception 1: DirectoryNotFoundException: Could not find a part of the path 'C:\Users\admin\Documents\GitHub\Images\shutdown_mo.png'. I pulled this project from github. Is it because the path to this image file is different in the code then it is on my computer?
+
+
+Yes, the exception is caused by a hardcoded absolute path 
+to an image file (C:\Users\admin\Documents\GitHub\Images\shutdown_mo.png) 
+that does not exist on your computer. 
+
+This is a common issue when projects reference resources 
+using absolute paths instead of relative paths or project 
+resources.
+
+
+How to fix:
+
+1.	Check the XAML Reference:
+    Open MainWindow.xaml (or the file at line 111, as indicated in the error) and look for an Image or similar element referencing the image. It likely uses an absolute path.
+
+2.	Use a Relative Path:
+•	Place the image (shutdown_mo.png) in your project directory, ideally in an Images or Resources folder within your project.
+•	In Visual Studio, right-click the image file in Solution Explorer, select Properties, and set Build Action to Resource.
+•	Update the XAML to use a relative URI, for example:
+
+ <Image Source="Images/shutdown_mo.png" />
+
+
+ or, if in a subfolder:
+  <Image Source="pack://application:,,,/Images/shutdown_mo.png" />
+
+
+3.	Ensure the File Exists:
+Make sure the image file is present in the correct folder in your project.
+
+
+
+Summary:
+The error is due to a missing file at a hardcoded absolute path. Change the image reference in your XAML to use a relative path and ensure the image is included in your project as a resource.
+Would you like help locating the exact line in your XAML and updating it?
+
+
+What’s happening:
+•	Your MainWindow.xaml references several images using relative paths like Images/img_home.png.
+•	The error message, however, refers to shutdown_mo.png in a folder outside your project directory.
+•	The line number (111) in the error is approximate and may not directly correspond to an <Image> tag, but rather to the point in the XAML where the parser failed to resolve a resource.
+
+Why you don’t see it:
+•	The image reference to shutdown_mo.png is likely in a style, template, or resource dictionary (such as Button.xaml, Image.xaml, or another XAML file), not directly in MainWindow.xaml.
+•	The error bubbles up to the main window’s initialization, so the line number is not always the exact line of the image reference.
+
+
+How to Fix
+1.	Search for shutdown_mo.png in your project:
+•	Look in all XAML files, especially in the Styles or Resources folders.
+•	You can use Visual Studio’s Find in Files feature (Ctrl+Shift+F) and search for shutdown_mo.png.
+
+2.	Check the Images folder:
+•	Ensure that shutdown_mo.png exists in the Images folder inside your project.
+•	If it’s missing, add the image to the correct folder.
+
+3.	Update the Image Reference:
+•	If the image is referenced with an absolute path, change it to a relative path, e.g.:
+ <Image Source="Images/shutdown_mo.png" ... />
+
+•	Make sure the image’s Build Action is set to Resource.
+
+
+
+Example: Fixing a Resource Reference
+If you find something like this in a style or template:
+<Image Source="C:\Users\admin\Documents\GitHub\Images\shutdown_mo.png" ... />
+
+Change it to:
+<Image Source="Images/shutdown_mo.png" ... />
+
+
+Summary:
+The error is not in the <Grid> tag, but in a missing or mis-referenced image file, likely in a style or resource. Search your project for shutdown_mo.png, ensure it exists in the correct folder, and update the reference to use a relative path.
+Would you like help searching for the exact reference in your project?
+
+
+How do i search for the references for shutdown_mo.png, ? i'm using visual studio community edition 2022
+
+
+To search for references to shutdown_mo.png in Visual Studio Community Edition 2022, follow these steps:
+1.	Open the Solution in Visual Studio.
+2.	Press Ctrl+Shift+F to open the Find in Files dialog.
+3.	In the "Find what" box, type: shutdown_mo.png
+4.	Set "Look in" to:
+•	Entire Solution (recommended), or
+•	Browse to your project folder if you want to limit the search.
+5.	Click "Find All".
+
+Visual Studio will display all occurrences of 
+shutdown_mo.png in your solution, including XAML, 
+resource dictionaries, and code files. 
+You can then double-click any result to jump directly 
+to the reference.
+
+
+
+I found all the references --> Code	File	Line	Column <None Remove="Images\shutdown_mo.png" />	C:\Users\admin\Documents\GitHub\Page-Navigation-using-MVVM-C#-Design-Pro\Source Code\Page Navigation App\Page Navigation App\Page Navigation App\Page Navigation App.csproj	29	26 <Resource Include="Images\shutdown_mo.png">	C:\Users\admin\Documents\GitHub\Page-Navigation-using-MVVM-C#-Design-Pro\Source Code\Page Navigation App\Page Navigation App\Page Navigation App\Page Navigation App.csproj	82	31 ImageSource="/Images/shutdown_mo.png"	C:\Users\admin\Documents\GitHub\Page-Navigation-using-MVVM-C#-Design-Pro\Source Code\Page Navigation App\Page Navigation App\Page Navigation App\Styles\Button.xaml	112	38 So the images use a relative path . I did set the build action of al the images in the Images folder to Resource , copy to Output Directory to Copy always and shutdown_mo.png is present in the Images folder
+
+
+Great troubleshooting! Since you have:
+•	The image present in the Images folder.
+•	The image referenced with a relative path:
+ImageSource="/Images/shutdown_mo.png"
+
+•	The build action set to Resource and Copy to Output Directory set to Copy always.
+But you’re still getting a DirectoryNotFoundException, here are the most likely causes and solutions:
+
+1. Resource URI Format
+In WPF, for images with Build Action: Resource, the correct URI is:
+ImageSource="pack://application:,,,/Images/shutdown_mo.png"
+
+or simply:
+ImageSource="Images/shutdown_mo.png"
+
+Do not use a leading slash (/Images/shutdown_mo.png) unless you are using the pack://application:,,,/ syntax.
+
+
+2. Check the Folder Structure
+•	Make sure the Images folder is at the root of your WPF project (not just in the solution).
+•	In Solution Explorer, the path should be:
+Page Navigation App (project)
+└── Images
+└── shutdown_mo.png
+
+3. Check for Typos
+•	Ensure there are no typos in the file name or extension (e.g., .png vs .PNG).
+•	Windows is case-insensitive, but WPF resource loading can be case-sensitive.
+
+
+4. Clean and Rebuild
+Sometimes, Visual Studio caches old build data. Try:
+•	Build > Clean Solution
+•	Build > Rebuild Solution
+
+5. Resource vs. Content
+•	Resource: Embedded in the assembly, referenced as Images/shutdown_mo.png.
+•	Content: Copied to output directory, referenced as Images/shutdown_mo.png (relative to executable).
+
+For WPF, Resource is preferred for XAML image references.
+
+
+6. Check the XAML Reference
+In your Button.xaml (line 112), try changing:
+ImageSource="/Images/shutdown_mo.png"
+
+To:
+ImageSource="Images/shutdown_mo.png"
+
+Or:
+ImageSource="pack://application:,,,/Images/shutdown_mo.png"
+
+7. Check for Duplicate or Conflicting References
+•	Remove any <None Remove="Images\shutdown_mo.png" /> from your .csproj file unless you have a specific reason for it.
+
+
+Summary Table
+
+Build Action	XAML Reference Example
+Resource	    Images/shutdown_mo.png or pack://...
+Content	        Images/shutdown_mo.png (relative to exe)
+
+
+Try updating the XAML reference as above and rebuild.
+If the issue persists, please share the relevant snippet from Button.xaml around line 112 for further analysis.
+
+
+
+******************Trae IDE****************
+
+
+Eric Kamminga
+
+when trying to run this application it won't launch and getting these warnings --> dotnet run
+
+C:\Program Files\dotnet\sdk\10.0.100\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.EolTargetFrameworks.targets(32,5): warning NETSDK1138: The target framework 'net6.0-windows' is out of support and will not receive security updates in the future. Please refer to https://aka.ms/dotnet-core-support for more information about the support policy.
+
+C:\Program Files\dotnet\sdk\10.0.100\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.EolTargetFrameworks.targets(32,5): warning NETSDK1138: The target framework 'net6.0-windows' is out of support and will not receive security updates in the future. Please refer to https://aka.ms/dotnet-core-support for more information about the support policy.
+
+C:\Program Files\dotnet\sdk\10.0.100\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.EolTargetFrameworks.targets(32,5): warning NETSDK1138: The target framework 'net6.0-windows' is out of support and will not receive security updates in the future. Please refer to https://aka.ms/dotnet-core-support for more information about the support policy.
+
+PS C:\Users\admin\Documents\GitHub\Page-Navigation-using-MVVM-C#-Design-Pro\Source Code\Page Navigation App\Page Navigation App\Page Navigation App> how do i make this application launch?
+
+
+Thanks for sharing the error and your goal! Before we dive in, let me ask a couple of questions to tailor my help:
+
+1. What’s your name, and how much experience do you have with 
+   C# and .NET development?
+2. Is there anything you’re interested in (shows, hobbies, etc.) 
+   that I can incorporate into our lessons or explanations?
+
+Once you answer, I’ll help you step-by-step to get your application launching and 
+teach you about .NET versions and project setup along the way.
+
+
+My name is Eric and i have a basic beginners knowledge of C# and .Net Development 
+and at the moment am interested in creating layouts for a database application. 
+THis open project is pullled from github and i wanted to use it as a possible 
+layout for the database application. 
+
+I have not much knowledge about C# wpf database application, 
+and this project which is about a layout gives me some ideas
+about how to implement it
+
+
+
+Great to meet you, Eric! Thanks for sharing your background and interests. 
+Since you’re interested in layouts for a database application and you’re 
+working with a C# WPF project from GitHub,
+ I’ll guide you step-by-step to get this project running and help you 
+ understand how layouts work in WPF.
+
+Let’s start by addressing the issue you’re seeing:
+
+### What’s Happening?
+- The warning you’re seeing means your project targets .NET 6.0-windows , 
+  which is now out of support.
+- You’re using the .NET 10 SDK, which can build older projects, 
+  but Microsoft recommends updating to a supported version (like .NET 8 or .NET 10).
+- Sometimes, projects targeting unsupported frameworks won’t launch, 
+  especially if dependencies or SDK features have changed.
+
+
+
+### Step 1: Check the Project’s Target Framework
+Let’s find out which framework your project is targeting and update it if needed. Question for you: Would you like to learn how to check and update the target framework yourself, or do you want me to walk you through it step-by-step?
+
+Please reply with:
+
+- “1” if you’re confused and want a slow, detailed walkthrough.
+- “2” if you kind of get it and want a moderate explanation.
+- “3” if you got it and want to move on to the next step.
+Once you reply, I’ll guide you through checking and updating the 
+target framework so your app can launch!
+
+
+Awesome, Eric! Since you’re ready to move on, let’s check and update the target framework for your project so it can launch successfully.
+
+### Step 2: How to Check and Update the Target Framework 1. Find the Project File
+In a WPF project, the target framework is set in the .csproj file. 
+
+For your project, look for a file named something like Page Navigation App.csproj in the folder:
+c:\Users\admin\Documents\GitHub\Page-Navigation-using-MVVM-C#-Design-Pro\Source Code\Page Navigation App\Page Navigation App\Page Navigation App\
+
+
+Builder
+
+Great to meet you, Eric! Thanks for sharing your background and interests. Since you’re interested in layouts for a database application and you’re working with a C# WPF project from GitHub, I’ll guide you step-by-step to get this project running and help you understand how layouts work in WPF.
+
+Let’s start by addressing the issue you’re seeing:
+
+### What’s Happening?
+- The warning you’re seeing means your project targets .NET 6.0-windows , which is now out of support.
+- You’re using the .NET 10 SDK, which can build older projects, but Microsoft recommends updating to a supported version (like .NET 8 or .NET 10).
+- Sometimes, projects targeting unsupported frameworks won’t launch, especially if dependencies or SDK features have changed.
+### Step 1: Check the Project’s Target Framework
+Let’s find out which framework your project is targeting and update it if needed. Question for you: Would you like to learn how to check and update the target framework yourself, or do you want me to walk you through it step-by-step?
+
+Please reply with:
+
+- “1” if you’re confused and want a slow, detailed walkthrough.
+- “2” if you kind of get it and want a moderate explanation.
+- “3” if you got it and want to move on to the next step.
+Once you reply, I’ll guide you through checking and updating the target framework so your app can launch!
+
+Eric Kamminga
+
+3
+
+Builder
+
+Awesome, Eric! Since you’re ready to move on, let’s check and update the target framework for your project so it can launch successfully.
+
+### Step 2: How to Check and Update the Target Framework 1. Find the Project File
+In a WPF project, the target framework is set in the .csproj file. For your project, look for a file named something like Page Navigation App.csproj in the folder:
+
+```
+c:\Users\admin\Documents\GitHub\Pag
+e-Navigation-using-MVVM-C#-Design-P
+ro\Source Code\Page Navigation 
+App\Page Navigation App\Page 
+Navigation App\
+``` 
+
+2. Open the .csproj File
+Inside this file, you’ll see a line like:
+<TargetFramework>net6.0-windows</TargetFramework>
+
+This is what’s causing the warning.
+
+ 3. Update the Target Framework
+Change that line to a supported version, such as .NET 8 :
+<TargetFramework>net8.0-windows</TargetFramework>
+
+
+Or, if you want to use the latest (and your SDK supports it), you can use .NET 10 :
+<TargetFramework>net10.0-windows</TargetFramework>
+
+
+
+4. Save the File
+After making the change, save the .csproj file.
+
+ 5. Restore and Run
+Open your terminal in the project directory and run:
+dotnet restore
+dotnet run
+
+This will restore dependencies and try to launch your app
+
+
+Your Task: Go ahead and open the .csproj file, update the <TargetFramework> to net8.0-windows or net10.0-windows , save it, and then run the commands above.
+
+Once you’ve done this, let me know what you see on the command line! If you get any errors or warnings, copy them here and I’ll help you troubleshoot.
+
+Would you like a hint on how to find the .csproj file, or are you ready to try it yourself?

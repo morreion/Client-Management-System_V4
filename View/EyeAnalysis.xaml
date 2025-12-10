@@ -1,0 +1,371 @@
+<UserControl x:Class="Client_Management_System_V4.View.EyeAnalysis"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Client_Management_System_V4.ViewModel"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             Style="{StaticResource Page_Style}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <UserControl.DataContext>
+        <vm:EyeAnalysisVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <Style TargetType="DatePickerTextBox">
+            <Setter Property="Background" Value="#3F4347"/>
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+        </Style>
+         <Style TargetType="TextBlock" x:Key="FieldLabel">
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="15,60,15,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="14" Padding="10,8" Background="#2D3035"
+                     Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
+            <Button Grid.Column="1" Content="🔍 Search Eyes" Command="{Binding SearchCommand}"
+                    Margin="10,0,0,0" Padding="15,8" Background="#3B82F6" Foreground="White" BorderThickness="0"/>
+        </Grid>
+
+        <!-- Master List -->
+        <Border Grid.Row="1" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="10">
+            <DataGrid ItemsSource="{Binding AnalysisList}"
+                      SelectedItem="{Binding SelectedAnalysis}"
+                      AutoGenerateColumns="False" CanUserAddRows="False"
+                      Background="#2D3035" Foreground="#DBDBDB"
+                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
+                      HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
+                
+                <DataGrid.ColumnHeaderStyle>
+                     <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="SeparatorVisibility" Value="Visible"/>
+                        <Setter Property="SeparatorBrush" Value="Red"/> <!-- Temporarily Red -->
+                        <Setter Property="Background" Value="#3F4347"/>
+                        <Setter Property="Foreground" Value="#DBDBDB"/>
+                        <Setter Property="Padding" Value="10,5"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="BorderBrush" Value="#555"/>
+                        
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridColumnHeader">
+                                    <Grid>
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Border>
+                                        
+                                        <Thumb x:Name="PART_RightHeaderGripper"
+                                               HorizontalAlignment="Right"
+                                               Cursor="SizeWE"
+                                               Width="1"
+                                               Background="{TemplateBinding SeparatorBrush}"
+                                               Visibility="{TemplateBinding SeparatorVisibility}"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Client" Binding="{Binding ClientName}" Width="1.5*"/>
+                    <DataGridTextColumn Header="Date" Binding="{Binding Analysis_Date, StringFormat=d}" Width="*"/>
+                    <DataGridTextColumn Header="Iris Colour" Binding="{Binding Iris_Colour}" Width="*"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Actions -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+            <Button Content="➕ Add New" Command="{Binding AddCommand}" Padding="15,8" Background="#10B981" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+            <Button Content="💾 Save" Command="{Binding SaveCommand}" Padding="15,8" Background="#3B82F6" Foreground="White" BorderThickness="0" Margin="0,0,10,0" IsEnabled="{Binding IsSelectionActive}"/>
+            <Button Content="🗑️ Delete" Command="{Binding DeleteCommand}" Padding="15,8" Background="#EF4444" Foreground="White" BorderThickness="0" Margin="0,0,10,0" IsEnabled="{Binding IsSelectionActive}"/>
+            <Button Content="❌ Cancel" Command="{Binding CancelCommand}" Padding="15,8" Background="#6B7280" Foreground="White" BorderThickness="0"/>
+        </StackPanel>
+
+        <!-- Detail Form -->
+        <Border Grid.Row="3" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="15">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/> <!-- Text Fields -->
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="1.2*"/> <!-- Images & Priorities -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left Column: Fields -->
+                    <StackPanel Grid.Column="0">
+                        <Grid Margin="0,0,0,15">
+                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Client *" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox ItemsSource="{Binding Clients}"
+                                          SelectedValue="{Binding SelectedAnalysis.ClientID}"
+                                          SelectedValuePath="ClientID"
+                                          DisplayMemberPath="Name"
+                                          Style="{StaticResource MyCustomComboBoxStyle}"
+                                          Height="35"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Date" Style="{StaticResource FieldLabel}"/>
+                                 <DatePicker SelectedDate="{Binding SelectedAnalysis.Analysis_Date}" Height="35"
+                                            Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <!-- Analysis Fields (2 cols) -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Iris Colour" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Iris_Colour}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Texture" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Texture}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Type" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Type}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Pupil" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Pupil}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Stomach" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Stomach}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Urine" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Urine}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="S.I.T." Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.S_I_T}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="ANW" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.ANW}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Bowel" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Bowel}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Nerve Rings" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Nerve_Rings}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Organs" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Organs}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Meridian Scan" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding SelectedAnalysis.Meridian_Scan}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Right Column: Priorities & Images -->
+                    <StackPanel Grid.Column="2">
+                        <!-- Sclera Priorities -->
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="Sclera Priorities" FontSize="16" Foreground="#DBDBDB" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Button Content="⚙️ Manage Types" Command="{Binding OpenManagerCommand}" 
+                                    HorizontalAlignment="Right"
+                                    Background="Green" Foreground="#eef2f8ff" BorderThickness="0" Cursor="Hand"/>
+                        </Grid>
+                        <Border Background="#333740" CornerRadius="5" Padding="5" Height="200" Margin="0,0,0,20">
+                            <ScrollViewer>
+                                <ItemsControl ItemsSource="{Binding PriorityTypes}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Content="{Binding Priority_Name}" 
+                                                      IsChecked="{Binding IsSelected}" 
+                                                      Foreground="#DBDBDB" Margin="0,2"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+
+                        <!-- Eye Scans -->
+                        <TextBlock Text="Eye Scans" FontSize="16" Foreground="#DBDBDB" FontWeight="Bold" Margin="0,0,0,10"/>
+                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Button Content="Upload LEFT Eye" Command="{Binding UploadLeftEyeCommand}" Padding="10,5" Background="#4B5563" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+                            <Button Content="Upload RIGHT Eye" Command="{Binding UploadRightEyeCommand}" Padding="10,5" Background="#4B5563" Foreground="White" BorderThickness="0"/>
+                        </StackPanel>
+                        
+                        <ItemsControl ItemsSource="{Binding CurrentScans}">
+                             <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="5" BorderBrush="#555" BorderThickness="1">
+                                        <StackPanel Width="100">
+                                            <Image Source="{Binding Eye_Scan}" Height="80"/>
+                                            <TextBlock Text="{Binding Eye_Side}" Foreground="Gray" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+                    
+                </Grid>
+            </ScrollViewer>
+        </Border>
+
+        <!-- PRIORITIES MANAGER OVERLAY -->
+        <Grid Grid.Row="0" Grid.RowSpan="4" Panel.ZIndex="100" 
+              Tag="{Binding IsManagerOpen}"
+              Style="{StaticResource Overlay_Grid_Style}">
+            
+            <!-- Drawer Content -->
+            <Border Tag="{Binding IsManagerOpen}" Style="{StaticResource Drawer_Style}" HorizontalAlignment="Right" Width="450" Background="#212529" BorderBrush="#3F4347" BorderThickness="1,0,0,0">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- Header -->
+                        <RowDefinition Height="Auto"/> <!-- Edit Form -->
+                        <RowDefinition Height="*"/>    <!-- List -->
+                        <RowDefinition Height="Auto"/> <!-- Footer -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+                        <Button Command="{Binding CloseManagerCommand}" Content="⬅ Back" Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Margin="0,0,20,0" FontSize="16"/>
+                        <TextBlock Text="Manage Priority Types" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Edit Form -->
+                    <Border Grid.Row="1" Background="#2D3035" CornerRadius="8" Padding="15" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Add / Edit Priority" FontWeight="SemiBold" Foreground="#DBDBDB" Margin="0,0,0,10"/>
+                            
+                            <TextBlock Text="Name *" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding SelectedManagerPriority.Priority_Name, UpdateSourceTrigger=PropertyChanged}" 
+                                     Background="#3F4347" Foreground="#DBDBDB" Padding="8" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding SelectedManagerPriority.Description, UpdateSourceTrigger=PropertyChanged}" 
+                                     Background="#3F4347" Foreground="#DBDBDB" Padding="8" Margin="0,0,0,15" TextWrapping="Wrap" Height="60"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Clear" Command="{Binding ClearPriorityCommand}" Background="#6B7280" Foreground="White" Padding="15,5" BorderThickness="0" Margin="0,0,10,0"/>
+                                <Button Content="Save" Command="{Binding SavePriorityCommand}" Background="#10B981" Foreground="White" Padding="20,5" BorderThickness="0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- List Header -->
+                     <TextBlock Grid.Row="2" Text="Existing Priorities" FontWeight="SemiBold" Foreground="#DBDBDB" Margin="0,0,0,10" VerticalAlignment="Top"/>
+
+                    <!-- List -->
+                    <DataGrid Grid.Row="2" Margin="0,30,0,0"
+                              ItemsSource="{Binding ManagerPriorityList}"
+                              SelectedItem="{Binding SelectedManagerPriority}"
+                              AutoGenerateColumns="False" CanUserAddRows="False"
+                              Background="#2D3035" Foreground="#DBDBDB"
+                              RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                              GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="1" 
+                              HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
+
+                  <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="SeparatorVisibility" Value="Visible"/>
+                            <Setter Property="SeparatorBrush" Value="Red"/> <!-- Temporarily Red to prove it works, user can change back -->
+                            <Setter Property="Background" Value="#3F4347"/>
+                            <Setter Property="Foreground" Value="#DBDBDB"/>
+                            <Setter Property="Padding" Value="10,5"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/> <!-- Bottom border only -->
+                            <Setter Property="BorderBrush" Value="#555"/>
+                            
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridColumnHeader">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                            
+                                            <!-- The Separator (Right Side) -->
+                                            <Thumb x:Name="PART_RightHeaderGripper"
+                                                   HorizontalAlignment="Right"
+                                                   Cursor="SizeWE"
+                                                   Width="1"
+                                                   Background="{TemplateBinding SeparatorBrush}"
+                                                   Visibility="{TemplateBinding SeparatorVisibility}"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+            
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Priority_Name}" Width="*"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="1.5*"/>
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="🗑" Command="{Binding DataContext.DeletePriorityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                Background="Transparent" BorderThickness="0" Foreground="#EF4444"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>

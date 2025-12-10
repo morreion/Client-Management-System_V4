@@ -1,0 +1,176 @@
+i've got a datagrid in a C# wpf application and want to style it. I assume this property --> GridLinesVisibility= "None" sets the visibility to not visible, what value must be given to make the grid lines visible. And is there a way to set the thickness and color of the gridlines? Same question for the column headers, how do i set the visibility for the column separators, their thickness and color? Here's my current code for the datagrid -->  <DataGrid x:Name="ClientsDataGrid"
+ItemsSource="{Binding Clients}"
+SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
+AutoGenerateColumns="False"
+CanUserAddRows="False"
+CanUserDeleteRows="False"
+IsReadOnly="True"
+SelectionMode="Single"
+GridLinesVisibility= "None"
+HeadersVisibility="Column"
+Background="Transparent"
+Foreground="#DBDBDB"
+BorderThickness="0"
+RowBackground="#2D3035"
+AlternatingRowBackground="#32363B">
+
+code
+Code
+download
+content_copy
+expand_less
+<DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#3F4347"/>
+                        <Setter Property="Foreground" Value="#DBDBDB"/>
+                        <Setter Property="Padding" Value="10,5"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding ClientID}" Width="50"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Mobile" Binding="{Binding Mobile}" Width="120"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
+                    <DataGridTextColumn Header="DOB" Binding="{Binding DOB, StringFormat=\{0:yyyy-MM-dd\}}" Width="100"/>
+                    <DataGridTextColumn Header="Age" Binding="{Binding Age}" Width="50"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+
+
+            The GridLinesVisibility property accepts one of four enum values. To make them visible, you usually set it to All.
+
+Here is the breakdown of your questions and the solutions for customizing thickness and color, which require slightly different approaches for the main grid versus the headers.
+
+1. Grid Lines Visibility, Color, and Thickness
+
+Standard grid lines in WPF do not have a direct "Thickness" property. To change the thickness, the standard workaround is to turn off the default grid lines and use a CellStyle to draw borders on the cells instead.
+
+Visibility: Set GridLinesVisibility="All" (or Horizontal/Vertical).[1]
+
+Color: Use HorizontalGridLinesBrush and VerticalGridLinesBrush.[2][3]
+
+Thickness: Use a CellStyle (recommended method).
+
+Updated DataGrid XAML:
+
+code
+Xml
+download
+content_copy
+expand_less
+<DataGrid x:Name="ClientsDataGrid" 
+          GridLinesVisibility="All" 
+          HorizontalGridLinesBrush="#505050" 
+          VerticalGridLinesBrush="#505050" 
+          ...>
+    <!-- Rest of your properties -->
+</DataGrid>
+
+If you need a specific Thickness (e.g., 2px):
+Set GridLinesVisibility="None" and add this to your DataGrid's resources or CellStyle:
+
+code
+Xml
+download
+content_copy
+expand_less
+<DataGrid.CellStyle>
+    <Style TargetType="DataGridCell">
+        <!-- Set the border thickness (Right and Bottom effectively create the grid) -->
+        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        <Setter Property="BorderBrush" Value="#505050"/>
+        <!-- Optional: Fix for content overlapping the border -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{TemplateBinding Background}" 
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</DataGrid.CellStyle>
+2. Column Header Separators
+
+The column separators are part of the DataGridColumnHeader style.[4][5]
+
+Visibility: Controlled by the SeparatorVisibility property.[4][5]
+
+Color: Controlled by the SeparatorBrush property.
+
+Thickness: There is no direct property for separator thickness. The separator is built into the default control template. To change its thickness, you must override the Template of the header.
+
+Easy Fix (Color & Visibility only):
+Update your existing DataGrid.ColumnHeaderStyle with these setters:
+
+code
+Xml
+download
+content_copy
+expand_less
+<DataGrid.ColumnHeaderStyle>
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#3F4347"/>
+        <Setter Property="Foreground" Value="#DBDBDB"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        
+        <!-- VISIBILITY: "Visible", "Hidden", or "Collapsed" -->
+        <Setter Property="SeparatorVisibility" Value="Visible"/>
+        
+        <!-- COLOR -->
+        <Setter Property="SeparatorBrush" Value="Red"/>
+    </Style>
+</DataGrid.ColumnHeaderStyle>
+
+Advanced Fix (Changing Thickness):
+Since you cannot simply set "SeparatorThickness," you can simulate it by adding a right-side border to your header style.
+
+Set SeparatorVisibility to Collapsed (to hide the default thin line).
+
+Add a BorderThickness of 0,0,2,0 (Right side only) to the Header itself.
+
+Set the BorderBrush to your desired separator color.
+
+code
+Xml
+download
+content_copy
+expand_less
+<DataGrid.ColumnHeaderStyle>
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#3F4347"/>
+        <Setter Property="Foreground" Value="#DBDBDB"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        
+        <!-- Hide default separator -->
+        <Setter Property="SeparatorVisibility" Value="Collapsed"/>
+        
+        <!-- Create custom thick separator using Border -->
+        <Setter Property="BorderThickness" Value="0,0,2,0"/>
+        <Setter Property="BorderBrush" Value="#505050"/>
+    </Style>
+</DataGrid.ColumnHeaderStyle>
+Sources
+help
+c-sharpcorner.com
+microsoft.com
+stackoverflow.com
+microsoft.com
+stackoverflow.com
+Google Search Suggestions
+Display of Search Suggestions is required when using Grounding with Google Search. Learn more
+wpf datagrid GridLinesVisibility values
+wpf datagrid column header separator style
+wpf datagrid grid lines color and thickness properties
+wpf datagrid column header separator visibility thickness color

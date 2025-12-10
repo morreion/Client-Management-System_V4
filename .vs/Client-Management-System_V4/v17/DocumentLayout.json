@@ -1,0 +1,471 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\client-management-system_v4.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:client-management-system_v4.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\viewmodel\\navigationvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:viewmodel\\navigationvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\utilities\\datatemplate.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:utilities\\datatemplate.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\styles\\button.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:styles\\button.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\model\\pagemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:model\\pagemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\utilities\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:utilities\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\utilities\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:utilities\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\utilities\\btn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:utilities\\btn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\styles\\text.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:styles\\text.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\styles\\page.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:styles\\page.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|c:\\users\\admin\\source\\repos\\client-management-system_v4\\styles\\image.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{49905C68-A5CC-4E0C-AB02-B350A99748E1}|Client-Management-System_V4.csproj|solutionrelative:styles\\image.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\HomeVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ViewModel\\HomeVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\OrderVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ViewModel\\OrderVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\ProductVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ViewModel\\ProductVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\TransactionVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ViewModel\\TransactionVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\SettingVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ViewModel\\SettingVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\CustomerVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ViewModel\\CustomerVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\ShipmentVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ViewModel\\ShipmentVM.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Transactions.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:View\\Transactions.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Shipments.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:View\\Shipments.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Settings.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:View\\Settings.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Products.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:View\\Products.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Orders.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:View\\Orders.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Home.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:View\\Home.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Customers.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:View\\Customers.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DataTemplate.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\DataTemplate.xaml",
+              "RelativeDocumentMoniker": "Utilities\\DataTemplate.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\DataTemplate.xaml",
+              "RelativeToolTip": "Utilities\\DataTemplate.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:29:20.857Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Client-Management-System_V4.csproj",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Client-Management-System_V4.csproj",
+              "RelativeDocumentMoniker": "Client-Management-System_V4.csproj",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Client-Management-System_V4.csproj",
+              "RelativeToolTip": "Client-Management-System_V4.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-30T05:20:35.106Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAABoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-29T22:27:34.996Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "HomeVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\HomeVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\HomeVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\HomeVM.cs",
+              "RelativeToolTip": "ViewModel\\HomeVM.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAYAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:33:12.76Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NavigationVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\NavigationVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\NavigationVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\NavigationVM.cs",
+              "RelativeToolTip": "ViewModel\\NavigationVM.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAiwAgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:33:20.097Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-29T22:27:35.196Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Button.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Button.xaml",
+              "RelativeDocumentMoniker": "Styles\\Button.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Button.xaml",
+              "RelativeToolTip": "Styles\\Button.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:28:38.929Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PageModel.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Model\\PageModel.cs",
+              "RelativeDocumentMoniker": "Model\\PageModel.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Model\\PageModel.cs",
+              "RelativeToolTip": "Model\\PageModel.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAAAQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:28:07.525Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "AssemblyInfo.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\AssemblyInfo.cs",
+              "RelativeToolTip": "AssemblyInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:35:46.091Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:35:27.39Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "OrderVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\OrderVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\OrderVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\OrderVM.cs",
+              "RelativeToolTip": "ViewModel\\OrderVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:33:45.769Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ProductVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\ProductVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\ProductVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\ProductVM.cs",
+              "RelativeToolTip": "ViewModel\\ProductVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:34:07.573Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "TransactionVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\TransactionVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\TransactionVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\TransactionVM.cs",
+              "RelativeToolTip": "ViewModel\\TransactionVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:34:36.161Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "SettingVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\SettingVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\SettingVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\SettingVM.cs",
+              "RelativeToolTip": "ViewModel\\SettingVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:34:18.793Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "CustomerVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\CustomerVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\CustomerVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\CustomerVM.cs",
+              "RelativeToolTip": "ViewModel\\CustomerVM.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:32:45.588Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ShipmentVM.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\ShipmentVM.cs",
+              "RelativeDocumentMoniker": "ViewModel\\ShipmentVM.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\ViewModel\\ShipmentVM.cs",
+              "RelativeToolTip": "ViewModel\\ShipmentVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:34:27.313Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Transactions.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Transactions.xaml",
+              "RelativeDocumentMoniker": "View\\Transactions.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Transactions.xaml",
+              "RelativeToolTip": "View\\Transactions.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:32:26.646Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Shipments.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Shipments.xaml",
+              "RelativeDocumentMoniker": "View\\Shipments.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Shipments.xaml",
+              "RelativeToolTip": "View\\Shipments.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:32:08.979Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Settings.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Settings.xaml",
+              "RelativeDocumentMoniker": "View\\Settings.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Settings.xaml",
+              "RelativeToolTip": "View\\Settings.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:31:45.953Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Products.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Products.xaml",
+              "RelativeDocumentMoniker": "View\\Products.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Products.xaml",
+              "RelativeToolTip": "View\\Products.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:31:25.234Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Orders.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Orders.xaml",
+              "RelativeDocumentMoniker": "View\\Orders.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Orders.xaml",
+              "RelativeToolTip": "View\\Orders.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:31:04.258Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Home.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Home.xaml",
+              "RelativeDocumentMoniker": "View\\Home.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Home.xaml",
+              "RelativeToolTip": "View\\Home.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:30:31.979Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Customers.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Customers.xaml",
+              "RelativeDocumentMoniker": "View\\Customers.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\View\\Customers.xaml",
+              "RelativeToolTip": "View\\Customers.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:30:06.337Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ViewModelBase.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\ViewModelBase.cs",
+              "RelativeDocumentMoniker": "Utilities\\ViewModelBase.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\ViewModelBase.cs",
+              "RelativeToolTip": "Utilities\\ViewModelBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:29:53.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RelayCommand.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\RelayCommand.cs",
+              "RelativeDocumentMoniker": "Utilities\\RelayCommand.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\RelayCommand.cs",
+              "RelativeToolTip": "Utilities\\RelayCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:29:45.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Btn.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\Btn.cs",
+              "RelativeDocumentMoniker": "Utilities\\Btn.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Utilities\\Btn.cs",
+              "RelativeToolTip": "Utilities\\Btn.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T05:29:09.633Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Text.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Text.xaml",
+              "RelativeDocumentMoniker": "Styles\\Text.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Text.xaml",
+              "RelativeToolTip": "Styles\\Text.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:29:05.28Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Page.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Page.xaml",
+              "RelativeDocumentMoniker": "Styles\\Page.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Page.xaml",
+              "RelativeToolTip": "Styles\\Page.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:29:02.874Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Image.xaml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Image.xaml",
+              "RelativeDocumentMoniker": "Styles\\Image.xaml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Client-Management-System_V4\\Styles\\Image.xaml",
+              "RelativeToolTip": "Styles\\Image.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-30T05:28:59.61Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

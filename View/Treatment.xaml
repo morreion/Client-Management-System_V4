@@ -1,0 +1,185 @@
+<UserControl x:Class="Client_Management_System_V4.View.Treatment"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Client_Management_System_V4.ViewModel"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             Style="{StaticResource Page_Style}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <UserControl.DataContext>
+        <vm:TreatmentVM />
+    </UserControl.DataContext>
+
+ <UserControl.Resources>
+        <Style TargetType="DatePickerTextBox">
+            <Setter Property="Background" Value="#3F4347"/>
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="15,60,15,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="14" Padding="10,8" Background="#2D3035"
+                     Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
+            <Button Grid.Column="1" Content="🔍 Search Treatment" Command="{Binding SearchCommand}"
+                    Margin="10,0,0,0" Padding="15,8" Background="#3B82F6" Foreground="White" BorderThickness="0"/>
+        </Grid>
+
+        <!-- List -->
+        <Border Grid.Row="1" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="10">
+            <DataGrid ItemsSource="{Binding TreatmentList}"
+                      SelectedItem="{Binding SelectedTreatment}"
+                      AutoGenerateColumns="False" CanUserAddRows="False"
+                      Background="#2D3035" Foreground="#DBDBDB"
+                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
+                      HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
+                
+                  <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="SeparatorVisibility" Value="Visible"/>
+                            <Setter Property="SeparatorBrush" Value="Red"/> <!-- Temporarily Red to prove it works, user can change back -->
+                            <Setter Property="Background" Value="#3F4347"/>
+                            <Setter Property="Foreground" Value="#DBDBDB"/>
+                            <Setter Property="Padding" Value="10,5"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/> <!-- Bottom border only -->
+                            <Setter Property="BorderBrush" Value="#555"/>
+                            
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridColumnHeader">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                            
+                                            <!-- The Separator (Right Side) -->
+                                            <Thumb x:Name="PART_RightHeaderGripper"
+                                                   HorizontalAlignment="Right"
+                                                   Cursor="SizeWE"
+                                                   Width="1"
+                                                   Background="{TemplateBinding SeparatorBrush}"
+                                                   Visibility="{TemplateBinding SeparatorVisibility}"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Client" Binding="{Binding ClientName}" Width="1.5*"/>
+                    <DataGridTextColumn Header="Date" Binding="{Binding Treatment_Date, StringFormat=d}" Width="*"/>
+                    <DataGridTextColumn Header="Presenting Symptoms" Binding="{Binding Presenting_Symptoms}" Width="2*"/>
+                    <DataGridTextColumn Header="Impression" Binding="{Binding Impression}" Width="2*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Actions -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+            <Button Content="➕ Add New" Command="{Binding AddCommand}" Padding="15,8" Background="#10B981" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+            <Button Content="💾 Save" Command="{Binding SaveCommand}" Padding="15,8" Background="#3B82F6" Foreground="White" BorderThickness="0" Margin="0,0,10,0" IsEnabled="{Binding IsSelectionActive}"/>
+            <Button Content="🗑️ Delete" Command="{Binding DeleteCommand}" Padding="15,8" Background="#EF4444" Foreground="White" BorderThickness="0" Margin="0,0,10,0" IsEnabled="{Binding IsSelectionActive}"/>
+            <Button Content="❌ Cancel" Command="{Binding CancelCommand}" Padding="15,8" Background="#6B7280" Foreground="White" BorderThickness="0"/>
+        </StackPanel>
+
+        <!-- Form -->
+        <Border Grid.Row="3" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="20">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Client & Date -->
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Text="Client *" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <ComboBox ItemsSource="{Binding Clients}"
+                                  SelectedValue="{Binding SelectedTreatment.ClientID}"
+                                  SelectedValuePath="ClientID"
+                                  DisplayMemberPath="Name"
+                                  Style="{StaticResource MyCustomComboBoxStyle}"
+                                  Height="38"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="0" Grid.Column="2">
+                        <TextBlock Text="Date" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                         <DatePicker SelectedDate="{Binding SelectedTreatment.Treatment_Date}" Height="38"
+                                    Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                    </StackPanel>
+
+                    <!-- Presenting Symptoms -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,15,0,0">
+                        <TextBlock Text="Presenting Symptoms" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding SelectedTreatment.Presenting_Symptoms, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
+                                 TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
+                    </StackPanel>
+
+                    <!-- Expectations & Impression -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,15,0,0">
+                        <TextBlock Text="Expectations of Treatment" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding SelectedTreatment.Expectations_of_Treatment, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
+                                 TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,15,0,0">
+                        <TextBlock Text="Impression" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding SelectedTreatment.Impression, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
+                                 TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
+                    </StackPanel>
+
+                    <!-- Rx -->
+                    <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,15,0,0">
+                        <TextBlock Text="Rx (Prescription Details)" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding SelectedTreatment.Rx, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
+                                 TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
+                    </StackPanel>
+                    
+                </Grid>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>
