@@ -224,8 +224,9 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Distributor *" Foreground="#DBDBDB" Margin="0,0,0,5" VerticalAlignment="Bottom"/>
+                           <!--Button to go to distributor manager  overlay-->
                             <Button Grid.Column="1" Content="⚙️ Manage Distributors" Command="{Binding OpenDistributorManagerCommand}" 
-                                    Background="Transparent" Foreground="#3B82F6" BorderThickness="0" Cursor="Hand" 
+                                    Background="Green" Foreground="White" BorderThickness="0" Cursor="Hand" 
                                     HorizontalAlignment="Right" Margin="0,0,0,5"/>
                         </Grid>
                         

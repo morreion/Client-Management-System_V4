@@ -64,6 +64,8 @@
                 CornerRadius="8"
                 Padding="10">
             <Grid>
+            <!--  HorizontalGridLinesBrush = "#3F4347"
+                          VerticalGridLinesBrush = "#3F4347"-->
                 <DataGrid x:Name="ClientsDataGrid"
                           ItemsSource="{Binding Clients}"
                           SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
