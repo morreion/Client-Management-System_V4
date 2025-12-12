@@ -20,9 +20,23 @@ namespace Client_Management_System_V4.Models
         public int? Children { get; set; }
         public string? Ref { get; set; }
         public string? Alt_Contact { get; set; }
+        
+        /// <summary>
+        /// 0 = Female, 1 = Male, Null = Unknown
+        /// </summary>
+        public int? Gender { get; set; }
 
         // Computed property for display
         public string DisplayName => $"{Name} ({Mobile ?? "No phone"})";
+
+        public string GenderDisplay
+        {
+            get
+            {
+                if (!Gender.HasValue) return "";
+                return Gender.Value == 1 ? "Male" : "Female";
+            }
+        }
         
         // Age calculation
         public int? Age
