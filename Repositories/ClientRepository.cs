@@ -20,6 +20,54 @@ namespace Client_Management_System_V4.Repositories
         public ClientRepository()
         {
             _connectionString = DatabaseManager.ConnectionString;
+            EnsureGenderColumnExists();
+        }
+
+        private void EnsureGenderColumnExists()
+        {
+            using var connection = new SQLiteConnection(_connectionString);
+            connection.Open();
+            
+            var checkSql = "PRAGMA table_info(Client)";
+            var columns = connection.Query<dynamic>(checkSql);
+            var genderColumn = columns.FirstOrDefault(c => c.name == "Gender");
+
+            if (genderColumn == null)
+            {
+                // Add column if missing (Nullable by default in this new version)
+                var alterSql = "ALTER TABLE Client ADD COLUMN Gender INTEGER";
+                connection.Execute(alterSql);
+            }
+            else
+            {
+                // If column exists, check if it is NOT NULL (notnull = 1)
+                // We want it to be nullable. SQLite ALTER COLUMN is limited, so we use Rename-Add-Copy-Drop pattern
+                if (genderColumn.notnull == 1)
+                {
+                    using var transaction = connection.BeginTransaction();
+                    try
+                    {
+                        // 1. Rename old column
+                        connection.Execute("ALTER TABLE Client RENAME COLUMN Gender TO Gender_Old", transaction: transaction);
+
+                        // 2. Add new nullable column
+                        connection.Execute("ALTER TABLE Client ADD COLUMN Gender INTEGER", transaction: transaction);
+
+                        // 3. Copy data
+                        connection.Execute("UPDATE Client SET Gender = Gender_Old", transaction: transaction);
+
+                        // 4. Drop old column
+                        connection.Execute("ALTER TABLE Client DROP COLUMN Gender_Old", transaction: transaction);
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -52,12 +100,12 @@ namespace Client_Management_System_V4.Repositories
                 INSERT INTO Client (
                     Name, Address, DOB, Mobile, Email, Occupation, 
                     Date_First_Consultation, Date_Last_Consultation, 
-                    Marital_Status, Children, Ref, Alt_Contact
+                    Marital_Status, Children, Ref, Alt_Contact, Gender
                 )
                 VALUES (
                     @Name, @Address, @DOB, @Mobile, @Email, @Occupation,
                     @Date_First_Consultation, @Date_Last_Consultation,
-                    @Marital_Status, @Children, @Ref, @Alt_Contact
+                    @Marital_Status, @Children, @Ref, @Alt_Contact, @Gender
                 );
                 SELECT last_insert_rowid();";
             
@@ -84,7 +132,8 @@ namespace Client_Management_System_V4.Repositories
                     Marital_Status = @Marital_Status, 
                     Children = @Children,
                     Ref = @Ref, 
-                    Alt_Contact = @Alt_Contact
+                    Alt_Contact = @Alt_Contact,
+                    Gender = @Gender
                 WHERE ClientID = @ClientID";
             
             int rowsAffected = await connection.ExecuteAsync(sql, client);
