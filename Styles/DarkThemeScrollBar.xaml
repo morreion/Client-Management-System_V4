@@ -58,7 +58,7 @@
     <Style TargetType="{x:Type ScrollBar}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Width" Value="20"/> <!-- Default width for vertical scrollbar -->
+        <Setter Property="Width" Value="15"/> <!-- Default width for vertical scrollbar -->
         <Setter Property="Height" Value="auto"/> <!-- Default height for horizontal scrollbar -->
         
         <!-- Vertical ScrollBar Template -->
@@ -81,12 +81,10 @@
                         <Trigger Property="Orientation" Value="Horizontal">
                             <Setter Property="Height" Value="10"/>
                             <Setter Property="Width" Value="Auto"/>
-                            <Setter Property="LayoutTransform" TargetName="GridRoot">
-                                <Setter.Value>
-                                    <RotateTransform Angle="-90"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Margin" TargetName="PART_Track" Value="0,1,0,1"/>
+                            <!-- Remove RotateTransform: Track handles orientation naturally if container is sized right -->
+                            <Setter TargetName="GridRoot" Property="Width" Value="Auto"/>
+                            <Setter TargetName="GridRoot" Property="Height" Value="15"/>
+                            <Setter Property="Margin" TargetName="PART_Track" Value="1,0,1,0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
