@@ -30,6 +30,18 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryFirstOrDefaultAsync<Treatment>(sql, new { Id = id });
         }
 
+        public async Task<IEnumerable<Treatment>> GetByClientIdAsync(int clientId)
+        {
+            using var connection = DatabaseManager.GetConnection();
+            var sql = @"
+                SELECT t.*, c.Name as ClientName 
+                FROM Treatment t 
+                JOIN Client c ON t.ClientID = c.ClientID 
+                WHERE t.ClientID = @ClientId
+                ORDER BY t.Treatment_Date DESC";
+            return await connection.QueryAsync<Treatment>(sql, new { ClientId = clientId });
+        }
+
         public async Task<int> AddAsync(Treatment entity)
         {
             using var connection = DatabaseManager.GetConnection();

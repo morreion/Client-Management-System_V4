@@ -43,6 +43,23 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryFirstOrDefaultAsync<MedHx>(sql, new { Id = id });
         }
 
+        public async Task<IEnumerable<MedHx>> GetByClientIdAsync(int clientId)
+        {
+            using var connection = DatabaseManager.GetConnection();
+            var sql = @"
+                SELECT 
+                    m.Med_HxID, m.ClientID, m.Assessment_Date, 
+                    m.Blood_Test_Results, m.Medication, m.Supplements, 
+                    m.Accidents_Previous_Illness, m.Menstrual_Notes, 
+                    m.Vaccinations, m.Med_Hx AS HistoryNotes, m.Family_Med_Hx,
+                    c.Name as ClientName 
+                FROM Med_Hx m 
+                JOIN Client c ON m.ClientID = c.ClientID 
+                WHERE m.ClientID = @ClientId
+                ORDER BY m.Assessment_Date DESC";
+            return await connection.QueryAsync<MedHx>(sql, new { ClientId = clientId });
+        }
+
         // 2. Details Fetcher
         public async Task<IEnumerable<MedHxSupplement>> GetSupplementsByHxIdAsync(int medHxId)
         {

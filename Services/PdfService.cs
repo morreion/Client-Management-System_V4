@@ -1,0 +1,469 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Client_Management_System_V4.Models;
+using Client_Management_System_V4.Repositories;
+using QuestPDF;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+
+namespace Client_Management_System_V4.Services
+{
+    public class PdfService : IPdfService
+    {
+        private readonly MedHxRepository _medHxRepo = new();
+        private readonly AnthropometricsRepository _anthroRepo = new();
+        private readonly DietRepository _dietRepo = new();
+        private readonly TreatmentRepository _treatmentRepo = new();
+        private readonly EyeAnalysisRepository _eyeRepo = new();
+        private readonly PrescriptionRepository _prescriptionRepo = new();
+
+        public PdfService()
+        {
+            Settings.License = LicenseType.Community;
+        }
+
+        public async Task GenerateHealthReportAsync(Client client, ReportOptions options, string filePath)
+        {
+            // Fetch Data based on Options
+            IEnumerable<MedHx> medHxList = options.IncludeMedicalHistory ? await _medHxRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<MedHx>();
+            IEnumerable<Anthropometrics> anthroList = options.IncludeAnthropometrics ? await _anthroRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<Anthropometrics>();
+            IEnumerable<Diet> dietList = options.IncludeDiet ? await _dietRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<Diet>();
+            IEnumerable<Treatment> treatmentList = options.IncludeTreatment ? await _treatmentRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<Treatment>();
+            IEnumerable<EyeAnalysis> eyeList = options.IncludeEyeAnalysis ? await _eyeRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<EyeAnalysis>();
+            
+            // Prescription Preparation
+            var prescriptionDetails = new List<(Prescription Rx, IEnumerable<PrescriptionSupplement> Supplements)>();
+            if (options.IncludePrescriptions)
+            {
+                var prescriptions = await _prescriptionRepo.GetByClientIdAsync(client.ClientID);
+                foreach(var rx in prescriptions)
+                {
+                    var sups = await _prescriptionRepo.GetSupplementsByPrescriptionIdAsync(rx.PrescriptionID.Value);
+                    prescriptionDetails.Add((rx, sups));
+                }
+            }
+
+            await Task.Run(() =>
+            {
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4);
+                        page.Margin(2, Unit.Centimetre);
+                        page.PageColor(Colors.White);
+                        page.DefaultTextStyle(x => x.FontSize(11).FontFamily("Arial"));
+
+                        page.Header().Element(ComposeHeader);
+                        
+                        page.Content().Element(content => ComposeContent(content, client, options, medHxList, anthroList, dietList, treatmentList, eyeList, prescriptionDetails));
+
+                        page.Footer().Element(ComposeFooter);
+                    });
+                })
+                .GeneratePdf(filePath);
+            });
+        }
+
+        public async Task GeneratePrescriptionReportAsync(Client client, string filePath)
+        {
+            var prescriptions = await _prescriptionRepo.GetByClientIdAsync(client.ClientID);
+            
+            // We need to fetch supplements for each prescription to display them details
+            // This might be N+1 query problem but for a single client report it's negligible
+            var prescriptionDetails = new List<(Prescription Rx, IEnumerable<PrescriptionSupplement> Supplements)>();
+            
+            foreach(var rx in prescriptions)
+            {
+                var sups = await _prescriptionRepo.GetSupplementsByPrescriptionIdAsync(rx.PrescriptionID.Value);
+                prescriptionDetails.Add((rx, sups));
+            }
+
+            await Task.Run(() =>
+            {
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4);
+                        page.Margin(2, Unit.Centimetre);
+                        page.PageColor(Colors.White);
+                        page.DefaultTextStyle(x => x.FontSize(11).FontFamily("Arial"));
+
+                        page.Header().Element(head => 
+                        {
+                            head.Row(row =>
+                            {
+                                row.RelativeItem().Column(column =>
+                                {
+                                    column.Item().Text("Prescription Report").FontSize(20).SemiBold().FontColor(Colors.Green.Medium);
+                                    column.Item().Text($"Date: {DateTime.Now:yyyy-MM-dd}").FontSize(10);
+                                });
+                            });
+                        });
+
+                        page.Content().PaddingVertical(10).Column(column =>
+                        {
+                            column.Item().Element(c => ComposePatientDetails(c, client));
+                            column.Item().Element(c => ComposePrescriptionDetails(c, prescriptionDetails));
+                        });
+
+                        page.Footer().Element(ComposeFooter);
+                    });
+                })
+                .GeneratePdf(filePath);
+            });
+        }
+
+        public async Task GenerateContactListReportAsync(IEnumerable<Client> clients, List<string> selectedColumns, string filePath)
+        {
+            await Task.Run(() =>
+            {
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4); // or PageSizes.A4.Landscape() if many columns
+                        if (selectedColumns.Count > 4) page.Size(PageSizes.A4.Landscape());
+                        
+                        page.Margin(2, Unit.Centimetre);
+                        page.PageColor(Colors.White);
+                        page.DefaultTextStyle(x => x.FontSize(10).FontFamily("Arial"));
+
+                        page.Header().Text("Client Contact List").FontSize(18).SemiBold().FontColor(Colors.Blue.Medium);
+
+                        page.Content().PaddingVertical(10).Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                // Dynamic column definition
+                                foreach(var col in selectedColumns)
+                                {
+                                    columns.RelativeColumn();
+                                }
+                            });
+
+                            table.Header(header =>
+                            {
+                                foreach (var col in selectedColumns)
+                                {
+                                    header.Cell().BorderBottom(1).BorderColor(Colors.Grey.Darken1).Padding(5).Text(col).Bold();
+                                }
+                            });
+
+                            foreach (var client in clients)
+                            {
+                                foreach (var col in selectedColumns)
+                                {
+                                    string value = col switch
+                                    {
+                                        "Name" => client.Name,
+                                        "Mobile" => client.Mobile ?? "-",
+                                        "Email" => client.Email ?? "-",
+                                        "Address" => client.Address ?? "-",
+                                        "DOB" => client.DOB?.ToString("yyyy-MM-dd") ?? "-",
+                                        "Occupation" => client.Occupation ?? "-",
+                                        "Gender" => client.GenderDisplay,
+                                        "Ref" => client.Ref ?? "-",
+                                        _ => "-"
+                                    };
+                                    table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(value);
+                                }
+                            }
+                        });
+
+                        page.Footer().Element(ComposeFooter);
+                    });
+                })
+                .GeneratePdf(filePath);
+            });
+        }
+
+        private void ComposeHeader(IContainer container)
+        {
+            container.Row(row =>
+            {
+                row.RelativeItem().Column(column =>
+                {
+                    column.Item().Text("Client Health Report").FontSize(20).SemiBold().FontColor(Colors.Blue.Medium);
+                    column.Item().Text($"Date: {DateTime.Now:yyyy-MM-dd}").FontSize(10);
+                });
+            });
+        }
+
+        private void ComposeContent(IContainer container, Client client, ReportOptions options,
+            IEnumerable<MedHx> medHxList, IEnumerable<Anthropometrics> anthroList, 
+            IEnumerable<Diet> dietList, IEnumerable<Treatment> treatmentList, 
+            IEnumerable<EyeAnalysis> eyeList,
+            List<(Prescription Rx, IEnumerable<PrescriptionSupplement> Supplements)> prescriptionDetails)
+        {
+            container.PaddingVertical(10).Column(column =>
+            {
+                // Patient Details
+                column.Item().Element(c => ComposePatientDetails(c, client));
+                
+                if (options.IncludeMedicalHistory)
+                    column.Item().Element(c => ComposeMedicalHistory(c, medHxList));
+                
+                if (options.IncludeAnthropometrics)
+                    column.Item().Element(c => ComposeAnthropometrics(c, anthroList));
+                
+                if (options.IncludeDiet)
+                    column.Item().Element(c => ComposeDiet(c, dietList));
+
+                if (options.IncludeTreatment)
+                    column.Item().Element(c => ComposeTreatment(c, treatmentList));
+
+                if (options.IncludeEyeAnalysis)
+                    column.Item().Element(c => ComposeEyeAnalysis(c, eyeList));
+
+                if (options.IncludePrescriptions)
+                    column.Item().Element(c => ComposePrescriptionDetails(c, prescriptionDetails));
+            });
+        }
+
+        private void ComposePatientDetails(IContainer container, Client client)
+        {
+            container.ShowEntire().Border(1).BorderColor(Colors.Grey.Lighten2).Padding(10).Column(column => 
+            {
+                column.Item().Text("Patient Details").FontSize(14).SemiBold().Underline();
+                
+                column.Item().Row(row => 
+                {
+                    row.RelativeItem().Text($"Name: {client.Name}");
+                    row.RelativeItem().Text($"DOB: {client.DOB:yyyy-MM-dd} (Age: {client.Age})");
+                });
+
+                column.Item().Row(row => 
+                {
+                    row.RelativeItem().Text($"Gender: {client.GenderDisplay}");
+                    row.RelativeItem().Text($"Mobile: {client.Mobile}");
+                });
+                
+                 column.Item().Row(row => 
+                {
+                    row.RelativeItem().Text($"Email: {client.Email}");
+                    row.RelativeItem().Text($"Occupation: {client.Occupation}");
+                });
+            });
+        }
+
+        private void ComposeMedicalHistory(IContainer container, IEnumerable<MedHx> list)
+        {
+            container.PaddingTop(20).Column(column =>
+            {
+                column.Item().Text("Medical History").FontSize(16).SemiBold().FontColor(Colors.Blue.Darken2);
+                
+                if (!list.Any())
+                {
+                    column.Item().Text("No records found.");
+                    return;
+                }
+
+                foreach (var item in list)
+                {
+                    column.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).PaddingVertical(5).Column(c =>
+                    {
+                        c.Item().Text($"Date: {item.Assessment_Date:yyyy-MM-dd}").Bold();
+                        c.Item().Text($"Notes: {item.HistoryNotes}");
+                        if (!string.IsNullOrEmpty(item.Medication)) c.Item().Text($"Medication: {item.Medication}");
+                        if (!string.IsNullOrEmpty(item.Supplements)) c.Item().Text($"Supplements: {item.Supplements}");
+                    });
+                }
+            });
+        }
+
+        private void ComposeAnthropometrics(IContainer container, IEnumerable<Anthropometrics> list)
+        {
+             container.PaddingTop(20).Column(column =>
+            {
+                column.Item().Text("Anthropometrics").FontSize(16).SemiBold().FontColor(Colors.Blue.Darken2);
+                
+                if (!list.Any())
+                {
+                    column.Item().Text("No records found.");
+                    return;
+                }
+
+                column.Item().Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        columns.ConstantColumn(80); // Date
+                        columns.RelativeColumn(); // Weight
+                        columns.RelativeColumn(); // BP
+                        columns.RelativeColumn(); // Pulse
+                        columns.RelativeColumn(); // BMI
+                    });
+
+                    table.Header(header =>
+                    {
+                        header.Cell().Text("Date").Bold();
+                        header.Cell().Text("Weight").Bold();
+                        header.Cell().Text("BP").Bold();
+                        header.Cell().Text("Pulse").Bold();
+                        header.Cell().Text("BMI").Bold();
+                    });
+
+                    foreach (var item in list)
+                    {
+                        table.Cell().Text($"{item.Assessment_Date:yyyy-MM-dd}");
+                        table.Cell().Text($"{item.Weight} kg");
+                        table.Cell().Text(item.BP);
+                        table.Cell().Text(item.Pulse.ToString());
+                        // Calculate BMI or use property
+                        var bmi = item.BMI.HasValue ? item.BMI.Value.ToString("F1") : "-";
+                        table.Cell().Text(bmi);
+                    }
+                });
+            });
+        }
+
+        private void ComposeDiet(IContainer container, IEnumerable<Diet> list)
+        {
+             container.PaddingTop(20).Column(column =>
+            {
+                column.Item().Text("Diet Plan").FontSize(16).SemiBold().FontColor(Colors.Blue.Darken2);
+                
+                if (!list.Any())
+                {
+                    column.Item().Text("No records found.");
+                    return;
+                }
+
+                 foreach (var item in list)
+                {
+                    column.Item().PaddingVertical(5).Column(c =>
+                    {
+                        c.Item().Text($"Plan Date: {item.Diet_Date:yyyy-MM-dd}").Bold();
+                        c.Item().Text("Breakfast:").SemiBold();
+                        c.Item().PaddingLeft(10).Text(item.Breakfast);
+                        c.Item().Text("Lunch:").SemiBold();
+                        c.Item().PaddingLeft(10).Text(item.Lunch);
+                        c.Item().Text("Dinner:").SemiBold();
+                        c.Item().PaddingLeft(10).Text(item.Dinner);
+                    });
+                }
+            });
+        }
+
+        private void ComposeTreatment(IContainer container, IEnumerable<Treatment> list)
+        {
+             container.PaddingTop(20).Column(column =>
+            {
+                column.Item().Text("Treatment Plan").FontSize(16).SemiBold().FontColor(Colors.Blue.Darken2);
+                if (!list.Any())
+                {
+                    column.Item().Text("No records found.");
+                    return;
+                }
+                foreach (var item in list)
+                {
+                    column.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).PaddingVertical(5).Column(c =>
+                    {
+                        c.Item().Text($"Date: {item.Treatment_Date:yyyy-MM-dd}").Bold();
+                        c.Item().Text($"Symptom: {item.Presenting_Symptoms}");
+                        c.Item().Text($"Impression: {item.Impression}");
+                        c.Item().Text($"Rx: {item.Rx}");
+                    });
+                }
+            });
+        }
+        
+        private void ComposePrescriptionDetails(IContainer container, IEnumerable<(Prescription Rx, IEnumerable<PrescriptionSupplement> Supplements)> list)
+        {
+             container.PaddingTop(20).Column(column =>
+            {
+                column.Item().Text("Prescriptions").FontSize(16).SemiBold().FontColor(Colors.Green.Darken2);
+                
+                if (!list.Any())
+                {
+                    column.Item().Text("No records found.");
+                    return;
+                }
+
+                foreach (var item in list)
+                {
+                    column.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).PaddingVertical(10).Column(c =>
+                    {
+                        c.Item().Text($"Date: {item.Rx.Prescription_Date:yyyy-MM-dd}").Bold().FontSize(12);
+                        if(item.Rx.Next_Appointment_Date.HasValue)
+                             c.Item().Text($"Next Appointment: {item.Rx.Next_Appointment_Date:yyyy-MM-dd}");
+                        
+                        c.Item().PaddingTop(5).Text("Recommendations:").SemiBold();
+                        c.Item().Text(item.Rx.Recommendations);
+
+                        if(item.Supplements.Any())
+                        {
+                            c.Item().PaddingTop(5).Text("Supplements:").SemiBold();
+                            c.Item().Table(table => 
+                            {
+                                table.ColumnsDefinition(cols => 
+                                {
+                                    cols.RelativeColumn(3); // Name
+                                    cols.RelativeColumn(); // Breakfast
+                                    cols.RelativeColumn(); // Lunch
+                                    cols.RelativeColumn(); // Dinner
+                                    cols.RelativeColumn(); // Bedtime
+                                });
+                                
+                                table.Header(h => 
+                                {
+                                    h.Cell().Text("Name").Italic();
+                                    h.Cell().Text("Brkfst").Italic();
+                                    h.Cell().Text("Lunch").Italic();
+                                    h.Cell().Text("Dinner").Italic();
+                                    h.Cell().Text("Bedtime").Italic();
+                                });
+
+                                foreach(var sup in item.Supplements)
+                                {
+                                    table.Cell().Text(sup.SupplementName);
+                                    table.Cell().Text(sup.Breakfast);
+                                    table.Cell().Text(sup.Lunch);
+                                    table.Cell().Text(sup.Dinner);
+                                    table.Cell().Text(sup.Bedtime);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        private void ComposeEyeAnalysis(IContainer container, IEnumerable<EyeAnalysis> list)
+        {
+             container.PaddingTop(20).Column(column =>
+            {
+                column.Item().Text("Eye Analysis").FontSize(16).SemiBold().FontColor(Colors.Blue.Darken2);
+                if (!list.Any())
+                {
+                    column.Item().Text("No records found.");
+                    return;
+                }
+                foreach (var item in list)
+                {
+                     column.Item().PaddingVertical(5).Column(c =>
+                    {
+                        c.Item().Text($"Analysis Date: {item.Analysis_Date:yyyy-MM-dd}").Bold();
+                        c.Item().Text($"Constitution: {item.Iris_Colour} / {item.Texture}");
+                        c.Item().Text($"Tissues: {item.Stomach} (Stomach), {item.Bowel} (Bowel), {item.Organs} (Organs)");
+                    });
+                }
+            });
+        }
+
+        private void ComposeFooter(IContainer container)
+        {
+            container.AlignCenter().Text(x =>
+            {
+                x.Span("Page ");
+                x.CurrentPageNumber();
+            });
+        }
+    }
+}

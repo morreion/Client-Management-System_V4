@@ -32,6 +32,18 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryFirstOrDefaultAsync<EyeAnalysis>(sql, new { Id = id });
         }
 
+        public async Task<IEnumerable<EyeAnalysis>> GetByClientIdAsync(int clientId)
+        {
+            using var connection = DatabaseManager.GetConnection();
+            var sql = @"
+                SELECT e.*, c.Name as ClientName 
+                FROM Eye_Analysis e 
+                JOIN Client c ON e.ClientID = c.ClientID 
+                WHERE e.ClientID = @ClientId
+                ORDER BY e.Analysis_Date DESC";
+            return await connection.QueryAsync<EyeAnalysis>(sql, new { ClientId = clientId });
+        }
+
         // 2. Lookup Data Methods
         public async Task<IEnumerable<ScleraPriorityType>> GetAllPriorityTypesAsync()
         {

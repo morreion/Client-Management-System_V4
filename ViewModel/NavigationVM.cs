@@ -12,43 +12,39 @@ namespace Client_Management_System_V4.ViewModel
             set { _currentView = value; OnPropertyChanged(); }
         }
 
-        public ICommand ClientCommand { get; set; }
-        public ICommand MedHxCommand { get; set; }
-        public ICommand AntropometricsCommand { get; set; }
-        public ICommand BodySystemsOverviewCommand { get; set; }
-        public ICommand EyeAnalysisCommand { get; set; }
-        public ICommand DietCommand { get; set; }
-        public ICommand TreatmentCommand { get; set; }
-        public ICommand PrescriptionCommand { get; set; }
-        public ICommand SupplementsCommand { get; set; }
-        public ICommand DistributorCommand { get; set; }
+        public ICommand ClientCommand { get; }
+        public ICommand MedHxCommand { get; }
+        public ICommand AntropometricsCommand { get; }
+        public ICommand BodySystemsOverviewCommand { get; }
+        public ICommand EyeAnalysisCommand { get; }
+        public ICommand DietCommand { get; }
+        public ICommand TreatmentCommand { get; }
+        public ICommand PrescriptionCommand { get; }
+        public ICommand SupplementsCommand { get; }
+        public ICommand DistributorCommand { get; }
+        public ICommand ReportsCommand { get; }
 
-        private void Client(object obj) => CurrentView = new ClientVM();
-        private void MedHx(object obj) => CurrentView = new MedHxVM();
-        private void Antropometrics(object obj) => CurrentView = new AntropometricsVM();
-        private void BodySystemsOverview(object obj) => CurrentView = new BodySystemsOverviewVM();
-        private void EyeAnalysis(object obj) => CurrentView = new EyeAnalysisVM();
-        private void Diet(object obj) => CurrentView = new DietVM();
-        private void Treatment(object obj) => CurrentView = new TreatmentVM();
-        private void Prescription(object obj) => CurrentView = new PrescriptionVM();
-        private void Supplements(object obj) => CurrentView = new SupplementsVM();
-        private void Distributor(object obj) => CurrentView = new DistributorVM();
+        private void SafeNavigate(object viewModel)
+        {
+            CurrentView = viewModel;
+        }
 
         public NavigationVM()
         {
-            ClientCommand = new RelayCommand(Client);
-            MedHxCommand = new RelayCommand(MedHx);
-            AntropometricsCommand = new RelayCommand(Antropometrics);
-            BodySystemsOverviewCommand = new RelayCommand(BodySystemsOverview);
-            EyeAnalysisCommand = new RelayCommand(EyeAnalysis);
-            DietCommand = new RelayCommand(Diet);
-            TreatmentCommand = new RelayCommand(Treatment);
-            PrescriptionCommand = new RelayCommand(Prescription);
-            SupplementsCommand = new RelayCommand(Supplements);
-            DistributorCommand = new RelayCommand(Distributor);
+            ClientCommand = new RelayCommand(_ => SafeNavigate(new ClientVM()));
+            DistributorCommand = new RelayCommand(_ => SafeNavigate(new DistributorVM()));
+            SupplementsCommand = new RelayCommand(_ => SafeNavigate(new SupplementsVM()));
+            MedHxCommand = new RelayCommand(_ => SafeNavigate(new MedHxVM()));
+            AntropometricsCommand = new RelayCommand(_ => SafeNavigate(new AntropometricsVM()));
+            DietCommand = new RelayCommand(_ => SafeNavigate(new DietVM()));
+            TreatmentCommand = new RelayCommand(_ => SafeNavigate(new TreatmentVM()));
+            PrescriptionCommand = new RelayCommand(_ => SafeNavigate(new PrescriptionVM()));
+            BodySystemsOverviewCommand = new RelayCommand(_ => SafeNavigate(new BodySystemsOverviewVM()));
+            EyeAnalysisCommand = new RelayCommand(_ => SafeNavigate(new EyeAnalysisVM()));
+            ReportsCommand = new RelayCommand(_ => SafeNavigate(new ReportsVM()));
 
-            // Startup Page
-            CurrentView = new ClientVM();
+            // Default view
+            SafeNavigate(new ClientVM());
         }
     }
 }

@@ -30,6 +30,18 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryFirstOrDefaultAsync<Diet>(sql, new { Id = id });
         }
 
+        public async Task<IEnumerable<Diet>> GetByClientIdAsync(int clientId)
+        {
+            using var connection = DatabaseManager.GetConnection();
+            var sql = @"
+                SELECT d.*, c.Name as ClientName 
+                FROM Diet d 
+                JOIN Client c ON d.ClientID = c.ClientID 
+                WHERE d.ClientID = @ClientId
+                ORDER BY d.Diet_Date DESC";
+            return await connection.QueryAsync<Diet>(sql, new { ClientId = clientId });
+        }
+
         public async Task<int> AddAsync(Diet entity)
         {
             using var connection = DatabaseManager.GetConnection();

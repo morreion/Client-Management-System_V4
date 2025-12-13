@@ -1,0 +1,141 @@
+<UserControl x:Class="Client_Management_System_V4.View.Reports"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Client_Management_System_V4.ViewModel"
+             xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.DataContext>
+        <vm:ReportsVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <local:NullToBoolConverter x:Key="NullToBoolConverter" />
+
+        <!-- Simple Custom CheckBox Style -->
+        <Style x:Key="ReportsCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="20" Height="20" Background="#3F4347" CornerRadius="4" BorderBrush="#555" BorderThickness="1">
+                                <Path Data="M 2,10 L 8,16 L 18,4" Stroke="#10B981" StrokeThickness="2" 
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"
+                                      Visibility="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            </Border>
+                            <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Main Header -->
+            <RowDefinition Height="*"/>    <!-- Content -->
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Reports Center" 
+                   FontSize="28" FontWeight="Bold" Foreground="#DBDBDB" 
+                   Margin="0,0,0,30"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/> <!-- Individual Reports -->
+                <ColumnDefinition Width="40"/> <!-- Spacer -->
+                <ColumnDefinition Width="*"/> <!-- General Reports -->
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT: Individual Client Reports -->
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Individual Client Reports" FontSize="20" Foreground="#10B981" Margin="0,0,0,20" FontWeight="SemiBold"/>
+
+                <!-- Client Selector -->
+                <Border Background="#2D3035" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Select Client:" Foreground="#aaa" Margin="0,0,0,5"/>
+                        <ComboBox ItemsSource="{Binding Clients}" 
+                                  SelectedItem="{Binding SelectedClient}"
+                                  DisplayMemberPath="Name"
+                                  Height="40"
+                                  Style="{StaticResource MyCustomComboBoxStyle}"
+                                  HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Health Report Config -->
+                <Border Background="#2D3035" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Health Report Sections" FontSize="16" Foreground="#DBDBDB" Margin="0,0,0,15" FontWeight="SemiBold"/>
+                        <CheckBox Content="Medical History" IsChecked="{Binding Options.IncludeMedicalHistory}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        <CheckBox Content="Anthropometrics" IsChecked="{Binding Options.IncludeAnthropometrics}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        <CheckBox Content="Diet Plan" IsChecked="{Binding Options.IncludeDiet}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        <CheckBox Content="Treatment Plan" IsChecked="{Binding Options.IncludeTreatment}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        <CheckBox Content="Eye Analysis" IsChecked="{Binding Options.IncludeEyeAnalysis}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        <CheckBox Content="Prescriptions" IsChecked="{Binding Options.IncludePrescriptions}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        
+                        <Button Content="� Generate Health Report" 
+                                Command="{Binding GenerateReportCommand}"
+                                Height="45" Margin="0,20,0,0"
+                                FontSize="16" FontWeight="SemiBold"
+                                Background="#3B82F6" Foreground="White"
+                                BorderThickness="0" Cursor="Hand"
+                                IsEnabled="{Binding SelectedClient, Converter={StaticResource NullToBoolConverter}}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- RIGHT: General Reports -->
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="General Reports" FontSize="20" Foreground="#F59E0B" Margin="0,0,0,20" FontWeight="SemiBold"/>
+
+                <!-- Contact List Config -->
+                <Border Background="#2D3035" CornerRadius="8" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Client Contact List" FontSize="16" Foreground="#DBDBDB" Margin="0,0,0,15" FontWeight="SemiBold"/>
+                        <TextBlock Text="Select columns to include:" Foreground="#aaa" Margin="0,0,0,10"/>
+
+                        <UniformGrid Columns="2">
+                            <CheckBox Content="Name" IsChecked="{Binding IncludeName}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                            <CheckBox Content="Mobile" IsChecked="{Binding IncludeMobile}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                            <CheckBox Content="Email" IsChecked="{Binding IncludeEmail}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                            <CheckBox Content="Address" IsChecked="{Binding IncludeAddress}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                            <CheckBox Content="D.O.B" IsChecked="{Binding IncludeDOB}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                            <CheckBox Content="Gender" IsChecked="{Binding IncludeGender}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                            <CheckBox Content="Occupation" IsChecked="{Binding IncludeOccupation}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                            <CheckBox Content="Reference" IsChecked="{Binding IncludeRef}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        </UniformGrid>
+
+                        <Button Content="📋 Generate Contact List" 
+                                Command="{Binding GenerateContactListCommand}"
+                                Height="45" Margin="0,20,0,0"
+                                FontSize="16" FontWeight="SemiBold"
+                                Background="#F59E0B" Foreground="White"
+                                BorderThickness="0" Cursor="Hand"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+        </Grid>
+
+        <!-- Loading Overlay -->
+        <Grid Grid.RowSpan="2" Background="#80000000" Visibility="{Binding IsGenerating, Converter={StaticResource BoolToVisibilityConverter}}"
+              d:Visibility="Collapsed">
+            <Border Background="#212529" CornerRadius="10" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="Generating PDF..." Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Please wait." Foreground="#aaa" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>

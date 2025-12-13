@@ -42,5 +42,9 @@
     <DataTemplate DataType="{x:Type vm:DistributorVM}">
         <view:Distributor />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ReportsVM}">
+        <view:Reports />
+    </DataTemplate>
     
 </ResourceDictionary>

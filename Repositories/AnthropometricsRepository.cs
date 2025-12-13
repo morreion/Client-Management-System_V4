@@ -30,6 +30,18 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryFirstOrDefaultAsync<Anthropometrics>(sql, new { Id = id });
         }
 
+        public async Task<IEnumerable<Anthropometrics>> GetByClientIdAsync(int clientId)
+        {
+            using var connection = DatabaseManager.GetConnection();
+            var sql = @"
+                SELECT a.*, c.Name as ClientName 
+                FROM Anthropometrics a 
+                JOIN Client c ON a.ClientID = c.ClientID 
+                WHERE a.ClientID = @ClientId
+                ORDER BY a.Assessment_Date DESC";
+            return await connection.QueryAsync<Anthropometrics>(sql, new { ClientId = clientId });
+        }
+
         public async Task<int> AddAsync(Anthropometrics entity)
         {
             using var connection = DatabaseManager.GetConnection();

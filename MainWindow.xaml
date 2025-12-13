@@ -122,6 +122,23 @@
 
                     </Menu:Btn>
 
+                    <!--// Reports //-->
+
+                    <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding ReportsCommand}">
+
+                        <Grid>
+
+                            <Image Source="Images/medical-record.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Reports"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </Menu:Btn>
+
                     <!--// Diet //-->
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"

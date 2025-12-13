@@ -33,6 +33,18 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryFirstOrDefaultAsync<Prescription>(sql, new { Id = id });
         }
 
+        public async Task<IEnumerable<Prescription>> GetByClientIdAsync(int clientId)
+        {
+            using var connection = DatabaseManager.GetConnection();
+            var sql = @"
+                SELECT p.*, c.Name as ClientName 
+                FROM Prescription p 
+                JOIN Client c ON p.ClientID = c.ClientID 
+                WHERE p.ClientID = @ClientId
+                ORDER BY p.Prescription_Date DESC";
+            return await connection.QueryAsync<Prescription>(sql, new { ClientId = clientId });
+        }
+
         // Get Supplements for a specific Prescription
         public async Task<IEnumerable<PrescriptionSupplement>> GetSupplementsByPrescriptionIdAsync(int prescriptionId)
         {

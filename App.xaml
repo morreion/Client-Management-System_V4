@@ -19,6 +19,7 @@
             
             <!-- Value Converters -->
             <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
+            <local:NullToBoolConverter x:Key="NullToBoolConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
