@@ -34,13 +34,36 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="5" >
                         <!-- KEY FIX: Apply CornerRadius here -->
-                        <ScrollViewer x:Name="PART_ContentHost" 
-                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                      Focusable="False" 
-                                      HorizontalScrollBarVisibility="Hidden" 
-                                      VerticalScrollBarVisibility="Hidden"/>
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          Focusable="False" 
+                                          HorizontalScrollBarVisibility="Hidden" 
+                                          VerticalScrollBarVisibility="Hidden"/>
+
+                            <!-- Placeholder Text -->
+                            <TextBlock x:Name="PlaceholderText"
+                                       Text="{TemplateBinding Tag}"
+                                       Foreground="#888888"
+                                       FontStyle="Italic"
+                                       VerticalAlignment="Center"
+                                       Margin="35,0,10,0"
+                                       IsHitTestVisible="False"
+                                       Visibility="Collapsed"/>
+                            <!--End placeholder text-->
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <!-- Placeholder Text -->
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                         <!-- Show Placeholder if Text is Null -->
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <!--End placeholder text-->
+
                         <!-- Change border color on mouse over -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource TextBoxMouseOverBorderBrush}"/>

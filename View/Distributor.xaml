@@ -237,17 +237,39 @@
                     <!-- Email -->
                     <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Email" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
-                                 Text="{Binding SelectedDistributor.Email, UpdateSourceTrigger=PropertyChanged}"
-                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                     Text="{Binding SelectedDistributor.Email, UpdateSourceTrigger=PropertyChanged}"
+                                     Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                            <Button Grid.Column="1" Content="📧" 
+                                    Margin="10,0,0,0"
+                                    Click="OpenEmail_Click"
+                                    Tag="{Binding SelectedDistributor.Email}"
+                                    Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Cursor="Hand"/>
+                        </Grid>
                     </StackPanel>
 
                     <!-- Website -->
                     <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Website" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
-                                 Text="{Binding SelectedDistributor.Website, UpdateSourceTrigger=PropertyChanged}"
-                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                         <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                     Text="{Binding SelectedDistributor.Website, UpdateSourceTrigger=PropertyChanged}"
+                                     Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                            <Button Grid.Column="1" Content="🌐" 
+                                    Margin="10,0,0,0"
+                                    Click="OpenWebsite_Click"
+                                    Tag="{Binding SelectedDistributor.Website}"
+                                    Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Cursor="Hand"/>
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>

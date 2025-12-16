@@ -230,6 +230,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Distributor *" Foreground="#DBDBDB" Margin="0,0,0,5" VerticalAlignment="Bottom"/>
+                          
                            <!--Button to go to distributor manager  overlay-->
                             <Button Grid.Column="1" Content="⚙️ Manage Distributors" Command="{Binding OpenDistributorManagerCommand}" 
                                     Background="Green" Foreground="White" BorderThickness="0" Cursor="Hand" 
@@ -311,9 +312,20 @@
                                              Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Email" Style="{StaticResource FieldLabel}"/>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
                                     <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
                                              Text="{Binding SelectedManagerDistributor.Email, UpdateSourceTrigger=PropertyChanged}" 
-                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
+                                    <Button Grid.Column="1" Content="📧" 
+                                            Margin="10,0,0,0"
+                                            Click="OpenEmail_Click"
+                                            Tag="{Binding SelectedManagerDistributor.Email}"
+                                            Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Cursor="Hand"/>
+                                </Grid>
                             </StackPanel>
 
                             <!-- Col 2 -->
@@ -329,10 +341,23 @@
                                              Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Website" Style="{StaticResource FieldLabel}"/>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
                                     <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
                                              Text="{Binding SelectedManagerDistributor.Website, UpdateSourceTrigger=PropertyChanged}" 
-                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
+                                    <Button Grid.Column="1" Content="🌐" 
+                                            Margin="10,0,0,0"
+                                            Click="OpenWebsite_Click"
+                                            Tag="{Binding SelectedManagerDistributor.Website}"
+                                            Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Cursor="Hand"/>
+                                </Grid>
                             </StackPanel>
+
+
                         </Grid>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
@@ -350,6 +375,7 @@
                           ItemsSource="{Binding DistributorManagerList}"
                           SelectedItem="{Binding SelectedManagerDistributor}"
                           AutoGenerateColumns="False" CanUserAddRows="False"
+                          Background="#2D3035" Foreground="#DBDBDB"
                           RowStyle="{StaticResource GlobalDataGridRowStyle}"
                           CellStyle="{StaticResource GlobalDataGridCellStyle}"
                           GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"

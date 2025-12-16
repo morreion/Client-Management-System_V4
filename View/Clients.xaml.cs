@@ -24,5 +24,23 @@ namespace Client_Management_System_V4.View
         {
             InitializeComponent();
         }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Hyperlink link && link.DataContext is Client_Management_System_V4.Models.Client client)
+            {
+                Utilities.LinkHelper.OpenEmail(client.Email);
+            }
+        }
+
+        private void OpenEmail_Click(object sender, RoutedEventArgs e)
+        {
+            // The Button's Tag or DataContext might contain the email, 
+            // but here we might just read from the TextBox binding or pass it via Tag.
+            if (sender is Button btn && btn.Tag is string email)
+            {
+                Utilities.LinkHelper.OpenEmail(email);
+            }
+        }
     }
 }

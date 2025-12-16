@@ -125,7 +125,17 @@
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="250"/>
                         <DataGridTextColumn Header="Gender" Binding="{Binding GenderDisplay}" Width="80"/>
                         <DataGridTextColumn Header="Mobile" Binding="{Binding Mobile}" Width="120"/>
-                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
+                        <DataGridTemplateColumn Header="Email" Width="200">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Hyperlink Click="Hyperlink_Click">
+                                            <TextBlock Text="{Binding Email}"/>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="DOB" Binding="{Binding DOB, StringFormat=\{0:yyyy-MM-dd\}}" Width="100"/>
                         <DataGridTextColumn Header="Age" Binding="{Binding Age}" Width="50"/>
                     </DataGrid.Columns>
@@ -229,10 +239,21 @@
 
                     <TextBlock Grid.Row="2" Grid.Column="0" 
                                Text="Email" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                    <TextBox Grid.Row="2" Grid.Column="0" 
-                             Style="{StaticResource RoundedTextBoxStyle}" 
-                             Text="{Binding SelectedClient.Email, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                    <Grid Grid.Row="2" Grid.Column="0" Margin="0,20,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedClient.Email, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+                        <Button Grid.Column="1" Content="📧" 
+                                ToolTip="Send Email"
+                                Margin="10,0,0,0"
+                                Click="OpenEmail_Click"
+                                Tag="{Binding SelectedClient.Email}"
+                                Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Cursor="Hand"/>
+                    </Grid>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" 
                                Text="Occupation" Foreground="#DBDBDB" Margin="0,0,0,5"/>
@@ -307,6 +328,7 @@
                     <TextBox Grid.Row="3" Grid.Column="2" 
                              Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Children, UpdateSourceTrigger=PropertyChanged}"
+                             Tag="Enter number of children (1, 2, ..)"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
 
                     <TextBlock Grid.Row="4" Grid.Column="2" 

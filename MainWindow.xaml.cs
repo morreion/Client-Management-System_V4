@@ -30,5 +30,11 @@ namespace Client_Management_System_V4
         {
             this.WindowState = WindowState.Minimized;
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
     }
 }

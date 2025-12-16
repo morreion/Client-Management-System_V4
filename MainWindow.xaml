@@ -12,7 +12,8 @@
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Background="Transparent">
+        Background="Transparent"
+        MouseDown="Window_MouseDown">
 
     <Window.DataContext>
         <vm:NavigationVM />
@@ -23,7 +24,9 @@
         <!--// Window Border //-->
 
         <Border Background="#212529"
-                CornerRadius="20" />
+                CornerRadius="20"
+                BorderBrush="#3B82F6"
+                BorderThickness="1" />
 
         <Grid>
 
@@ -40,7 +43,9 @@
                   Width="250">
 
                 <Border Background="#272B2F"
-                        CornerRadius="20,0,0,20" />
+                        CornerRadius="20,0,0,20"
+                        BorderBrush="#3B82F6"
+                        BorderThickness="1" />
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" Margin="0,20,0,20">
                     <StackPanel Width="250">
