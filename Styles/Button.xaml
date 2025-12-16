@@ -176,7 +176,7 @@
                 Stretch="None" />
 
     <ImageBrush x:Key="minimize_app_mo"
-                ImageSource="/Images/icons8-minimize-window-32_Red.png"
+                ImageSource="/Images/icons8-minimize-window-48_Blue.png"
                 Stretch="None" />
 
     <Style x:Key="MinimizeApp"
