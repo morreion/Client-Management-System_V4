@@ -37,7 +37,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+            <!-- Added Style="{StaticResource SearchTextBoxStyle}"
+            Tag="Enter name..." -->
+            <TextBox Style="{StaticResource SearchTextBoxStyle}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..." 
                      FontSize="14" Padding="10,8" Background="#2D3035"
                      Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
                 <TextBox.InputBindings>
@@ -51,13 +55,19 @@
 
         <!-- List -->
         <Border Grid.Row="1" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="10">
+            
+            <!--In your original code, you hardcoded RowBackground and AlternatingRowBackground
+             inside the <DataGrid> tag. These hardcoded values override Styles. You must remove them 
+             for the hover effects to work.
+             RowBackground="#2D3035" AlternatingRowBackground="#333740"-->
             <DataGrid ItemsSource="{Binding TreatmentList}"
                       SelectedItem="{Binding SelectedTreatment}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       Background="#2D3035" Foreground="#DBDBDB"
-                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
-                      HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
+                      HorizontalGridLinesBrush = "#3F4347"  VerticalGridLinesBrush = "#3F4347">
                 
                   <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -150,7 +160,8 @@
                     <!-- Presenting Symptoms -->
                     <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,15,0,0">
                         <TextBlock Text="Presenting Symptoms" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedTreatment.Presenting_Symptoms, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedTreatment.Presenting_Symptoms, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
@@ -158,14 +169,16 @@
                     <!-- Expectations & Impression -->
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,15,0,0">
                         <TextBlock Text="Expectations of Treatment" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedTreatment.Expectations_of_Treatment, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedTreatment.Expectations_of_Treatment, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,15,0,0">
                         <TextBlock Text="Impression" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedTreatment.Impression, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedTreatment.Impression, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
@@ -173,7 +186,8 @@
                     <!-- Rx -->
                     <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,15,0,0">
                         <TextBlock Text="Rx (Prescription Details)" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedTreatment.Rx, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedTreatment.Rx, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>

@@ -174,3 +174,211 @@ wpf datagrid GridLinesVisibility values
 wpf datagrid column header separator style
 wpf datagrid grid lines color and thickness properties
 wpf datagrid column header separator visibility thickness color
+
+
+
+
+
+
+******************Hoverover and selected rows styles******************
+
+I have a datagrid and want to have an effect. When i hover over 
+the rows with a mouse, the row that is hovered over should 
+change color, as well as the text in that column, when the mouse 
+leaves the row should revert back to its normal properties. These 
+same hover over properties for the row, should also applied when a 
+row is selected, so same foregound and background colors as when the 
+mouse hovers over it. Also when hovering over the rows, or selecting 
+the row, the cells border of that row should change color, for instance 
+light blue.This style should apply to all the datagrids in all the views. 
+How do i go about that ? Use the view and its datagrid i provided before as the context
+
+
+
+
+To achieve this globally for all DataGrids, we will follow the 
+same pattern as before: create a dedicated ResourceDictionary file.
+
+Because you want the Cell Borders to change color when the 
+Row is hovered or selected, we actually need to style two 
+things:
+
+DataGridRow: To handle the background and text color changes.
+
+DataGridCell: To handle the light blue border effect (since rows 
+don't actually have "vertical" borders between columns, cells do).
+
+
+
+Step 1: Create the Style File
+
+Go to your Styles folder.
+
+Add a new Resource Dictionary named DataGridStyles.xaml.
+
+
+Step 2: Add the Code
+
+Paste the following code into DataGridStyles.xaml.
+
+Key Logic:
+
+DataGridCell Style: We use DataTrigger to look up at the parent DataGridRow. If the Row is hovered or selected, the Cell changes its BorderBrush to Light Blue.
+
+DataGridRow Style: We use standard Trigger properties. 
+If IsMouseOver or IsSelected is true, we change the Background 
+to a lighter gray and Foreground to White.
+
+
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 1. The Cell Style (Handles the Light Blue Borders) -->
+    <Style x:Key="GlobalDataGridCellStyle" TargetType="DataGridCell">
+        <!-- Default State: Transparent border (invisible), dark background -->
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0,0,1,1"/> <!-- Right and Bottom borders -->
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{TemplateBinding Background}" 
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <!-- TRIGGER: When Parent ROW is Hovered -->
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsMouseOver}" Value="True">
+                <Setter Property="BorderBrush" Value="#3B82F6"/> <!-- Light Blue Border -->
+            </DataTrigger>
+
+            <!-- TRIGGER: When Parent ROW is Selected -->
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
+                <Setter Property="BorderBrush" Value="#3B82F6"/> <!-- Light Blue Border -->
+                <Setter Property="Foreground" Value="White"/>
+            </DataTrigger>
+            
+            <!-- Remove the default blue selection highlight on the specific cell, 
+                 so the whole Row looks uniform -->
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="Transparent"/> 
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 2. The Row Style (Handles Background and Text Color) -->
+    <Style x:Key="GlobalDataGridRowStyle" TargetType="DataGridRow">
+        <Setter Property="Background" Value="#2D3035"/> <!-- Normal Background -->
+        <Setter Property="Foreground" Value="#DBDBDB"/> <!-- Normal Text -->
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="0,5"/>
+        
+        <Style.Triggers>
+            <!-- Mouse Hover Effect -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#4B5563"/> <!-- Lighter Grey on Hover -->
+                <Setter Property="Foreground" Value="White"/>    <!-- White Text on Hover -->
+            </Trigger>
+
+            <!-- Selection Effect (Same as Hover) -->
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#4B5563"/> <!-- Lighter Grey on Select -->
+                <Setter Property="Foreground" Value="White"/>    <!-- White Text on Select -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
+
+
+
+Step 3: Register in App.xaml
+
+Update your App.xaml to include this new dictionary, 
+just like you did for the textboxes.
+
+
+
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <!-- Your other styles -->
+            <ResourceDictionary Source="Styles/TextBoxStyles.xaml"/>
+            
+            <!-- ADD THIS LINE: -->
+            <ResourceDictionary Source="Styles/DataGridStyles.xaml"/>
+            
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+</Application.Resources>
+Step 4: Update the View (Important!)
+
+You must make a small cleanup in Treatment.xaml.
+
+In your original code, you hardcoded RowBackground and 
+AlternatingRowBackground inside the <DataGrid> tag. These 
+hardcoded values override Styles. You must remove them for 
+the hover effects to work.
+
+Update your DataGrid tag to look like this:
+
+<!-- List -->
+<Border Grid.Row="1" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="10">
+    <DataGrid ItemsSource="{Binding TreatmentList}"
+              SelectedItem="{Binding SelectedTreatment}"
+              AutoGenerateColumns="False" 
+              CanUserAddRows="False"
+              
+              Background="#2D3035" 
+              BorderThickness="0"
+              GridLinesVisibility="None" 
+              HeadersVisibility="Column"
+              
+              RowStyle="{StaticResource GlobalDataGridRowStyle}"
+              CellStyle="{StaticResource GlobalDataGridCellStyle}">
+              
+              <!-- 
+                 REMOVED: RowBackground="..." 
+                 REMOVED: AlternatingRowBackground="..."
+                 REMOVED: Foreground="..."
+                 REMOVED: HorizontalGridLinesBrush/VerticalGridLinesBrush
+                 ADDED: RowStyle and CellStyle above
+                 CHANGED: GridLinesVisibility to None (Since our custom CellStyle handles borders)
+              -->
+
+          <DataGrid.ColumnHeaderStyle>
+               <!-- Your existing Header Style code remains here -->
+          </DataGrid.ColumnHeaderStyle>
+
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Client" Binding="{Binding ClientName}" Width="1.5*"/>
+            <DataGridTextColumn Header="Date" Binding="{Binding Treatment_Date, StringFormat=d}" Width="*"/>
+            <DataGridTextColumn Header="Presenting Symptoms" Binding="{Binding Presenting_Symptoms}" Width="2*"/>
+            <DataGridTextColumn Header="Impression" Binding="{Binding Impression}" Width="2*"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</Border>
+Summary of Changes
+
+Created DataGridStyles.xaml: Contains the logic to turn 
+rows/cells Gray+White on hover, and add Blue borders.
+
+Cleaned Treatment.xaml: Removed specific color properties 
+(RowBackground, etc.) from the DataGrid tag so that the 
+Style triggers are allowed to activate.
+
+Applied Styles: Added RowStyle="{StaticResource 
+GlobalDataGridRowStyle}" and CellStyle="{StaticResource 
+GlobalDataGridCellStyle}" to the DataGrid.

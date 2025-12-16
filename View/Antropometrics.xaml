@@ -37,7 +37,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+            <!--added Style="{StaticResource SearchTextBoxStyle}"
+            Tag="Enter name..."-->
+            <TextBox Style="{StaticResource SearchTextBoxStyle}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..."
                      FontSize="14" Padding="10,8" Background="#2D3035"
                      Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
                 <TextBox.InputBindings>
@@ -55,7 +59,8 @@
                       SelectedItem="{Binding SelectedAnthropometrics}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       Background="#2D3035" Foreground="#DBDBDB"
-                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
                       HorizontalGridLinesBrush = "#3F4347"  VerticalGridLinesBrush = "#3F4347">
                 
@@ -154,57 +159,66 @@
                     <!-- Row 1: Measurements -->
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,15,0,0">
                         <TextBlock Text="Weight (kg)" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.Weight, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.Weight, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,15,0,0">
                         <TextBlock Text="Height (cm)" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.Height, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.Height, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Grid.Column="4" Margin="0,15,0,0">
                         <TextBlock Text="BMI (Auto)" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.BMI, Mode=OneWay}" IsReadOnly="True"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.BMI, Mode=OneWay}" IsReadOnly="True"
                                  Padding="8" Background="#2D2D2D" Foreground="#AAAAAA" BorderBrush="#555"/>
                     </StackPanel>
 
                     <!-- Row 2: Vitals -->
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,15,0,0">
                         <TextBlock Text="Blood Pressure" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.BP, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.BP, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,15,0,0">
                         <TextBlock Text="Pulse" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.Pulse, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.Pulse, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Grid.Column="4" Margin="0,15,0,0">
                         <TextBlock Text="SpO2 (%)" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.SpO2_Percent, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.SpO2_Percent, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <!-- Row 3: Other -->
                     <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,15,0,0">
                         <TextBlock Text="Zinc Status" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.Zinc_Status, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.Zinc_Status, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,15,0,0">
                         <TextBlock Text="NOX Status" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.NOX_Status, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.NOX_Status, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                      <StackPanel Grid.Row="3" Grid.Column="4" Margin="0,15,0,0">
                         <TextBlock Text="Temperature" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedAnthropometrics.Temp, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedAnthropometrics.Temp, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 

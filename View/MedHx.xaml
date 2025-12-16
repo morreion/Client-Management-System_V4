@@ -68,7 +68,10 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+            <!--Added Style="{StaticResource SearchTextBoxStyle}"-->
+            <TextBox Style="{StaticResource SearchTextBoxStyle}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..." 
                      FontSize="14" Padding="10,8" Background="#2D3035"
                      Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
                 <TextBox.InputBindings>
@@ -87,7 +90,8 @@
                       SelectedItem="{Binding SelectedHistory}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       Background="#2D3035" Foreground="#DBDBDB"
-                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0" 
                       HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
                 
@@ -198,43 +202,51 @@
                                  <!-- Left Col -->
                                  <StackPanel Grid.Row="0" Grid.Column="0">
                                      <TextBlock Text="Blood Test Results" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.Blood_Test_Results}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedHistory.Blood_Test_Results}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
                                  
                                  <StackPanel Grid.Row="1" Grid.Column="0">
                                      <TextBlock Text="Medications" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.Medication}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedHistory.Medication}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
                                  
                                  <StackPanel Grid.Row="2" Grid.Column="0">
                                      <TextBlock Text="Menstrual / Womens Health" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.Menstrual_Notes}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedHistory.Menstrual_Notes}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
                                  
                                  <StackPanel Grid.Row="3" Grid.Column="0">
                                      <TextBlock Text="Supplements (General Notes)" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.Supplements}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                              Text="{Binding SelectedHistory.Supplements}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
 
                                  <!-- Right Col -->
                                  <StackPanel Grid.Row="0" Grid.Column="2">
                                      <TextBlock Text="Accidents / Previous Illness" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.Accidents_Previous_Illness}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedHistory.Accidents_Previous_Illness}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
                                  
                                  <StackPanel Grid.Row="1" Grid.Column="2">
                                      <TextBlock Text="Vaccinations" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.Vaccinations}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedHistory.Vaccinations}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
                                  
                                  <StackPanel Grid.Row="2" Grid.Column="2">
                                      <TextBlock Text="Family Medical History" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.Family_Med_Hx}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedHistory.Family_Med_Hx}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
 
                                  <StackPanel Grid.Row="3" Grid.Column="2">
                                      <TextBlock Text="Other History Notes (Med_Hx)" Style="{StaticResource FieldLabel}"/>
-                                     <TextBox Text="{Binding SelectedHistory.HistoryNotes}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedHistory.HistoryNotes}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
                                  </StackPanel>
 
                              </Grid>
@@ -270,17 +282,20 @@
                                      
                                      <StackPanel Grid.Column="1" Margin="0,0,5,0">
                                          <TextBlock Text="Dosage" Style="{StaticResource FieldLabel}"/>
-                                         <TextBox Text="{Binding NewItemDosage}" Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
+                                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                                 Text="{Binding NewItemDosage}" Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
                                      </StackPanel>
                                      
                                      <StackPanel Grid.Column="2" Margin="0,0,5,0">
                                          <TextBlock Text="Frequency" Style="{StaticResource FieldLabel}"/>
-                                         <TextBox Text="{Binding NewItemFrequency}" Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
+                                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                                 Text="{Binding NewItemFrequency}" Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
                                      </StackPanel>
                                      
                                      <StackPanel Grid.Column="3" Margin="0,0,5,0">
                                          <TextBlock Text="Notes" Style="{StaticResource FieldLabel}"/>
-                                         <TextBox Text="{Binding NewItemNotes}" Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
+                                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                                 Text="{Binding NewItemNotes}" Background="#3F4347" Foreground="#DBDBDB" Padding="5"/>
                                      </StackPanel>
                                      
                                      <Button Grid.Column="4" Content="Add Item" Command="{Binding AddSupplementCommand}"

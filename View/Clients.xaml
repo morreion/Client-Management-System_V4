@@ -30,9 +30,13 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
+            <!--Added Style="{StaticResource SearchTextBoxStyle}",
+            Tag="Enter name..." -->
             <TextBox x:Name="SearchBox"
                      Grid.Column="0"
+                     Style="{StaticResource SearchTextBoxStyle}"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..."
                      FontSize="14"
                      Padding="10,8"
                      Background="#2D3035"
@@ -69,20 +73,14 @@
                 <DataGrid x:Name="ClientsDataGrid"
                           ItemsSource="{Binding Clients}"
                           SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          GridLinesVisibility= "All"
-                          HeadersVisibility="Column"
-                          Background="Transparent"
-                          Foreground="#DBDBDB"
-                          BorderThickness="0"
-                          RowBackground="#2D3035"
-                          AlternatingRowBackground="#32363B"
-                          HorizontalGridLinesBrush = "#3F4347"
-                          VerticalGridLinesBrush = "#3F4347">
+                          AutoGenerateColumns="False" CanUserAddRows="False"
+                          Background="#2D3035" Foreground="#DBDBDB"
+                          RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                          CellStyle="{StaticResource GlobalDataGridCellStyle}"
+                          GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
+                          HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <!-- <Setter Property="SeparatorVisibility" Value="All"/>-->
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -124,7 +122,8 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding ClientID}" Width="50"/>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="250"/>
+                        <DataGridTextColumn Header="Gender" Binding="{Binding GenderDisplay}" Width="80"/>
                         <DataGridTextColumn Header="Mobile" Binding="{Binding Mobile}" Width="120"/>
                         <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
                         <DataGridTextColumn Header="DOB" Binding="{Binding DOB, StringFormat=\{0:yyyy-MM-dd\}}" Width="100"/>
@@ -217,32 +216,46 @@
                     <TextBlock Grid.Row="0" Grid.Column="0" 
                                Text="Name *" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="0" Grid.Column="0" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Name, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" 
                                Text="Address" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="1" Grid.Column="0" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Address, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
 
                     <TextBlock Grid.Row="2" Grid.Column="0" 
                                Text="Email" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="2" Grid.Column="0" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Email, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" 
                                Text="Occupation" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="3" Grid.Column="0" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Occupation, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
 
                     <TextBlock Grid.Row="4" Grid.Column="0" 
                                Text="Referral Source" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="4" Grid.Column="0" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Ref, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" 
+                               Text="Gender" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                    <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Margin="0,20,0,10">
+                        <RadioButton GroupName="Gender" Content="Male" Foreground="#DBDBDB" Margin="0,0,20,0"
+                                     IsChecked="{Binding SelectedClient.Gender, Converter={StaticResource IntToBoolConverter}, ConverterParameter=1}"/>
+                        <RadioButton GroupName="Gender" Content="Female" Foreground="#DBDBDB"
+                                     IsChecked="{Binding SelectedClient.Gender, Converter={StaticResource IntToBoolConverter}, ConverterParameter=0}"/>
+                    </StackPanel>
 
                     <!-- Column 2 -->
                     <TextBlock Grid.Row="0" Grid.Column="2" 
@@ -266,6 +279,7 @@
                     <TextBlock Grid.Row="1" Grid.Column="2" 
                                Text="Mobile" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="1" Grid.Column="2" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Mobile, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
 
@@ -291,12 +305,14 @@
                     <TextBlock Grid.Row="3" Grid.Column="2" 
                                Text="Children" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="3" Grid.Column="2" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Children, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
 
                     <TextBlock Grid.Row="4" Grid.Column="2" 
                                Text="Alternate Contact" Foreground="#DBDBDB" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="4" Grid.Column="2" 
+                             Style="{StaticResource RoundedTextBoxStyle}" 
                              Text="{Binding SelectedClient.Alt_Contact, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,20,0,10" Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                 </Grid>

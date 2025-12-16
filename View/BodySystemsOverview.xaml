@@ -43,7 +43,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+            <!--`Added Style="{StaticResource SearchTextBoxStyle}",
+            Tag="Enter name..."-->
+            <TextBox Style="{StaticResource SearchTextBoxStyle}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..."
                      FontSize="14" Padding="10,8" Background="#2D3035"
                      Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
                 <TextBox.InputBindings>
@@ -61,7 +65,8 @@
                       SelectedItem="{Binding SelectedOverview}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       Background="#2D3035" Foreground="#DBDBDB"
-                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
                       HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
                 
@@ -174,28 +179,34 @@
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Sleep" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Sleep}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Sleep}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Snore" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Snore}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Snore}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Column="4">
                                 <TextBlock Text="Exercise" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Exercise}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Exercise}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="2" Grid.Column="0">
                                 <TextBlock Text="Smoke / Alcohol" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Smoke_Alc}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Smoke_Alc}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Row="2" Grid.Column="2">
                                 <TextBlock Text="Cravings" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Cravings}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Cravings}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Row="2" Grid.Column="4">
                                 <TextBlock Text="Beverages" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Beverages}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Beverages}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>
@@ -216,20 +227,24 @@
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Digestion" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Digestion}" Background="#2D3035" Foreground="#DBDBDB" Padding="5" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Digestion}" Background="#2D3035" Foreground="#DBDBDB" Padding="5" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Bowels" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Bowels}" Background="#2D3035" Foreground="#DBDBDB" Padding="5" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Bowels}" Background="#2D3035" Foreground="#DBDBDB" Padding="5" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="2" Grid.Column="0">
                                 <TextBlock Text="Urination" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Urination}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Urination}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Row="2" Grid.Column="2">
                                 <TextBlock Text="Tongue Analysis" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Tongue}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Tongue}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>
@@ -247,15 +262,18 @@
                             
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Backache" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Backache}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Backache}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Joint Pain" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Joint_Pain}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Joint_Pain}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Column="4">
                                 <TextBlock Text="Skin &amp; Hair" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Skin_Hair}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Skin_Hair}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>
@@ -278,28 +296,34 @@
                             
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Head (Headaches/Dizziness)" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Head}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Head}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="ENT (Ear, Nose, Throat)" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.ENT}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.ENT}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Column="4">
                                 <TextBlock Text="Immune" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Immune}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Immune}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             
                             <StackPanel Grid.Row="2" Grid.Column="0">
                                 <TextBlock Text="Allergies" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Allergy}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Allergy}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Row="2" Grid.Column="2">
                                 <TextBlock Text="Thyroid" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Thyroid}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Thyroid}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Row="2" Grid.Column="4">
                                 <TextBlock Text="Mind &amp; Emotional" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedOverview.Mind_Emotional}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedOverview.Mind_Emotional}" Background="#2D3035" Foreground="#DBDBDB" Padding="5"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>

@@ -6,6 +6,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- for custom datagrid style: -->
+                <ResourceDictionary Source="Styles/DataGridStyles.xaml"/>
+                <!-- NEW: rounded custom TextBox style dictionary -->
+                <ResourceDictionary Source="Styles/RoundedTextBox.xaml"/>
+                <!-- custom  search textbox -->
+                <ResourceDictionary Source="Styles/TextBoxStyles.xaml"/>
                  <!-- NEW: Merge your custom ScrollBar style dictionary -->
                 <ResourceDictionary Source="Styles/DarkThemeScrollBar.xaml"/>
                 <!-- Merge your custom ComboBox style dictionary -->
@@ -20,6 +26,7 @@
             <!-- Value Converters -->
             <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
             <local:NullToBoolConverter x:Key="NullToBoolConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
+            <local:IntToBoolConverter x:Key="IntToBoolConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

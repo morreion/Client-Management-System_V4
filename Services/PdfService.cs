@@ -183,6 +183,127 @@ namespace Client_Management_System_V4.Services
             });
         }
 
+        public async Task GenerateSupplementsReportAsync(IEnumerable<Supplement> supplements, string filePath)
+        {
+            await Task.Run(() =>
+            {
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4.Landscape()); // Landscape for more data
+                        page.Margin(2, Unit.Centimetre);
+                        page.PageColor(Colors.White);
+                        page.DefaultTextStyle(x => x.FontSize(10).FontFamily("Arial"));
+
+                        page.Header().Row(row =>
+                        {
+                            row.RelativeItem().Column(column =>
+                            {
+                                column.Item().Text("Supplements Inventory").FontSize(20).SemiBold().FontColor(Colors.Green.Medium);
+                                column.Item().Text($"Date: {DateTime.Now:yyyy-MM-dd}").FontSize(10);
+                            });
+                        });
+
+                        page.Content().PaddingVertical(10).Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(2); // Name
+                                columns.RelativeColumn(2); // Type
+                                columns.RelativeColumn(2); // Distributor
+                                columns.RelativeColumn(3); // Description
+                                columns.RelativeColumn(3); // Usage
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell().BorderBottom(1).Padding(5).Text("Name").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Type").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Distributor").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Description").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Usage").Bold();
+                            });
+
+                            foreach (var item in supplements)
+                            {
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Name ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Type ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.DistributorName ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Description ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Usage ?? "-");
+                            }
+                        });
+
+                        page.Footer().Element(ComposeFooter);
+                    });
+                })
+                .GeneratePdf(filePath);
+            });
+        }
+
+        public async Task GenerateDistributorReportAsync(IEnumerable<Distributor> distributors, string filePath)
+        {
+             await Task.Run(() =>
+            {
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4.Landscape());
+                        page.Margin(2, Unit.Centimetre);
+                        page.PageColor(Colors.White);
+                        page.DefaultTextStyle(x => x.FontSize(10).FontFamily("Arial"));
+
+                        page.Header().Row(row =>
+                        {
+                            row.RelativeItem().Column(column =>
+                            {
+                                column.Item().Text("Distributor List").FontSize(20).SemiBold().FontColor(Colors.Orange.Medium);
+                                column.Item().Text($"Date: {DateTime.Now:yyyy-MM-dd}").FontSize(10);
+                            });
+                        });
+
+                        page.Content().PaddingVertical(10).Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(2); // Name
+                                columns.RelativeColumn(2); // Email
+                                columns.RelativeColumn(2); // Mobile
+                                columns.RelativeColumn(2); // Work Phone
+                                columns.RelativeColumn(2); // Website
+                                columns.RelativeColumn(3); // Address
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell().BorderBottom(1).Padding(5).Text("Name").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Email").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Mobile").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Work Phone").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Website").Bold();
+                                header.Cell().BorderBottom(1).Padding(5).Text("Address").Bold();
+                            });
+
+                            foreach (var item in distributors)
+                            {
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Name ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Email ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Mobile ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Work_Phone ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Website ?? "-");
+                                table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5).Text(item.Address ?? "-");
+                            }
+                        });
+
+                        page.Footer().Element(ComposeFooter);
+                    });
+                })
+                .GeneratePdf(filePath);
+            });
+        }
+
         private void ComposeHeader(IContainer container)
         {
             container.Row(row =>

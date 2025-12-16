@@ -15,6 +15,8 @@ namespace Client_Management_System_V4.ViewModel
     public class ReportsVM : ViewModelBase
     {
         private readonly ClientRepository _clientRepository;
+        private readonly SupplementRepository _supplementRepository;
+        private readonly DistributorRepository _distributorRepository;
         private readonly IPdfService _pdfService;
 
         private Client? _selectedClient;
@@ -44,6 +46,8 @@ namespace Client_Management_System_V4.ViewModel
         public ICommand GenerateReportCommand { get; }
         public ICommand GeneratePrescriptionReportCommand { get; }
         public ICommand GenerateContactListCommand { get; }
+        public ICommand GenerateSupplementsReportCommand { get; }
+        public ICommand GenerateDistributorReportCommand { get; }
 
         // Contact List Properties
         public bool IncludeName { get; set; } = true;
@@ -58,11 +62,15 @@ namespace Client_Management_System_V4.ViewModel
         public ReportsVM()
         {
             _clientRepository = new ClientRepository();
+            _supplementRepository = new SupplementRepository();
+            _distributorRepository = new DistributorRepository();
             _pdfService = new PdfService();
 
             GenerateReportCommand = new RelayCommand(async _ => await GenerateReport(), _ => SelectedClient != null);
             GeneratePrescriptionReportCommand = new RelayCommand(async _ => await GeneratePrescriptionReport(), _ => SelectedClient != null);
             GenerateContactListCommand = new RelayCommand(async _ => await GenerateContactList());
+            GenerateSupplementsReportCommand = new RelayCommand(async _ => await GenerateSupplementsReport());
+            GenerateDistributorReportCommand = new RelayCommand(async _ => await GenerateDistributorReport());
 
             LoadClients();
         }
@@ -174,6 +182,64 @@ namespace Client_Management_System_V4.ViewModel
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error generating contact list: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    IsGenerating = false;
+                }
+            }
+        }
+
+        private async Task GenerateSupplementsReport()
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "PDF Details|*.pdf",
+                FileName = $"Supplements_Inventory_{DateTime.Now:yyyyMMdd}.pdf"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                IsGenerating = true;
+                try
+                {
+                    var supplements = await _supplementRepository.GetAllAsync();
+                    await _pdfService.GenerateSupplementsReportAsync(supplements, saveFileDialog.FileName);
+                    MessageBox.Show("Supplements Report generated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    OpenPdf(saveFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error generating supplements report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    IsGenerating = false;
+                }
+            }
+        }
+
+        private async Task GenerateDistributorReport()
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "PDF Details|*.pdf",
+                FileName = $"Distributor_List_{DateTime.Now:yyyyMMdd}.pdf"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                IsGenerating = true;
+                try
+                {
+                    var distributors = await _distributorRepository.GetAllAsync();
+                    await _pdfService.GenerateDistributorReportAsync(distributors, saveFileDialog.FileName);
+                    MessageBox.Show("Distributor Report generated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    OpenPdf(saveFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error generating distributor report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
                 {

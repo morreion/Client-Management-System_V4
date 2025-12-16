@@ -58,40 +58,50 @@
     <Style TargetType="{x:Type ScrollBar}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Width" Value="20"/> <!-- Default width for vertical scrollbar -->
-        <Setter Property="Height" Value="auto"/> <!-- Default height for horizontal scrollbar -->
-        
-        <!-- Vertical ScrollBar Template -->
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ScrollBar}">
-                    <Grid x:Name="GridRoot" Width="{TemplateBinding Width}" Background="{StaticResource ScrollBarTrackBackground}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="0.00001*"/>
-                        </Grid.RowDefinitions>
-                        <!-- Scrollbar track area -->
-                        <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true">
-                            <Track.Thumb>
-                                <Thumb Style="{StaticResource DarkScrollBarThumb}"/>
-                            </Track.Thumb>
-                        </Track>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <!-- Horizontal ScrollBar template -->
-                        <Trigger Property="Orientation" Value="Horizontal">
-                            <Setter Property="Height" Value="10"/>
-                            <Setter Property="Width" Value="Auto"/>
-                            <Setter Property="LayoutTransform" TargetName="GridRoot">
-                                <Setter.Value>
-                                    <RotateTransform Angle="-90"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Margin" TargetName="PART_Track" Value="0,1,0,1"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="Height" Value="10"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                            <Grid x:Name="GridRoot" Background="{StaticResource ScrollBarTrackBackground}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.00001*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Track x:Name="PART_Track" Grid.Column="0" IsDirectionReversed="False">
+                                    <Track.Thumb>
+                                        <Thumb Style="{StaticResource DarkScrollBarThumb}"/>
+                                    </Track.Thumb>
+                                </Track>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="10"/>
+                <Setter Property="Height" Value="Auto"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                            <Grid x:Name="GridRoot" Background="{StaticResource ScrollBarTrackBackground}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.00001*"/>
+                                </Grid.RowDefinitions>
+                                
+                                <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="True">
+                                    <Track.Thumb>
+                                        <Thumb Style="{StaticResource DarkScrollBarThumb}"/>
+                                    </Track.Thumb>
+                                </Track>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- ============================================================================ -->

@@ -25,5 +25,10 @@ namespace Client_Management_System_V4
         {
             Close();
         }
+
+        private void MinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
     }
 }

@@ -37,7 +37,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+            <!--Added Style="{StaticResource SearchTextBoxStyle}",
+            Tag="Enter name..." -->
+            <TextBox Style="{StaticResource SearchTextBoxStyle}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..." 
                      FontSize="14" Padding="10,8" Background="#2D3035"
                      Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
                 <TextBox.InputBindings>
@@ -55,7 +59,8 @@
                       SelectedItem="{Binding SelectedDiet}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       Background="#2D3035" Foreground="#DBDBDB"
-                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
                       HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
                 
@@ -151,14 +156,16 @@
                     <!-- Breakfast & Lunch -->
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,15,0,0">
                         <TextBlock Text="Breakfast" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDiet.Breakfast, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDiet.Breakfast, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,15,0,0">
                         <TextBlock Text="Lunch" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDiet.Lunch, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDiet.Lunch, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
@@ -166,14 +173,16 @@
                     <!-- Dinner & Snacks -->
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,15,0,0">
                         <TextBlock Text="Dinner" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDiet.Dinner, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDiet.Dinner, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,15,0,0">
                         <TextBlock Text="Snacks" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDiet.Snacks, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDiet.Snacks, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>

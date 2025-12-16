@@ -52,7 +52,7 @@
                               IsChecked="True">
 
                         <Grid>
-                            <Image Source="Images/customer.png"
+                            <Image Source="Images/icons8-customers-80.png"
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Clients"
                                        Style="{StaticResource Text_Style}" />
@@ -66,7 +66,7 @@
                               Command="{Binding MedHxCommand}">
 
                         <Grid>
-                            <Image Source="Images/medical-record.png"
+                            <Image Source="Images/icons8-history-100.png"
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Medical History"
                                        Style="{StaticResource Text_Style}" />
@@ -80,7 +80,7 @@
                               Command="{Binding AntropometricsCommand}">
 
                         <Grid>
-                            <Image Source="Images/body-temperature.png"
+                            <Image Source="Images/icons8-body-100_7.png"
                                    Style="{StaticResource Image_Style}" />
                             <TextBlock Text="Antropometrics"
                                        Style="{StaticResource Text_Style}" />
@@ -95,7 +95,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/endocrine.png"
+                            <Image Source="Images/icons8-body-100_6.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Body Systems Overview"
@@ -112,7 +112,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/analysis.png"
+                            <Image Source="Images/icons8-eye-96.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Eye Analysis"
@@ -129,7 +129,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/medical-record.png"
+                            <Image Source="Images/icons8-reports-96.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Reports"
@@ -146,7 +146,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/diet_2.png"
+                            <Image Source="Images/icons8-diet-96.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Diet"
@@ -163,7 +163,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/treatment-plan.png"
+                            <Image Source="Images/icons8-physical-therapy-80.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Treatment"
@@ -180,7 +180,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/prescription.png"
+                            <Image Source="Images/icons8-file-prescription-96.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Prescription"
@@ -197,7 +197,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/pills.png"
+                            <Image Source="Images/icons8-supplement-100.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Supplements"
@@ -220,6 +220,10 @@
             </Grid>
 
         </Grid>
+
+        <Button x:Name="MinimizeApp"
+                Style="{StaticResource MinimizeApp}"
+                Click="MinimizeApp_Click" />
 
         <Button x:Name="CloseApp"
                 Style="{StaticResource ExitApp}"

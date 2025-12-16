@@ -43,7 +43,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+            <!--Added Style="{StaticResource SearchTextBoxStyle}",
+            Tag="Enter name..."-->
+            <TextBox Style="{StaticResource SearchTextBoxStyle}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..."
                      FontSize="14" Padding="10,8" Background="#2D3035"
                      Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1">
                 <TextBox.InputBindings>
@@ -61,7 +65,8 @@
                       SelectedItem="{Binding SelectedAnalysis}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       Background="#2D3035" Foreground="#DBDBDB"
-                      RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
                       HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
                 
@@ -163,42 +168,54 @@
                             
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Iris Colour" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Iris_Colour}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Iris_Colour}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Texture" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Texture}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Texture}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Type" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Type}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Type}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Pupil" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Pupil}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Pupil}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
 
                                 <TextBlock Text="Stomach" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Stomach}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Stomach}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Urine" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Urine}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Urine}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                             </StackPanel>
                             
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="S.I.T." Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.S_I_T}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.S_I_T}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="ANW" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.ANW}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.ANW}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Bowel" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Bowel}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Bowel}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Nerve Rings" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Nerve_Rings}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Nerve_Rings}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Organs" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Organs}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Organs}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Meridian Scan" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedAnalysis.Meridian_Scan}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                         Text="{Binding SelectedAnalysis.Meridian_Scan}" Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -284,11 +301,13 @@
                             <TextBlock Text="Add / Edit Priority" FontWeight="SemiBold" Foreground="#DBDBDB" Margin="0,0,0,10"/>
                             
                             <TextBlock Text="Name *" Style="{StaticResource FieldLabel}"/>
-                            <TextBox Text="{Binding SelectedManagerPriority.Priority_Name, UpdateSourceTrigger=PropertyChanged}" 
+                            <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                     Text="{Binding SelectedManagerPriority.Priority_Name, UpdateSourceTrigger=PropertyChanged}" 
                                      Background="#3F4347" Foreground="#DBDBDB" Padding="8" Margin="0,0,0,10"/>
 
                             <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
-                            <TextBox Text="{Binding SelectedManagerPriority.Description, UpdateSourceTrigger=PropertyChanged}" 
+                            <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                     Text="{Binding SelectedManagerPriority.Description, UpdateSourceTrigger=PropertyChanged}" 
                                      Background="#3F4347" Foreground="#DBDBDB" Padding="8" Margin="0,0,0,15" TextWrapping="Wrap" Height="60"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

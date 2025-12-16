@@ -39,9 +39,13 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
+            <!--Added  Style="{StaticResource SearchTextBoxStyle}",
+            Tag="Enter supplement name..."-->
             <TextBox x:Name="SearchBox"
                      Grid.Column="0"
+                     Style="{StaticResource SearchTextBoxStyle}"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter supplement name..."
                      FontSize="14"
                      Padding="10,8"
                      Background="#2D3035"
@@ -81,8 +85,8 @@
                       HeadersVisibility="Column"
                       GridLinesVisibility="All"
                       BorderThickness="0"
-                      RowBackground="#2D3035"
-                      AlternatingRowBackground="#333740"
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       HorizontalGridLinesBrush = "#3F4347"
                       VerticalGridLinesBrush = "#3F4347">
                 
@@ -205,14 +209,16 @@
                     <!-- Name -->
                     <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,15">
                         <TextBlock Text="Name *" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedSupplement.Name, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedSupplement.Name, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <!-- Type -->
                     <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,15">
                         <TextBlock Text="Type" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedSupplement.Type, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedSupplement.Type, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
@@ -242,7 +248,8 @@
                     <!-- Description -->
                     <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Description" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedSupplement.Description, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedSupplement.Description, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
@@ -250,7 +257,8 @@
                     <!-- Usage -->
                     <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Usage Instructions" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedSupplement.Usage, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedSupplement.Usage, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
@@ -293,31 +301,37 @@
                             <!-- Col 1 -->
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Name *" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedManagerDistributor.Name, UpdateSourceTrigger=PropertyChanged}" 
-                                         Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedManagerDistributor.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
 
                                 <TextBlock Text="Mobile" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedManagerDistributor.Mobile, UpdateSourceTrigger=PropertyChanged}" 
-                                         Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedManagerDistributor.Mobile, UpdateSourceTrigger=PropertyChanged}" 
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Email" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedManagerDistributor.Email, UpdateSourceTrigger=PropertyChanged}" 
-                                         Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedManagerDistributor.Email, UpdateSourceTrigger=PropertyChanged}" 
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                             </StackPanel>
 
                             <!-- Col 2 -->
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Address" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedManagerDistributor.Address, UpdateSourceTrigger=PropertyChanged}" 
-                                         Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedManagerDistributor.Address, UpdateSourceTrigger=PropertyChanged}" 
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
 
                                 <TextBlock Text="Work Phone" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedManagerDistributor.Work_Phone, UpdateSourceTrigger=PropertyChanged}" 
-                                         Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedManagerDistributor.Work_Phone, UpdateSourceTrigger=PropertyChanged}" 
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                                 
                                 <TextBlock Text="Website" Style="{StaticResource FieldLabel}"/>
-                                <TextBox Text="{Binding SelectedManagerDistributor.Website, UpdateSourceTrigger=PropertyChanged}" 
-                                         Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
+                                    <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Text="{Binding SelectedManagerDistributor.Website, UpdateSourceTrigger=PropertyChanged}" 
+                                             Background="#3F4347" Foreground="#DBDBDB" Padding="5" Margin="0,0,0,10"/>
                             </StackPanel>
                         </Grid>
 
@@ -336,8 +350,8 @@
                           ItemsSource="{Binding DistributorManagerList}"
                           SelectedItem="{Binding SelectedManagerDistributor}"
                           AutoGenerateColumns="False" CanUserAddRows="False"
-                          Background="#2D3035" Foreground="#DBDBDB"
-                          RowBackground="#2D3035" AlternatingRowBackground="#333740"
+                          RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                          CellStyle="{StaticResource GlobalDataGridCellStyle}"
                           GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
                           HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
 

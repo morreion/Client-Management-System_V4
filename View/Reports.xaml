@@ -98,7 +98,7 @@
                 <TextBlock Text="General Reports" FontSize="20" Foreground="#F59E0B" Margin="0,0,0,20" FontWeight="SemiBold"/>
 
                 <!-- Contact List Config -->
-                <Border Background="#2D3035" CornerRadius="8" Padding="20">
+                <Border Background="#2D3035" CornerRadius="8" Padding="20" Margin="0,0,0,20">
                     <StackPanel>
                         <TextBlock Text="Client Contact List" FontSize="16" Foreground="#DBDBDB" Margin="0,0,0,15" FontWeight="SemiBold"/>
                         <TextBlock Text="Select columns to include:" Foreground="#aaa" Margin="0,0,0,10"/>
@@ -119,6 +119,28 @@
                                 Height="45" Margin="0,20,0,0"
                                 FontSize="16" FontWeight="SemiBold"
                                 Background="#F59E0B" Foreground="White"
+                                BorderThickness="0" Cursor="Hand"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Inventory & Distributors -->
+                <Border Background="#2D3035" CornerRadius="8" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Inventory &amp; Distributors" FontSize="16" Foreground="#DBDBDB" Margin="0,0,0,15" FontWeight="SemiBold"/>
+                        <TextBlock Text="Full reports of your inventory and contacts." Foreground="#aaa" Margin="0,0,0,15"/>
+
+                        <Button Content="💊 Supplements Inventory" 
+                                Command="{Binding GenerateSupplementsReportCommand}"
+                                Height="45" Margin="0,0,0,10"
+                                FontSize="14" FontWeight="SemiBold"
+                                Background="#10B981" Foreground="White"
+                                BorderThickness="0" Cursor="Hand"/>
+
+                        <Button Content="🚚 Distributors List" 
+                                Command="{Binding GenerateDistributorReportCommand}"
+                                Height="45"
+                                FontSize="14" FontWeight="SemiBold"
+                                Background="#6366F1" Foreground="White"
                                 BorderThickness="0" Cursor="Hand"/>
                     </StackPanel>
                 </Border>

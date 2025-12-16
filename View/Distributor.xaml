@@ -30,9 +30,13 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
+            <!--Added  Style="{StaticResource SearchTextBoxStyle}",
+            , Tag="Enter name..." -->
             <TextBox x:Name="SearchBox"
                      Grid.Column="0"
+                     Style="{StaticResource SearchTextBoxStyle}"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Enter name..." 
                      FontSize="14"
                      Padding="10,8"
                      Background="#2D3035"
@@ -72,8 +76,8 @@
                       HeadersVisibility="Column"
                       GridLinesVisibility="All"
                       BorderThickness="0"
-                      RowBackground="#2D3035"
-                      AlternatingRowBackground="#333740" 
+                      RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                      CellStyle="{StaticResource GlobalDataGridCellStyle}"
                       HorizontalGridLinesBrush = "#3F4347" 
                       VerticalGridLinesBrush = "#3F4347">
                 
@@ -200,14 +204,16 @@
                     <!-- Name (Spans 2 columns) -->
                     <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Name *" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDistributor.Name, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDistributor.Name, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <!-- Address (Spans 2 columns) -->
                     <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Address" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDistributor.Address, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDistributor.Address, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
                                  TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60"/>
                     </StackPanel>
@@ -215,28 +221,32 @@
                     <!-- Work Phone -->
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,15">
                         <TextBlock Text="Work Phone" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDistributor.Work_Phone, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDistributor.Work_Phone, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <!-- Mobile -->
                     <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,15">
                         <TextBlock Text="Mobile" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDistributor.Mobile, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDistributor.Mobile, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <!-- Email -->
                     <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Email" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDistributor.Email, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDistributor.Email, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
 
                     <!-- Website -->
                     <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                         <TextBlock Text="Website" Foreground="#DBDBDB" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SelectedDistributor.Website, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedDistributor.Website, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"/>
                     </StackPanel>
                 </Grid>
