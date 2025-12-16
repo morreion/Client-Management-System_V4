@@ -205,11 +205,14 @@ namespace Client_Management_System_V4.Repositories
                 foreach (var scan in newScans)
                 {
                      // Ensure ID is set
-                     scan.Eye_AnalysisID = analysis.Eye_AnalysisID.Value;
-                     // Only insert if it doesn't look like it's already there (rudimentary check or just always add new)
-                     if (scan.Eye_ScanID == null)
+                     if (analysis.Eye_AnalysisID.HasValue)
                      {
-                        await connection.ExecuteAsync(sqlScan, scan, transaction);
+                         scan.Eye_AnalysisID = analysis.Eye_AnalysisID.Value;
+                         // Only insert if it doesn't look like it's already there (rudimentary check or just always add new)
+                         if (scan.Eye_ScanID == null)
+                         {
+                            await connection.ExecuteAsync(sqlScan, scan, transaction);
+                         }
                      }
                 }
 

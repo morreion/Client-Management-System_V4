@@ -59,6 +59,37 @@ namespace Client_Management_System_V4.ViewModel
         public bool IncludeOccupation { get; set; }
         public bool IncludeRef { get; set; }
 
+        // Filter Properties
+        public ObservableCollection<string> GenderFilters { get; set; } = new ObservableCollection<string> { "All Genders", "Male", "Female" };
+
+        private string _selectedGenderFilter = "All Genders";
+        public string SelectedGenderFilter
+        {
+            get => _selectedGenderFilter;
+            set { _selectedGenderFilter = value; OnPropertyChanged(); }
+        }
+
+        private bool _filterByAge;
+        public bool FilterByAge
+        {
+            get => _filterByAge;
+            set { _filterByAge = value; OnPropertyChanged(); }
+        }
+
+        private int _minAge = 0;
+        public int MinAge
+        {
+            get => _minAge;
+            set { _minAge = value; OnPropertyChanged(); }
+        }
+
+        private int _maxAge = 100;
+        public int MaxAge
+        {
+            get => _maxAge;
+            set { _maxAge = value; OnPropertyChanged(); }
+        }
+
         public ReportsVM()
         {
             _clientRepository = new ClientRepository();
@@ -164,6 +195,33 @@ namespace Client_Management_System_V4.ViewModel
                 return;
             }
 
+            // Apply Filters
+            var filteredClients = Clients.AsEnumerable();
+
+            // Gender Filter
+            if (SelectedGenderFilter == "Male")
+            {
+                filteredClients = filteredClients.Where(c => c.Gender == 1);
+            }
+            else if (SelectedGenderFilter == "Female")
+            {
+                filteredClients = filteredClients.Where(c => c.Gender == 0);
+            }
+
+            // Age Filter
+            if (FilterByAge)
+            {
+                filteredClients = filteredClients.Where(c => c.Age.HasValue && c.Age.Value >= MinAge && c.Age.Value <= MaxAge);
+            }
+
+            var finalClientList = filteredClients.ToList();
+
+            if (!finalClientList.Any())
+            {
+                MessageBox.Show("No clients match the selected filters.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "PDF Details|*.pdf",
@@ -175,7 +233,7 @@ namespace Client_Management_System_V4.ViewModel
                 IsGenerating = true;
                 try
                 {
-                    await _pdfService.GenerateContactListReportAsync(Clients, cols, saveFileDialog.FileName);
+                    await _pdfService.GenerateContactListReportAsync(new ObservableCollection<Client>(finalClientList), cols, saveFileDialog.FileName);
                     MessageBox.Show("Contact List generated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     OpenPdf(saveFileDialog.FileName);
                 }

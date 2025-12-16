@@ -28,10 +28,10 @@ namespace Client_Management_System_V4.ViewModel
         
         // Add Item Form Properties
         private Supplement? _itemToAddSupplement;
-        private string _itemToAddBreakfast;
-        private string _itemToAddLunch;
-        private string _itemToAddDinner;
-        private string _itemToAddBedtime;
+        private string _itemToAddBreakfast = string.Empty;
+        private string _itemToAddLunch = string.Empty;
+        private string _itemToAddDinner = string.Empty;
+        private string _itemToAddBedtime = string.Empty;
 
         private string _searchText = string.Empty;
         private bool _isLoading;

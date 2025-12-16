@@ -42,8 +42,11 @@ namespace Client_Management_System_V4.Services
                 var prescriptions = await _prescriptionRepo.GetByClientIdAsync(client.ClientID);
                 foreach(var rx in prescriptions)
                 {
-                    var sups = await _prescriptionRepo.GetSupplementsByPrescriptionIdAsync(rx.PrescriptionID.Value);
-                    prescriptionDetails.Add((rx, sups));
+                    if (rx.PrescriptionID.HasValue)
+                    {
+                        var sups = await _prescriptionRepo.GetSupplementsByPrescriptionIdAsync(rx.PrescriptionID.Value);
+                        prescriptionDetails.Add((rx, sups));
+                    }
                 }
             }
 
@@ -79,8 +82,11 @@ namespace Client_Management_System_V4.Services
             
             foreach(var rx in prescriptions)
             {
-                var sups = await _prescriptionRepo.GetSupplementsByPrescriptionIdAsync(rx.PrescriptionID.Value);
-                prescriptionDetails.Add((rx, sups));
+                if (rx.PrescriptionID.HasValue)
+                {
+                    var sups = await _prescriptionRepo.GetSupplementsByPrescriptionIdAsync(rx.PrescriptionID.Value);
+                    prescriptionDetails.Add((rx, sups));
+                }
             }
 
             await Task.Run(() =>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +27,7 @@ namespace Client_Management_System_V4.View
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Hyperlink link && link.DataContext is Client_Management_System_V4.Models.Client client)
+            if (sender is Hyperlink link && link.DataContext is Client_Management_System_V4.Models.Client client && !string.IsNullOrEmpty(client.Email))
             {
                 Utilities.LinkHelper.OpenEmail(client.Email);
             }

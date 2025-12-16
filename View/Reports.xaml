@@ -47,12 +47,13 @@
                    FontSize="28" FontWeight="Bold" Foreground="#DBDBDB" 
                    Margin="0,0,0,30"/>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/> <!-- Individual Reports -->
-                <ColumnDefinition Width="40"/> <!-- Spacer -->
-                <ColumnDefinition Width="*"/> <!-- General Reports -->
-            </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Row="1" Style="{StaticResource DarkScrollViewerStyle}" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/> <!-- Individual Reports -->
+                    <ColumnDefinition Width="40"/> <!-- Spacer -->
+                    <ColumnDefinition Width="*"/> <!-- General Reports -->
+                </Grid.ColumnDefinitions>
 
             <!-- LEFT: Individual Client Reports -->
             <StackPanel Grid.Column="0">
@@ -101,6 +102,45 @@
                 <Border Background="#2D3035" CornerRadius="8" Padding="20" Margin="0,0,0,20">
                     <StackPanel>
                         <TextBlock Text="Client Contact List" FontSize="16" Foreground="#DBDBDB" Margin="0,0,0,15" FontWeight="SemiBold"/>
+                        
+                        <!-- Filters -->
+                        <TextBlock Text="Filters" FontSize="14" Foreground="#10B981" Margin="0,0,0,10" FontWeight="SemiBold"/>
+                        <StackPanel Margin="0,0,0,20">
+                            <!-- Gender Filter -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Gender:" Foreground="#aaa" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="1"
+                                          ItemsSource="{Binding GenderFilters}" 
+                                          SelectedItem="{Binding SelectedGenderFilter}"
+                                          Style="{StaticResource MyCustomComboBoxStyle}"
+                                          Height="35"/>
+                            </Grid>
+
+                            <!-- Age Filter -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Content="Filter Age" IsChecked="{Binding FilterByAge}" 
+                                          Style="{StaticResource ReportsCheckBoxStyle}" 
+                                          VerticalAlignment="Center" Width="100"/>
+                                
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" 
+                                            Visibility="{Binding FilterByAge, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <TextBox Text="{Binding MinAge}" Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Width="60" Height="30" VerticalContentAlignment="Center" TextAlignment="Center"/>
+                                    <TextBlock Text="to" Foreground="#aaa" VerticalAlignment="Center" Margin="10,0"/>
+                                    <TextBox Text="{Binding MaxAge}" Style="{StaticResource RoundedTextBoxStyle}" 
+                                             Width="60" Height="30" VerticalContentAlignment="Center" TextAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
                         <TextBlock Text="Select columns to include:" Foreground="#aaa" Margin="0,0,0,10"/>
 
                         <UniformGrid Columns="2">
@@ -145,8 +185,8 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-
-        </Grid>
+            </Grid>
+        </ScrollViewer>
 
         <!-- Loading Overlay -->
         <Grid Grid.RowSpan="2" Background="#80000000" Visibility="{Binding IsGenerating, Converter={StaticResource BoolToVisibilityConverter}}"

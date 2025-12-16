@@ -126,8 +126,11 @@ namespace Client_Management_System_V4.Repositories
 
                 foreach (var s in supplements)
                 {
-                    s.PrescriptionID = prescription.PrescriptionID.Value;
-                    await connection.ExecuteAsync(sqlDetail, s, transaction);
+                    if (prescription.PrescriptionID.HasValue)
+                    {
+                        s.PrescriptionID = prescription.PrescriptionID.Value;
+                        await connection.ExecuteAsync(sqlDetail, s, transaction);
+                    }
                 }
 
                 transaction.Commit();
