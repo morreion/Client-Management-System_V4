@@ -74,8 +74,12 @@ namespace Client_Management_System_V4.ViewModel
             get => _searchText;
             set
             {
-                _searchText = value;
-                OnPropertyChanged(nameof(SearchText));
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    OnPropertyChanged(nameof(SearchText));
+                    _ = SearchAsync();
+                }
             }
         }
 

@@ -32,11 +32,6 @@
 
         <!-- Search -->
         <Grid Grid.Row="0" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
             <!--Added Style="{StaticResource SearchTextBoxStyle}",
             Tag="Enter name..." -->
             <TextBox Style="{StaticResource SearchTextBoxStyle}"
@@ -48,9 +43,6 @@
                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                 </TextBox.InputBindings>
             </TextBox>
-
-            <Button Grid.Column="1" Content="🔍 Search Prescriptions" Command="{Binding SearchCommand}"
-                    Margin="10,0,0,0" Padding="15,8" Background="#3B82F6" Foreground="White" BorderThickness="0"/>
         </Grid>
 
         <!-- Master List -->
