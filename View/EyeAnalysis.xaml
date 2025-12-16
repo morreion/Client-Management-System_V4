@@ -326,8 +326,9 @@
                               SelectedItem="{Binding SelectedManagerPriority}"
                               AutoGenerateColumns="False" CanUserAddRows="False"
                               Background="#2D3035" Foreground="#DBDBDB"
-                              RowBackground="#2D3035" AlternatingRowBackground="#333740"
-                              GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="1" 
+                              RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                              CellStyle="{StaticResource GlobalDataGridCellStyle}"
+                              GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
                               HorizontalGridLinesBrush = "#3F4347" VerticalGridLinesBrush = "#3F4347">
 
                   <DataGrid.ColumnHeaderStyle>
