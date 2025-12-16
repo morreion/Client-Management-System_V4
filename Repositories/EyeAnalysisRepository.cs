@@ -246,9 +246,8 @@ namespace Client_Management_System_V4.Repositories
                 FROM Eye_Analysis e 
                 JOIN Client c ON e.ClientID = c.ClientID 
                 WHERE c.Name LIKE @Search 
-                   OR e.Iris_Colour LIKE @Search
                 ORDER BY e.Analysis_Date DESC";
-            return await connection.QueryAsync<EyeAnalysis>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<EyeAnalysis>(sql, new { Search = $"{searchTerm}%" });
         }
 
         public async Task<int> CountAsync()

@@ -96,7 +96,7 @@ namespace Client_Management_System_V4.Repositories
                 JOIN Client c ON a.ClientID = c.ClientID 
                 WHERE c.Name LIKE @Search 
                 ORDER BY a.Assessment_Date DESC";
-            return await connection.QueryAsync<Anthropometrics>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<Anthropometrics>(sql, new { Search = $"{searchTerm}%" });
         }
 
         public async Task<int> CountAsync()

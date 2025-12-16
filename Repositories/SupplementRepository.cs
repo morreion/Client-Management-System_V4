@@ -74,11 +74,8 @@ namespace Client_Management_System_V4.Repositories
                 FROM Supplements s 
                 LEFT JOIN Distributor d ON s.DistributorID = d.DistributorID 
                 WHERE s.Name LIKE @Search 
-                   OR s.Type LIKE @Search 
-                   OR s.Description LIKE @Search
-                   OR d.Name LIKE @Search
                 ORDER BY s.Name";
-            return await connection.QueryAsync<Supplement>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<Supplement>(sql, new { Search = $"{searchTerm}%" });
         }
 
         public async Task<int> CountAsync()

@@ -84,11 +84,8 @@ namespace Client_Management_System_V4.Repositories
                 FROM Diet d 
                 JOIN Client c ON d.ClientID = c.ClientID 
                 WHERE c.Name LIKE @Search 
-                   OR d.Breakfast LIKE @Search 
-                   OR d.Lunch LIKE @Search
-                   OR d.Dinner LIKE @Search
                 ORDER BY d.Diet_Date DESC";
-            return await connection.QueryAsync<Diet>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<Diet>(sql, new { Search = $"{searchTerm}%" });
         }
 
         public async Task<int> CountAsync()

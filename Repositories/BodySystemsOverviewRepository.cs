@@ -84,10 +84,8 @@ namespace Client_Management_System_V4.Repositories
                 FROM Body_Systems_Overview b 
                 JOIN Client c ON b.ClientID = c.ClientID 
                 WHERE c.Name LIKE @Search 
-                   OR b.Immune LIKE @Search 
-                   OR b.Digestion LIKE @Search
                 ORDER BY b.Assessment_Date DESC";
-            return await connection.QueryAsync<BodySystemsOverview>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<BodySystemsOverview>(sql, new { Search = $"{searchTerm}%" });
         }
 
         public async Task<int> CountAsync()

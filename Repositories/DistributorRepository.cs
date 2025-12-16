@@ -69,12 +69,8 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryAsync<Distributor>(
                 @"SELECT * FROM Distributor 
                   WHERE Name LIKE @Search 
-                     OR Email LIKE @Search 
-                     OR Work_Phone LIKE @Search
-                     OR Mobile LIKE @Search
-                     OR Website LIKE @Search
                   ORDER BY Name",
-                new { Search = $"%{searchTerm}%" });
+                new { Search = $"{searchTerm}%" });
         }
 
         /// <summary>

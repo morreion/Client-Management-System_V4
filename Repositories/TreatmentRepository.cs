@@ -90,10 +90,8 @@ namespace Client_Management_System_V4.Repositories
                 FROM Treatment t 
                 JOIN Client c ON t.ClientID = c.ClientID 
                 WHERE c.Name LIKE @Search 
-                   OR t.Presenting_Symptoms LIKE @Search 
-                   OR t.Impression LIKE @Search
                 ORDER BY t.Treatment_Date DESC";
-            return await connection.QueryAsync<Treatment>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<Treatment>(sql, new { Search = $"{searchTerm}%" });
         }
 
         public async Task<int> CountAsync()

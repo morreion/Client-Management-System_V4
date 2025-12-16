@@ -186,10 +186,8 @@ namespace Client_Management_System_V4.Repositories
                 FROM Med_Hx m 
                 JOIN Client c ON m.ClientID = c.ClientID 
                 WHERE c.Name LIKE @Search 
-                   OR m.Medication LIKE @Search
-                   OR m.Accidents_Previous_Illness LIKE @Search
                 ORDER BY m.Assessment_Date DESC";
-            return await connection.QueryAsync<MedHx>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<MedHx>(sql, new { Search = $"{searchTerm}%" });
         }
 
         // Interface requirements not fully used but needed

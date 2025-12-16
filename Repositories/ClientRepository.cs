@@ -110,10 +110,10 @@ namespace Client_Management_System_V4.Repositories
             using var connection = new SQLiteConnection(_connectionString);
             const string sql = @"
                 SELECT * FROM Client 
-                WHERE Name LIKE @Search OR Email LIKE @Search
+                WHERE Name LIKE @Search
                 ORDER BY Name";
             
-            return await connection.QueryAsync<Client>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<Client>(sql, new { Search = $"{searchTerm}%" });
         }
 
         /// <summary>

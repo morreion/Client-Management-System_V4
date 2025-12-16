@@ -168,9 +168,8 @@ namespace Client_Management_System_V4.Repositories
                 FROM Prescription p 
                 JOIN Client c ON p.ClientID = c.ClientID 
                 WHERE c.Name LIKE @Search 
-                   OR p.Recommendations LIKE @Search 
                 ORDER BY p.Prescription_Date DESC";
-            return await connection.QueryAsync<Prescription>(sql, new { Search = $"%{searchTerm}%" });
+            return await connection.QueryAsync<Prescription>(sql, new { Search = $"{searchTerm}%" });
         }
 
         public async Task<int> CountAsync()
