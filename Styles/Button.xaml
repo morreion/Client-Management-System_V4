@@ -236,4 +236,53 @@
 
     </Style>
 
+
+    <!-- NEW: Rounded Action Button Style -->
+    <!-- Usage: Set Background for normal color, Set Tag for Hover color -->
+    <Style x:Key="RoundedButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="Margin" Value="0,0,10,0"/>
+        <!--old padding property-,  <Setter Property="Padding" Value="15,8"/>-->
+       
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        
+        <Setter Property="Template">
+          <Setter.Value>
+             <ControlTemplate TargetType="Button">
+                <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="8" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}">
+                
+                        <!-- THE FIX: Add Margin="{TemplateBinding Padding}" -->
+                        <!-- This tells the text to respect the padding set on the Button -->
+               <ContentPresenter HorizontalAlignment="Center" 
+                                 VerticalAlignment="Center"
+                                 Margin="{TemplateBinding Padding}"/>
+            </Border>
+            
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="border" Property="Background" 
+                            Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/> 
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="border" Property="Background" Value="#555555"/>
+                    <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                    <Setter Property="Foreground" Value="#AAAAAA"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Setter.Value>
+</Setter>
+    </Style>
+
 </ResourceDictionary>

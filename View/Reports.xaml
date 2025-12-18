@@ -57,12 +57,12 @@
 
             <!-- LEFT: Individual Client Reports -->
             <StackPanel Grid.Column="0">
-                <TextBlock Text="Individual Client Reports" FontSize="20" Foreground="#10B981" Margin="0,0,0,20" FontWeight="SemiBold"/>
+                <TextBlock Text="Individual Client Reports"  Foreground="#10B981" Margin="0,0,0,20" FontSize="14" FontWeight="SemiBold"/>
 
                 <!-- Client Selector -->
                 <Border Background="#2D3035" CornerRadius="8" Padding="20" Margin="0,0,0,20">
                     <StackPanel>
-                        <TextBlock Text="Select Client:" Foreground="#aaa" Margin="0,0,0,5"/>
+                        <TextBlock Text="Select Client:"  FontSize="14" Foreground="#aaa" Margin="0,0,0,5"/>
                         <ComboBox ItemsSource="{Binding Clients}" 
                                   SelectedItem="{Binding SelectedClient}"
                                   DisplayMemberPath="Name"
@@ -85,10 +85,14 @@
                         
                         <Button Content="� Generate Health Report" 
                                 Command="{Binding GenerateReportCommand}"
-                                Height="45" Margin="0,20,0,0"
-                                FontSize="16" FontWeight="SemiBold"
-                                Background="#3B82F6" Foreground="White"
-                                BorderThickness="0" Cursor="Hand"
+                                Style="{StaticResource RoundedButtonStyle}"                                 Height="45" Margin="0,20,0,0"
+                                FontSize="16" 
+                                FontWeight="SemiBold"
+                                Background="#10B981" 
+                                Tag="#2AA63E"
+                                Foreground="White"
+                                BorderThickness="0" 
+                                Cursor="Hand"
                                 IsEnabled="{Binding SelectedClient, Converter={StaticResource NullToBoolConverter}}"/>
                     </StackPanel>
                 </Border>
@@ -112,7 +116,7 @@
                                     <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Gender:" Foreground="#aaa" VerticalAlignment="Center"/>
+                                <TextBlock Text="Gender:" FontSize="14" Foreground="#aaa" VerticalAlignment="Center"/>
                                 <ComboBox Grid.Column="1"
                                           ItemsSource="{Binding GenderFilters}" 
                                           SelectedItem="{Binding SelectedGenderFilter}"
@@ -134,14 +138,14 @@
                                             Visibility="{Binding FilterByAge, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <TextBox Text="{Binding MinAge}" Style="{StaticResource RoundedTextBoxStyle}" 
                                              Width="60" Height="30" VerticalContentAlignment="Center" TextAlignment="Center"/>
-                                    <TextBlock Text="to" Foreground="#aaa" VerticalAlignment="Center" Margin="10,0"/>
+                                    <TextBlock Text="to" FontSize="14" Foreground="#aaa" VerticalAlignment="Center" Margin="10,0"/>
                                     <TextBox Text="{Binding MaxAge}" Style="{StaticResource RoundedTextBoxStyle}" 
                                              Width="60" Height="30" VerticalContentAlignment="Center" TextAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
 
-                        <TextBlock Text="Select columns to include:" Foreground="#aaa" Margin="0,0,0,10"/>
+                        <TextBlock Text="Select columns to include:" FontSize="14" Foreground="#aaa" Margin="0,0,0,10"/>
 
                         <UniformGrid Columns="2">
                             <CheckBox Content="Name" IsChecked="{Binding IncludeName}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
@@ -156,10 +160,16 @@
 
                         <Button Content="📋 Generate Contact List" 
                                 Command="{Binding GenerateContactListCommand}"
-                                Height="45" Margin="0,20,0,0"
-                                FontSize="16" FontWeight="SemiBold"
-                                Background="#F59E0B" Foreground="White"
-                                BorderThickness="0" Cursor="Hand"/>
+                                Style="{StaticResource RoundedButtonStyle}"                                
+                                Height="45" 
+                                Margin="0,20,0,0"
+                                FontSize="16" 
+                                FontWeight="SemiBold"                               
+                                Background="#FFB93B"
+                                Tag="#FE9A37"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
                     </StackPanel>
                 </Border>
 
@@ -167,21 +177,33 @@
                 <Border Background="#2D3035" CornerRadius="8" Padding="20">
                     <StackPanel>
                         <TextBlock Text="Inventory &amp; Distributors" FontSize="16" Foreground="#DBDBDB" Margin="0,0,0,15" FontWeight="SemiBold"/>
-                        <TextBlock Text="Full reports of your inventory and contacts." Foreground="#aaa" Margin="0,0,0,15"/>
+                        <TextBlock Text="Full reports of your inventory and contacts." FontSize="14" Foreground="#aaa" Margin="0,0,0,15"/>
 
                         <Button Content="💊 Supplements Inventory" 
                                 Command="{Binding GenerateSupplementsReportCommand}"
-                                Height="45" Margin="0,0,0,10"
-                                FontSize="14" FontWeight="SemiBold"
-                                Background="#10B981" Foreground="White"
-                                BorderThickness="0" Cursor="Hand"/>
+                                Style="{StaticResource RoundedButtonStyle}"
+                                Height="45" 
+                                Margin="0,0,0,10"
+                                FontSize="14" 
+                                FontWeight="SemiBold"
+                                Background="#C27AFF" 
+                                Tag ="#8E51FF"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
 
                         <Button Content="🚚 Distributors List" 
                                 Command="{Binding GenerateDistributorReportCommand}"
+                                Style="{StaticResource RoundedButtonStyle}"
                                 Height="45"
-                                FontSize="14" FontWeight="SemiBold"
-                                Background="#6366F1" Foreground="White"
-                                BorderThickness="0" Cursor="Hand"/>
+                                FontSize="14" 
+                                FontWeight="SemiBold"
+                                Margin="0,0,0,10"
+                                Background="#6366F1" 
+                                Tag ="#4F46E5"
+                                Foreground="White"
+                                BorderThickness="0" 
+                                Cursor="Hand"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

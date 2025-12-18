@@ -73,9 +73,10 @@ namespace Client_Management_System_V4.Data
                     }
                 }
 
-                // If tables already exist, nothing to do
+                // If tables already exist, check for migrations
                 if (tablesExist)
                 {
+                    PerformMigrations();
                     return;
                 }
 
@@ -91,10 +92,54 @@ namespace Client_Management_System_V4.Data
                 using var command = connection.CreateCommand();
                 command.CommandText = schema;
                 command.ExecuteNonQuery();
+
+                // Ensure migrations are applied even for new databases (in case schema is old)
+                PerformMigrations();
             }
             catch (Exception ex)
             {
                 throw new Exception($"Database initialization failed: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Checks for and applies necessary database migrations
+        /// </summary>
+        private static void PerformMigrations()
+        {
+            try
+            {
+                using var connection = new SQLiteConnection(ConnectionString);
+                connection.Open();
+
+                // Check if Gender column exists in Client table
+                bool genderExists = false;
+                using (var checkCmd = new SQLiteCommand("PRAGMA table_info(Client)", connection))
+                using (var reader = checkCmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var name = reader["name"].ToString();
+                        if (string.Equals(name, "Gender", StringComparison.OrdinalIgnoreCase))
+                        {
+                            genderExists = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!genderExists)
+                {
+                    using var alterCmd = new SQLiteCommand("ALTER TABLE Client ADD COLUMN Gender INTEGER", connection);
+                    alterCmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle migration error
+                Debug.WriteLine($"Migration failed: {ex.Message}");
+                // We don't throw here to avoid crashing the app if migration fails, 
+                // but functionally it might still fail later if column is missing.
             }
         }
 

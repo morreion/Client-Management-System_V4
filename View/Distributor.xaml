@@ -120,8 +120,9 @@
                     Margin="0,10">
             <Button Content="➕ Add New"
                     Command="{Binding AddCommand}"
-                    Padding="15,8"
+                    Style="{StaticResource RoundedButtonStyle}"   
                     Background="#10B981"
+                    Tag="#0a4a0f" 
                     Foreground="White"
                     BorderThickness="0"
                     FontSize="14"
@@ -130,8 +131,9 @@
             
             <Button Content="💾 Save"
                     Command="{Binding SaveCommand}"
-                    Padding="15,8"
+                    Style="{StaticResource RoundedButtonStyle}"  
                     Background="#3B82F6"
+                    Tag="#25108f"
                     Foreground="White"
                     BorderThickness="0"
                     FontSize="14"
@@ -141,8 +143,9 @@
             
             <Button Content="🗑️ Delete"
                     Command="{Binding DeleteCommand}"
-                    Padding="15,8"
+                    Style="{StaticResource RoundedButtonStyle}"  
                     Background="#EF4444"
+                    Tag="#9c0505"
                     Foreground="White"
                     BorderThickness="0"
                     FontSize="14"
@@ -152,8 +155,9 @@
             
             <Button Content="❌ Cancel"
                     Command="{Binding CancelCommand}"
-                    Padding="15,8"
+                    Style="{StaticResource RoundedButtonStyle}"  
                     Background="#6B7280"
+                    Tag="#4a4a4f"
                     Foreground="White"
                     BorderThickness="0"
                     FontSize="14"

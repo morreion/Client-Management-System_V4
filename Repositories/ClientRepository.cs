@@ -52,12 +52,12 @@ namespace Client_Management_System_V4.Repositories
                 INSERT INTO Client (
                     Name, Address, DOB, Mobile, Email, Occupation, 
                     Date_First_Consultation, Date_Last_Consultation, 
-                    Marital_Status, Children, Ref, Alt_Contact
+                    Marital_Status, Children, Ref, Alt_Contact, Gender
                 )
                 VALUES (
                     @Name, @Address, @DOB, @Mobile, @Email, @Occupation,
                     @Date_First_Consultation, @Date_Last_Consultation,
-                    @Marital_Status, @Children, @Ref, @Alt_Contact
+                    @Marital_Status, @Children, @Ref, @Alt_Contact, @Gender
                 );
                 SELECT last_insert_rowid();";
             
@@ -84,7 +84,8 @@ namespace Client_Management_System_V4.Repositories
                     Marital_Status = @Marital_Status, 
                     Children = @Children,
                     Ref = @Ref, 
-                    Alt_Contact = @Alt_Contact
+                    Alt_Contact = @Alt_Contact,
+                    Gender = @Gender
                 WHERE ClientID = @ClientID";
             
             int rowsAffected = await connection.ExecuteAsync(sql, client);

@@ -1,0 +1,274 @@
+Rounded button Style
+
+
+I want to create a style for a button, the buttons now show a light blue color, 
+when hovering over it, therefore the white foreground text is then difficult to see. 
+In the style i should be able to change mouse hover color of the button. 
+Or can i do that in the normal properties of a button? If a style is going to be created, 
+i also want to have it rounded corners, but cornerradius is not a property of the button, 
+it has to be done in a style. I attached  a button style for some  other buttons i use now.
+do i need to adjust it, if so how do i implement it, otherwise create a new style.
+
+
+
+You should create a new style inside that same file. 
+The existing styles you posted are very specific (one is for Sidebar RadioButtons, 
+the others are for Window Icons like Close/Minimize).
+
+To fulfill your requirement of customizable hover colors and rounded corners, 
+the best trick in WPF without writing complex C# backend code is to use the 
+Tag property of the button to hold your "Hover Color".
+
+Here is the plan:
+
+Rounded Corners: We will use a Border with CornerRadius inside the template.
+
+Hover Color: We will tell the template: "When the mouse is over the button, 
+switch the Background to whatever color is stored in the Tag property."
+
+Step 1: Add this Style to your Resource Dictionary
+
+Open your existing file (e.g., ButtonStyles.xaml or whatever you named the file 
+containing the code you pasted) and add this new style at the bottom, 
+before the closing </ResourceDictionary> tag.
+
+
+<!-- NEW: Rounded Action Button Style -->
+    <!-- Usage: Set Background for normal color, Set Tag for Hover color -->
+    <Style x:Key="RoundedButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="Margin" Value="0,0,10,0"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="8" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                        
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                    
+                    <ControlTemplate.Triggers>
+                        <!-- TRIGGER: Mouse Over -->
+                        <!-- This changes the background to the color defined in the Tag property -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" 
+                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/> 
+                        </Trigger>
+                        
+                        <!-- TRIGGER: Button Pressed -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        
+                        <!-- TRIGGER: Disabled -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Background" Value="#555555"/>
+                            <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                            <Setter Property="Foreground" Value="#AAAAAA"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+Step 2: How to use it in your View (Treatment.xaml)
+
+Now you can update your buttons. You keep the Background (Normal Color) and add 
+a Tag (Hover Color).
+
+Here are the updated buttons for your specific colors:
+
+1. The Add Button (Green)
+
+Normal: #10B981 (Emerald Green)
+
+Hover (Tag): #059669 (Darker Emerald)
+
+
+<Button Content="➕ Add New" 
+        Command="{Binding AddCommand}"
+        Style="{StaticResource RoundedButtonStyle}"
+        Background="#10B981" 
+        Tag="#059669" />
+
+2. The Save Button (Blue)
+
+Normal: #3B82F6 (Blue)
+
+Hover (Tag): #2563EB (Darker Blue)
+
+
+<Button Content="💾 Save" 
+        Command="{Binding SaveCommand}"
+        Style="{StaticResource RoundedButtonStyle}"
+        Background="#3B82F6" 
+        Tag="#2563EB"
+        IsEnabled="{Binding IsSelectionActive}"/>
+
+3. The Delete Button (Red)
+
+Normal: #EF4444 (Red)
+
+Hover (Tag): #DC2626 (Darker Red)
+
+
+<Button Content="🗑️ Delete" 
+        Command="{Binding DeleteCommand}"
+        Style="{StaticResource RoundedButtonStyle}"
+        Background="#EF4444" 
+        Tag="#DC2626"
+        IsEnabled="{Binding IsSelectionActive}"/>
+
+4. The Cancel Button (Gray)
+
+Normal: #6B7280 (Gray)
+
+Hover (Tag): #4B5563 (Darker Gray)
+
+
+<Button Content="❌ Cancel" 
+        Command="{Binding CancelCommand}"
+        Style="{StaticResource RoundedButtonStyle}"
+        Background="#6B7280" 
+        Tag="#4B5563"/>
+
+5. The Search Button (Blue)
+Don't forget the search button at the top of your view!
+
+
+<Button Grid.Column="1" 
+        Content="🔍 Search Treatment" 
+        Command="{Binding SearchCommand}"
+        Style="{StaticResource RoundedButtonStyle}"
+        Background="#3B82F6" 
+        Tag="#2563EB"
+        Margin="10,0,0,0"/>
+Explanation of the Solution
+
+Why a new style? The existing BtnStyle in your file targeted RadioButton. 
+You needed a style for Button.
+
+CornerRadius: CornerRadius is not a property of a Button, 
+but it is a property of a Border. By putting a Border inside the ControlTemplate of the button,
+we can curve the edges.
+
+The Tag Trick: You asked to be able to set the hover color easily. 
+By binding the IsMouseOver trigger to the Tag property, 
+you can set the hover color directly in your XAML (e.g., Tag="Red") 
+without needing to write a new style for every single color button you have.
+
+
+
+
+
+the text in the rounded button is now cramped up, 
+tried to increase the padding in the padding property, 
+in the view as well in the ButtonStyles.xaml . 
+Didn't work so i just added space to the buttons content 
+on the left and the right --> 
+<Button Content=" ➕ Add New  " 
+        Command="{Binding AddCommand}" 
+        Padding = "16,8" 
+        Style="{StaticResource RoundedButtonStyle}"  
+        Background="#10B981" 
+        Tag="#059669" 
+        Foreground="White" 
+        BorderThickness="0" 
+        Margin="0,0,10,0"/>   
+
+Is there a different way instead of adding space to the buttons 
+content property?
+
+
+
+The reason your Padding property is being ignored is that the ControlTemplate 
+created in the previous step wasn't told to use it. In WPF, 
+if you don't explicitly bind the ContentPresenter to the Padding of the button, 
+the text will just sit tightly in the center, ignoring whatever values you set.
+
+You do not need to add spaces to the text. Here is the fix.
+
+
+Step 1: Fix the Style in ButtonStyles.xaml
+
+Go to your RoundedButtonStyle in your resource file. 
+Look for the <ContentPresenter /> tag inside the Border.
+
+You need to add Margin="{TemplateBinding Padding}".
+
+Replace the entire ControlTemplate section of that style with this corrected version:
+
+
+<Setter Property="Template">
+    <Setter.Value>
+        <ControlTemplate TargetType="Button">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="8" 
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}">
+                
+                <!-- THE FIX: Add Margin="{TemplateBinding Padding}" -->
+                <!-- This tells the text to respect the padding set on the Button -->
+                <ContentPresenter HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"
+                                  Margin="{TemplateBinding Padding}"/>
+            </Border>
+            
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="border" Property="Background" 
+                            Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/> 
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="border" Property="Background" Value="#555555"/>
+                    <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                    <Setter Property="Foreground" Value="#AAAAAA"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Setter.Value>
+</Setter>
+
+
+
+Step 2: Clean up your View (Treatment.xaml)
+
+Now that the binding is fixed, the Padding="15,8" inside the Style setter will actually work.
+
+Remove the extra spaces from your text (change " ➕ Add New " back to "➕ Add New").
+
+Remove the manual Padding="115,8" from the button in the view (it will look 
+huge now that it works!).
+
+You can also remove Foreground, BorderThickness and Margin if they are already 
+handled by the Style to keep your code clean.
+
+Your Button code should now look clean like this:
+
+
+<Button Content="➕ Add New" 
+        Command="{Binding AddCommand}" 
+        Style="{StaticResource RoundedButtonStyle}"  
+        Background="#10B981" 
+        Tag="#059669" />
+
+This will automatically apply the 15,8 padding defined in the Style, 
+giving the text plenty of breathing room inside the rounded corners.

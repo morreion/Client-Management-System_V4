@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS "Client" (
 	"Marital_Status" VARCHAR(50),
 	"Children" INTEGER,
 	"Ref" VARCHAR(255),
-	"Alt_Contact" VARCHAR(255)
+	"Alt_Contact" VARCHAR(255),
+	"Gender" INTEGER
 );
 
 -- Distributor Table
