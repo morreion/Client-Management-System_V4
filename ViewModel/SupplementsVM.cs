@@ -187,6 +187,32 @@ namespace Client_Management_System_V4.ViewModel
                  return;
              }
 
+             if (!string.IsNullOrWhiteSpace(SelectedManagerDistributor.Email))
+             {
+                 var email = SelectedManagerDistributor.Email.Trim();
+                 // Simple regex for email validation
+                 var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                 if (!System.Text.RegularExpressions.Regex.IsMatch(email, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                 {
+                     MessageBox.Show($"The email address '{email}' is not valid.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                     return;
+                 }
+                 SelectedManagerDistributor.Email = email; // Save trimmed version
+             }
+
+             if (!string.IsNullOrWhiteSpace(SelectedManagerDistributor.Website))
+             {
+                 var website = SelectedManagerDistributor.Website.Trim();
+                 // Simple regex for website validation (allows optional http/https)
+                 var pattern = @"^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/.*)?$";
+                 if (!System.Text.RegularExpressions.Regex.IsMatch(website, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                 {
+                     MessageBox.Show($"The website '{website}' is not valid.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                     return;
+                 }
+                 SelectedManagerDistributor.Website = website;
+             }
+
              try
              {
                  IsLoading = true;

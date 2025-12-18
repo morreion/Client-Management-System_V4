@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -217,6 +217,18 @@ namespace Client_Management_System_V4.ViewModel
                 MessageBox.Show("Client name is required.", "Validation Error", 
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(SelectedClient.Email))
+            {
+                var email = SelectedClient.Email.Trim();
+                var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                if (!System.Text.RegularExpressions.Regex.IsMatch(email, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                {
+                    MessageBox.Show($"The email address '{email}' is not valid.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                SelectedClient.Email = email;
             }
 
             try

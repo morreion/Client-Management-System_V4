@@ -272,3 +272,108 @@ Your Button code should now look clean like this:
 
 This will automatically apply the 15,8 padding defined in the Style, 
 giving the text plenty of breathing room inside the rounded corners.
+
+
+
+is it possible within the style file --> ButtonStyles.xaml, 
+to implement a tooltip for the button?
+
+
+
+Yes, it is absolutely possible. In WPF, the ToolTip is actually 
+its own control, separate from the Button. 
+To make it look good (Dark theme, rounded corners), 
+you need to create a Style for the ToolTip inside your 
+ButtonStyles.xaml file.
+
+Once you add this style, any button (or control) that has 
+a tooltip will automatically use this custom dark design.
+
+Step 1: Add the ToolTip Style to ButtonStyles.xaml
+
+Open your ButtonStyles.xaml file and paste this code above your 
+RoundedButtonStyle.
+
+Key Features of this Style:
+
+TargetType="ToolTip": This automatically applies to all tooltips.
+
+Rounded Corners: Uses a Border with CornerRadius="8".
+
+Dark Theme: Matches your app colors (#2D3035 background, #3F4347 border).
+
+DropShadow: Adds a subtle shadow so it "pops" out from the background.
+
+
+<!-- CUSTOM TOOLTIP STYLE -->
+    <Style TargetType="ToolTip">
+        <Setter Property="Background" Value="#2D3035"/>
+        <Setter Property="Foreground" Value="#DBDBDB"/>
+        <Setter Property="BorderBrush" Value="#3F4347"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <!-- Optional: offset slightly from the mouse cursor -->
+        <Setter Property="HorizontalOffset" Value="10"/> 
+        <Setter Property="VerticalOffset" Value="10"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Grid>
+                        <!-- Shadow Effect -->
+                        <Border Background="Black" CornerRadius="8" Margin="3" Opacity="0.3">
+                            <Border.Effect>
+                                <BlurEffect Radius="5"/>
+                            </Border.Effect>
+                        </Border>
+
+                        <!-- Actual ToolTip Box -->
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+Step 2: How to use it in your View (Treatment.xaml)
+
+You do not need to change the Button Style (RoundedButtonStyle). You simply add the ToolTip property to your buttons in the view.
+
+Example for your Save and Add buttons:
+
+
+<!-- Save Button -->
+<Button Content="💾 Save" 
+        Command="{Binding SaveCommand}"
+        Style="{StaticResource RoundedButtonStyle}"
+        Background="#3B82F6" 
+        Tag="#2563EB"
+        IsEnabled="{Binding IsSelectionActive}"
+        ToolTip="Save the current treatment details to the database" /> 
+
+<!-- Add Button -->
+<Button Content="➕ Add New" 
+        Command="{Binding AddCommand}" 
+        Style="{StaticResource RoundedButtonStyle}"  
+        Background="#10B981" 
+        Tag="#059669"
+        ToolTip="Create a new blank treatment record" />
+
+Now, when you hover over these buttons, a dark, rounded popup will appear with the text you wrote in the ToolTip property.
+
+Google Search Suggestions
+Display of Search Suggestions is required when using Grounding with Google Search. Learn more
+WPF setter property tooltip in style
+WPF custom tooltip style xaml rounded corners dark theme
+WPF style tooltip inside button style resource dictionary

@@ -190,7 +190,7 @@ namespace Client_Management_System_V4.ViewModel
 
         private void AddItemToCurrentList()
         {
-            if (ItemToAddSupplement == null) return;
+            if (ItemToAddSupplement == null || ItemToAddSupplement.SupplementID == null) return;
 
             // Check duplicate?
             if (CurrentSupplements.Any(x => x.SupplementID == ItemToAddSupplement.SupplementID))

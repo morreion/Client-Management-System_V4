@@ -213,13 +213,23 @@
                     </StackPanel>
 
                     <!-- Right Column: Priorities & Images -->
-                    <StackPanel Grid.Column="2">
+                    <StackPanel Orientation="Vertical" Grid.Column="2">
                         <!-- Sclera Priorities -->
                         <Grid Margin="0,0,0,10">
-                            <TextBlock Text="Sclera Priorities" FontSize="16" Foreground="#DBDBDB" FontWeight="Bold" VerticalAlignment="Center"/>
-                            <Button Content="⚙️ Manage Types" Command="{Binding OpenManagerCommand}" 
+                            <StackPanel Orientation="Vertical">
+                               
+                                <Button Content="⚙️ Manage Types" 
+                                    Command="{Binding OpenManagerCommand}" 
+                                    Style="{StaticResource RoundedButtonStyle}" 
                                     HorizontalAlignment="Right"
-                                    Background="Green" Foreground="#eef2f8ff" BorderThickness="0" Cursor="Hand"/>
+                                    Background="#2AA63E" 
+                                    Tag="#178236"
+                                    Foreground="#eef2f8ff" 
+                                    BorderThickness="0" 
+                                    Cursor="Hand"/>
+
+                                    <TextBlock Text="Sclera Priorities" FontSize="16" Foreground="#DBDBDB" FontWeight="Bold" VerticalAlignment= "Center" HorizontalAlignment ="Left" Margin ="8,8,8,8" />
+                            </StackPanel>
                         </Grid>
                         <Border Background="#333740" CornerRadius="5" Padding="5" Height="200" Margin="0,0,0,20">
                             <ScrollViewer>
