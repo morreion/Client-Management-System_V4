@@ -14,6 +14,7 @@
 
     <UserControl.Resources>
         <local:NullToBoolConverter x:Key="NullToBoolConverter" />
+        <local:RadioButtonConverter x:Key="RadioButtonConverter" />
 
         <!-- Simple Custom CheckBox Style -->
         <Style x:Key="ReportsCheckBoxStyle" TargetType="CheckBox">
@@ -28,6 +29,27 @@
                                 <Path Data="M 2,10 L 8,16 L 18,4" Stroke="#10B981" StrokeThickness="2" 
                                       VerticalAlignment="Center" HorizontalAlignment="Center"
                                       Visibility="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            </Border>
+                            <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Simple Custom RadioButton Style -->
+        <Style x:Key="ReportsRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="20" Height="20" Background="#3F4347" CornerRadius="10" BorderBrush="#555" BorderThickness="1">
+                                <Ellipse Width="10" Height="10" Fill="#10B981" 
+                                         VerticalAlignment="Center" HorizontalAlignment="Center"
+                                         Visibility="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVisibilityConverter}}"/>
                             </Border>
                             <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -143,6 +165,14 @@
                                              Width="60" Height="30" VerticalContentAlignment="Center" TextAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
+                        </StackPanel>
+
+                        <TextBlock Text="Export Format:" FontSize="14" Foreground="#aaa" Margin="0,0,0,10"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                            <RadioButton Content="PDF" GroupName="ExportFormat" IsChecked="{Binding ExportFormat, Converter={StaticResource RadioButtonConverter}, ConverterParameter=PDF}" 
+                                         Style="{StaticResource ReportsRadioButtonStyle}" Margin="0,0,20,0"/>
+                            <RadioButton Content="Excel" GroupName="ExportFormat" IsChecked="{Binding ExportFormat, Converter={StaticResource RadioButtonConverter}, ConverterParameter=Excel}" 
+                                         Style="{StaticResource ReportsRadioButtonStyle}"/>
                         </StackPanel>
 
                         <TextBlock Text="Select columns to include:" FontSize="14" Foreground="#aaa" Margin="0,0,0,10"/>

@@ -220,13 +220,13 @@
                                
                                 <Button Content="⚙️ Manage Types" 
                                     Command="{Binding OpenManagerCommand}" 
-                                    Style="{StaticResource RoundedButtonStyle}" 
-                                    HorizontalAlignment="Right"
+                                    Style="{StaticResource RoundedButtonStyle}"                                     
                                     Background="#2AA63E" 
                                     Tag="#178236"
                                     Foreground="#eef2f8ff" 
                                     BorderThickness="0" 
-                                    Cursor="Hand"/>
+                                    Cursor="Hand"
+                                    Margin="0,8,16,8"/>
 
                                     <TextBlock Text="Sclera Priorities" FontSize="16" Foreground="#DBDBDB" FontWeight="Bold" VerticalAlignment= "Center" HorizontalAlignment ="Left" Margin ="8,8,8,8" />
                             </StackPanel>
@@ -247,9 +247,24 @@
 
                         <!-- Eye Scans -->
                         <TextBlock Text="Eye Scans" FontSize="16" Foreground="#DBDBDB" FontWeight="Bold" Margin="0,0,0,10"/>
-                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <Button Content="Upload LEFT Eye" Command="{Binding UploadLeftEyeCommand}" Padding="10,5" Background="#4B5563" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
-                            <Button Content="Upload RIGHT Eye" Command="{Binding UploadRightEyeCommand}" Padding="10,5" Background="#4B5563" Foreground="White" BorderThickness="0"/>
+                         <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <Button Content="Upload LEFT Eye" 
+                                    Command="{Binding UploadLeftEyeCommand}" 
+                                    Style="{StaticResource RoundedButtonStyle}"                                     
+                                    Background="#4B5563" 
+                                    Tag="#525252"
+                                    Foreground="White" 
+                                    BorderThickness="0" 
+                                    Margin="0,0,16,8"/>
+                                    <!-- Margin="0,0,8,8" is applied to the left, top, right, and bottom (in that order). -->
+                            <Button Content="Upload RIGHT Eye" 
+                                    Command="{Binding UploadRightEyeCommand}" 
+                                    Style="{StaticResource RoundedButtonStyle}"                                    
+                                    Background="#4B5563" 
+                                    Tag="#525252"
+                                    Foreground="White" 
+                                    BorderThickness="0"
+                                    Margin="0,8,16,8"/>
                         </StackPanel>
                         
                         <ItemsControl ItemsSource="{Binding CurrentScans}">
@@ -293,7 +308,15 @@
 
                     <!-- Header -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-                        <Button Command="{Binding CloseManagerCommand}" Content="⬅ Back" Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Margin="0,0,20,0" FontSize="16"/>
+                        <Button Command="{Binding CloseManagerCommand}" 
+                                Style="{StaticResource RoundedButtonStyle}"
+                                Content="⬅ Back" 
+                                Background="#155DFC" 
+                                Tag ="#193CB8"
+                                Foreground="#DBDBDB" 
+                                BorderThickness="0" 
+                                Margin="0,0,20,0" 
+                                FontSize="16"/>
                         <TextBlock Text="Manage Priority Types" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
 
@@ -313,8 +336,21 @@
                                      Background="#3F4347" Foreground="#DBDBDB" Padding="8" Margin="0,0,0,15" TextWrapping="Wrap" Height="60"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Clear" Command="{Binding ClearPriorityCommand}" Background="#6B7280" Foreground="White" Padding="15,5" BorderThickness="0" Margin="0,0,10,0"/>
-                                <Button Content="Save" Command="{Binding SavePriorityCommand}" Background="#10B981" Foreground="White" Padding="20,5" BorderThickness="0"/>
+                                <Button Content="❌  Clear" 
+                                        Command="{Binding ClearPriorityCommand}" 
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Background="#6B7280"
+                                        Tag="#4a4a4f"
+                                        Foreground="White"                                         
+                                        BorderThickness="0" 
+                                        Margin="0,0,10,0"/>
+                                <Button Content="💾 Save"  
+                                        Command="{Binding SavePriorityCommand}" 
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Background="#2AA63E" 
+                                        Tag="#178236" 
+                                        Foreground="White"                                         
+                                        BorderThickness="0"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>

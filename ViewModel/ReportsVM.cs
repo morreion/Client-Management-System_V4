@@ -18,6 +18,7 @@ namespace Client_Management_System_V4.ViewModel
         private readonly SupplementRepository _supplementRepository;
         private readonly DistributorRepository _distributorRepository;
         private readonly IPdfService _pdfService;
+        private readonly IExcelService _excelService;
 
         private Client? _selectedClient;
         public Client? SelectedClient
@@ -50,6 +51,13 @@ namespace Client_Management_System_V4.ViewModel
         public ICommand GenerateDistributorReportCommand { get; }
 
         // Contact List Properties
+        private string _exportFormat = "PDF"; // Default to PDF
+        public string ExportFormat
+        {
+            get => _exportFormat;
+            set { _exportFormat = value; OnPropertyChanged(); }
+        }
+
         public bool IncludeName { get; set; } = true;
         public bool IncludeMobile { get; set; } = true;
         public bool IncludeEmail { get; set; }
@@ -96,6 +104,7 @@ namespace Client_Management_System_V4.ViewModel
             _supplementRepository = new SupplementRepository();
             _distributorRepository = new DistributorRepository();
             _pdfService = new PdfService();
+            _excelService = new ExcelService();
 
             GenerateReportCommand = new RelayCommand(async _ => await GenerateReport(), _ => SelectedClient != null);
             GeneratePrescriptionReportCommand = new RelayCommand(async _ => await GeneratePrescriptionReport(), _ => SelectedClient != null);
@@ -222,10 +231,14 @@ namespace Client_Management_System_V4.ViewModel
                 return;
             }
 
+            var isExcel = ExportFormat == "Excel";
+            var filter = isExcel ? "Excel Files|*.xlsx" : "PDF Details|*.pdf";
+            var extension = isExcel ? "xlsx" : "pdf";
+
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "PDF Details|*.pdf",
-                FileName = $"ContactList_{DateTime.Now:yyyyMMdd}.pdf"
+                Filter = filter,
+                FileName = $"ContactList_{DateTime.Now:yyyyMMdd}.{extension}"
             };
 
             if (saveFileDialog.ShowDialog() == true)
@@ -233,9 +246,28 @@ namespace Client_Management_System_V4.ViewModel
                 IsGenerating = true;
                 try
                 {
-                    await _pdfService.GenerateContactListReportAsync(new ObservableCollection<Client>(finalClientList), cols, saveFileDialog.FileName);
+                    if (isExcel)
+                    {
+                        await _excelService.GenerateContactListReportAsync(finalClientList, cols, saveFileDialog.FileName);
+                    }
+                    else
+                    {
+                        await _pdfService.GenerateContactListReportAsync(new ObservableCollection<Client>(finalClientList), cols, saveFileDialog.FileName);
+                    }
+                    
                     MessageBox.Show("Contact List generated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    OpenPdf(saveFileDialog.FileName);
+                    
+                    if (!isExcel) // Optional: Open Excel file too? Usually yes.
+                    {
+                        OpenPdf(saveFileDialog.FileName);
+                    }
+                    else
+                    {
+                         // Open Excel file
+                         var p = new System.Diagnostics.Process();
+                         p.StartInfo = new System.Diagnostics.ProcessStartInfo(saveFileDialog.FileName) { UseShellExecute = true };
+                         p.Start();
+                    }
                 }
                 catch (Exception ex)
                 {

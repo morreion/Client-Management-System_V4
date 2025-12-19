@@ -280,7 +280,15 @@
 
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-                    <Button Command="{Binding CloseDistributorManagerCommand}" Content="⬅ Back" Background="Transparent" Foreground="#DBDBDB" BorderThickness="0" Margin="0,0,20,0" FontSize="16"/>
+                    <Button Command="{Binding CloseDistributorManagerCommand}" 
+                            Style="{StaticResource RoundedButtonStyle}"
+                            Content="⬅ Back" 
+                            Background="#155DFC" 
+                            Tag ="#193CB8" 
+                            Foreground="#DBDBDB" 
+                            BorderThickness="0" 
+                            Margin="0,0,20,0" 
+                            FontSize="16"/>
                     <TextBlock Text="Manage Distributors" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                 </StackPanel>
 
