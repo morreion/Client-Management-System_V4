@@ -1,0 +1,550 @@
+in this C# wpf database application i'm creating, 
+i have table where pdf files are stored. this table called, 
+stored_documents, has the following attributes, 
+ID --> Integer, 
+Document_Name --> Text, 
+Document_Description --> Text, 
+Date_Of_Document --> Date, 
+Scanned_Document --> Blob. 
+
+Question 1 --> is the Blob datatype correct for storing pdf files or 
+pictures? 
+
+Question 2 --> This table will be linked in a one to many relationship 
+to a clients table, where 1 client can have many stored documents. 
+Now when the client select a document in the UI, it opens a pdf viewer 
+window, in which the 
+
+Document_Name, 
+Document_Descriptionand,  
+Date_Of_Document 
+
+are shown on top of the pdf viewer window, 
+
+and underneath is the Scanned_Document  shown. 
+
+If there are multiple files belonging to the client, then the 
+file selected, like in a dropdown where the Document_Name's are 
+loaded from the table belonging to that client, in the ui, 
+then the Scanned_Document  is loaded into the pdf viewer, 
+but the not selected blob files are loaded as well, 
+and are only visible after clicking a next button, 
+which loads the next Scanned_Document  , with the next 
+Document_Name, 
+Document_Descriptionand,  
+Date_Of_Document 
+are shown on top of the pdf viewer window, and underneath is 
+the Scanned_Document  shown and a back button to go to the 
+previous document. 
+
+If there are more then two Scanned_Document  linked to that client, 
+the back button will be at the last document loaded. 
+Is this possible to create? Please advice
+
+
+
+Here is the advice and solution for your requirements.
+
+Question 1: Is the BLOB datatype correct for storing PDF files or 
+pictures?
+
+Short Answer: Yes, it is correct, but you should be aware of 
+the trade-offs.
+
+The "Pro" (Why it's good):
+
+Simplicity: Your backup strategy is easy. When you backup the database, 
+you backup all the documents automatically. 
+You don't have to worry about "missing files" in a separate folder.
+
+Security: The documents are protected by the same 
+login/password security as your database. People can't just browse 
+a folder on the server and steal PDFs.
+
+Data Integrity: You never end up with a "broken link" 
+(where the database says a file exists, but someone deleted it 
+from the hard drive).
+
+The "Con" (The Warning):
+
+Database Size: Storing PDFs (which can be 500KB - 5MB each) will 
+make your database grow very fast. If you have 1,000 clients with 
+5 documents each, that could be 10GB - 20GB of data. 
+This slows down backups and restores.
+
+Performance: fetching a large BLOB can slow down the network.
+
+Verdict: For a generic "Client Management System" where you might 
+have a few thousand documents, BLOB is fine. If you expect to store 
+millions of documents or very large high-res scans, 
+you should store the File Path (Text) in the database and 
+keep the actual files in a secure folder on the server.
+
+
+Question 2: Is the described UI navigation possible?
+
+Short Answer: Yes, this is a classic "Master-Detail" or 
+"Collection Navigation" scenario in MVVM. It is fully achievable.
+
+Here is how you should architect this.
+
+1. The Logic (ViewModel)
+
+You should not load the PDF BLOBs for all documents at once. 
+That will freeze your application if a client has 20 PDFs.
+Instead, you should load the List of "Metadata" 
+(ID, Name, Date, Description) first. Then, only when the user selects a 
+specific document (or clicks Next), you fetch the BLOB for that 
+specific document.
+
+The ViewModel Structure:
+
+
+public class PdfViewerVM : ViewModelBase
+{
+    // The list of documents for this client (Metadata ONLY - No Blobs yet!)
+    private List<DocumentMetadata> _allDocuments;
+    
+    // To track where we are
+    private int _currentIndex = 0;
+
+    // Properties bound to the UI
+    public string CurrentDocName { get; set; }     // Binds to TextBlock
+    public string CurrentDocDesc { get; set; }     // Binds to TextBlock
+    public DateTime CurrentDocDate { get; set; }   // Binds to TextBlock
+    public string CurrentPdfFilePath { get; set; } // Binds to the WebBrowser/PDF Viewer
+
+    // Commands
+    public ICommand NextCommand { get; set; }
+    public ICommand PreviousCommand { get; set; }
+
+    public PdfViewerVM(int clientId)
+    {
+        // 1. Load the list of documents (ID, Name, Date) from DB
+        _allDocuments = Database.GetDocumentsForClient(clientId);
+        
+        // 2. Load the first document if it exists
+        if (_allDocuments.Count > 0)
+        {
+            _currentIndex = 0;
+            LoadDocument(_currentIndex);
+        }
+    }
+
+    private void LoadDocument(int index)
+    {
+        var docMeta = _allDocuments[index];
+
+        // Set Text Properties
+        CurrentDocName = docMeta.Document_Name;
+        CurrentDocDesc = docMeta.Document_Description;
+        CurrentDocDate = docMeta.Date_Of_Document;
+        OnPropertyChanged(nameof(CurrentDocName)); // ... raise for others too
+
+        // CRITICAL STEP: Handle the PDF
+        // 1. Fetch the BLOB from the database using docMeta.ID
+        byte[] pdfBlob = Database.GetPdfBlob(docMeta.ID);
+
+        // 2. Write it to a temporary file on the user's computer
+        string tempPath = Path.Combine(Path.GetTempPath(), $"temp_view_{Guid.NewGuid()}.pdf");
+        File.WriteAllBytes(tempPath, pdfBlob);
+
+        // 3. Tell the View to look at this file
+        CurrentPdfFilePath = tempPath;
+        OnPropertyChanged(nameof(CurrentPdfFilePath));
+    }
+
+    public void Next()
+    {
+        if (_currentIndex < _allDocuments.Count - 1)
+        {
+            _currentIndex++;
+            LoadDocument(_currentIndex);
+        }
+    }
+
+    public void Previous()
+    {
+        if (_currentIndex > 0)
+        {
+            _currentIndex--;
+            LoadDocument(_currentIndex);
+        }
+    }
+}
+2. The Viewer (The Tricky Part)
+
+WPF does not have a built-in "Bindable PDF Viewer" that accepts a Byte Array (BLOB) directly out of the box. You have two main options:
+
+Option A: Microsoft WebView2 (Recommended)
+This uses the Edge browser engine to show the PDF. It is fast, modern, and supports zooming/printing natively. You point it to the temporary file path we created in the ViewModel.
+
+Option B: Standard WebBrowser Control
+Easier to add (built-in), but relies on the user having Adobe Reader or similar installed.
+
+The View (XAML) Layout:
+
+
+<Grid>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/> <!-- Header Info -->
+        <RowDefinition Height="*"/>    <!-- PDF Viewer -->
+        <RowDefinition Height="Auto"/> <!-- Buttons -->
+    </Grid.RowDefinitions>
+
+    <!-- 1. Top Info Panel -->
+    <StackPanel Grid.Row="0" Background="#2D3035" Margin="0,0,0,10">
+        <TextBlock Text="{Binding CurrentDocName}" FontSize="18" FontWeight="Bold" Foreground="White"/>
+        <TextBlock Text="{Binding CurrentDocDate, StringFormat=d}" FontStyle="Italic" Foreground="LightGray"/>
+        <TextBlock Text="{Binding CurrentDocDesc}" TextWrapping="Wrap" Foreground="White"/>
+    </StackPanel>
+
+    <!-- 2. The Viewer -->
+    <!-- You need a specialized behavior or control here. 
+         The simplest way is using the built-in WebBrowser pointing to the file path -->
+    <WebBrowser Grid.Row="1" Source="{Binding CurrentPdfFilePath}" />
+
+    <!-- 3. Navigation Buttons -->
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+        <Button Content="Previous" Command="{Binding PreviousCommand}" Width="100"/>
+        <TextBlock Text="{Binding CurrentIndexDisplay}" VerticalAlignment="Center" Margin="10,0" Foreground="White"/>
+        <Button Content="Next" Command="{Binding NextCommand}" Width="100"/>
+    </StackPanel>
+</Grid>
+Summary of Advice
+
+Keep the BLOBs, but do not load them all into memory when the window 
+opens. Load the list of names first, then fetch the heavy BLOB only 
+when the specific page is viewed.
+
+Use a Temp File: Since you are storing data as byte[] (BLOB) but 
+most PDF viewers want a File Path (String), the most reliable code 
+pattern is: Database -> Byte[] -> System.IO.File.WriteAllBytes(tempPath) -> View(tempPath).
+
+Use WebBrowser or WebView2: For the PDF viewing part, the native WebBrowser
+control is the easiest "free" way to display a PDF file path in WPF 
+without buying expensive 3rd party controls.
+
+
+
+Could you produce an implementation plan .md file with how to do this pdf view feature
+
+Here is a comprehensive Implementation Plan formatted as a Markdown file. 
+You can save this as PDF_Viewer_Implementation_Plan.md and 
+follow it step-by-step.
+
+Implementation Plan: PDF Viewer with MVVM & Lazy Loading
+Overview
+
+This feature allows users to view scanned PDF documents associated 
+with a specific client.
+Key Architectural Decision: To ensure performance, 
+we will separate Metadata (Name, Date, ID) from the Content (BLOB). 
+The application will load the list of available documents first, 
+and only fetch the heavy PDF BLOB from the database when the 
+specific document is displayed.
+
+Prerequisites
+
+Existing SQLite/SQL Server connection.
+
+The stored_documents table exists.
+
+WPF Project set up with MVVM.
+
+Step 1: Data Layer (Models & DTOs)
+
+We need two classes: one for the heavy full record, and one for the lightweight list.
+
+1.1 Create DocumentMetadata.cs
+
+Used for the navigation list. It does not contain the BLOB.
+
+
+public class DocumentMetadata
+{
+    public int ID { get; set; }
+    public string Document_Name { get; set; }
+    public string Document_Description { get; set; }
+    public DateTime Date_Of_Document { get; set; }
+}
+
+
+
+1.2 Update Database Repository
+
+Add two methods to your Data Access Layer (Repository).
+
+// Method 1: Get the list (Metadata only)
+public List<DocumentMetadata> GetClientDocuments(int clientId)
+{
+    // SQL: SELECT ID, Document_Name, Document_Description, Date_Of_Document 
+    //      FROM stored_documents WHERE ClientID = @clientId
+    // Return list of DocumentMetadata
+}
+
+// Method 2: Get the specific file (BLOB only)
+public byte[] GetDocumentBlob(int documentId)
+{
+    // SQL: SELECT Scanned_Document FROM stored_documents WHERE ID = @documentId
+    // ExecuteScalar and return (byte[])result
+}
+
+
+
+Step 2: Infrastructure (Handling the PDF)
+
+Since WebBrowser requires a file path and the Database provides bytes, 
+we need a bridge.
+
+2.1 Create PdfTempFileManager.cs
+
+This static helper class saves the BLOB to the user's temporary folder 
+so the browser can read it.
+
+
+using System.IO;
+
+public static class PdfTempFileManager
+{
+    public static string WritePdfToTemp(byte[] pdfBytes)
+    {
+        if (pdfBytes == null || pdfBytes.Length == 0) return null;
+
+        // Create a unique filename so we don't lock files
+        string fileName = $"view_{Guid.NewGuid()}.pdf";
+        string tempPath = Path.Combine(Path.GetTempPath(), fileName);
+
+        File.WriteAllBytes(tempPath, pdfBytes);
+        return tempPath;
+    }
+    
+    // Optional: Call this when closing the window to clean up
+    public static void CleanUp(string path) 
+    {
+        try { if(File.Exists(path)) File.Delete(path); } catch { /* Ignore locks */ }
+    }
+}
+
+
+2.2 Create WebBrowserBehavior.cs (Crucial for MVVM)
+
+The standard WPF WebBrowser control does not allow binding the Source property easily. We need an "Attached Property" to make it work with MVVM.
+
+Create a folder named Behaviors or Helpers and add this class:
+
+
+using System.Windows;
+using System.Windows.Controls;
+
+public static class WebBrowserBehavior
+{
+    public static readonly DependencyProperty BindableSourceProperty =
+        DependencyProperty.RegisterAttached(
+            "BindableSource",
+            typeof(string),
+            typeof(WebBrowserBehavior),
+            new UIPropertyMetadata(null, OnBindableSourceChanged));
+
+    public static string GetBindableSource(DependencyObject obj)
+    {
+        return (string)obj.GetValue(BindableSourceProperty);
+    }
+
+    public static void SetBindableSource(DependencyObject obj, string value)
+    {
+        obj.SetValue(BindableSourceProperty, value);
+    }
+
+    public static void OnBindableSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        WebBrowser browser = d as WebBrowser;
+        if (browser != null)
+        {
+            string uri = e.NewValue as string;
+            if (!string.IsNullOrEmpty(uri))
+            {
+                browser.Navigate(uri);
+            }
+            else 
+            {
+                browser.Navigate("about:blank");
+            }
+        }
+    }
+}
+Step 3: The ViewModel
+
+Create PdfViewerVM.cs. This handles the logic of next/previous and loading data.
+
+
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+
+public class PdfViewerVM : ViewModelBase // Assuming you have INotifyPropertyChanged implemented
+{
+    private List<DocumentMetadata> _docList;
+    private int _currentIndex = -1;
+    
+    // Bindable Properties
+    private string _currentName;
+    public string CurrentName { get => _currentName; set { _currentName = value; OnPropertyChanged(); } }
+
+    private string _currentDesc;
+    public string CurrentDesc { get => _currentDesc; set { _currentDesc = value; OnPropertyChanged(); } }
+
+    private DateTime _currentDate;
+    public DateTime CurrentDate { get => _currentDate; set { _currentDate = value; OnPropertyChanged(); } }
+
+    private string _currentPdfPath;
+    public string CurrentPdfPath { get => _currentPdfPath; set { _currentPdfPath = value; OnPropertyChanged(); } }
+    
+    private bool _hasDocs;
+    public bool HasDocs { get => _hasDocs; set { _hasDocs = value; OnPropertyChanged(); } }
+
+    // Navigation State
+    public bool CanGoNext => _docList != null && _currentIndex < _docList.Count - 1;
+    public bool CanGoPrev => _docList != null && _currentIndex > 0;
+
+    // Commands
+    public ICommand NextCommand { get; set; }
+    public ICommand PreviousCommand { get; set; }
+
+    public PdfViewerVM(int clientId)
+    {
+        LoadData(clientId);
+        NextCommand = new RelayCommand(Next, () => CanGoNext);
+        PreviousCommand = new RelayCommand(Previous, () => CanGoPrev);
+    }
+
+    private void LoadData(int clientId)
+    {
+        // 1. Fetch Metadata Only
+        _docList = YourRepo.GetClientDocuments(clientId);
+
+        if (_docList != null && _docList.Count > 0)
+        {
+            HasDocs = true;
+            _currentIndex = 0;
+            LoadSpecificDocument(_currentIndex);
+        }
+        else
+        {
+            HasDocs = false;
+            CurrentName = "No Documents Found";
+        }
+    }
+
+    private void LoadSpecificDocument(int index)
+    {
+        var meta = _docList[index];
+        
+        // 2. Set Header Info
+        CurrentName = meta.Document_Name;
+        CurrentDesc = meta.Document_Description;
+        CurrentDate = meta.Date_Of_Document;
+
+        // 3. Lazy Load BLOB and convert to Temp File
+        byte[] blob = YourRepo.GetDocumentBlob(meta.ID);
+        CurrentPdfPath = PdfTempFileManager.WritePdfToTemp(blob);
+        
+        // Update Button States
+        (NextCommand as RelayCommand).RaiseCanExecuteChanged();
+        (PreviousCommand as RelayCommand).RaiseCanExecuteChanged();
+    }
+
+    private void Next() { if (CanGoNext) LoadSpecificDocument(++_currentIndex); }
+    private void Previous() { if (CanGoPrev) LoadSpecificDocument(--_currentIndex); }
+}
+Step 4: The View (XAML)
+
+Create a new Window or UserControl named PdfViewerView.xaml.
+Ensure you include the namespace for the Behavior created in Step 2.
+
+code
+Xml
+download
+content_copy
+expand_less
+<UserControl x:Class="Client_Management_System_V4.View.PdfViewerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Client_Management_System_V4.Behaviors" 
+             Background="#2D3035">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="*"/>    <!-- PDF -->
+            <RowDefinition Height="Auto"/> <!-- Footer/Nav -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. Header Information -->
+        <Border Grid.Row="0" Padding="15" Background="#3F4347" BorderBrush="#555" BorderThickness="0,0,0,1">
+            <StackPanel>
+                <TextBlock Text="{Binding CurrentName}" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,0,0,5"/>
+                
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBlock Text="Date: " Foreground="#888" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding CurrentDate, StringFormat=d}" Foreground="#DBDBDB"/>
+                </StackPanel>
+                
+                <TextBlock Text="{Binding CurrentDesc}" Foreground="#DBDBDB" TextWrapping="Wrap" FontStyle="Italic"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 2. The PDF Viewer -->
+        <!-- Note the usage of local:WebBrowserBehavior.BindableSource -->
+        <Border Grid.Row="1" Margin="10" BorderBrush="#555" BorderThickness="1">
+            <WebBrowser local:WebBrowserBehavior.BindableSource="{Binding CurrentPdfPath}"/>
+        </Border>
+
+        <!-- 3. Navigation Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="15">
+            
+            <Button Content="Previous" 
+                    Command="{Binding PreviousCommand}"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Background="#6B7280" Tag="#4B5563"
+                    Width="120"/>
+
+            <Button Content="Next" 
+                    Command="{Binding NextCommand}"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Background="#3B82F6" Tag="#2563EB"
+                    Width="120"/>
+                    
+        </StackPanel>
+    </Grid>
+</UserControl>
+Step 5: Integration
+
+How to launch this from your main Client View.
+
+In your ClientTreatmentVM (or wherever the user clicks to view docs), add a Command.
+
+Pass the SelectedClient.ID to the new ViewModel.
+
+Open the window.
+
+code
+C#
+download
+content_copy
+expand_less
+public void OpenDocuments()
+{
+    if (SelectedClient == null) return;
+
+    var vm = new PdfViewerVM(SelectedClient.ClientID);
+    var window = new Window
+    {
+        Content = new PdfViewerView { DataContext = vm },
+        Title = $"Documents for {SelectedClient.Name}",
+        Width = 800,
+        Height = 900,
+        WindowStartupLocation = WindowStartupLocation.CenterScreen
+    };
+    
+    window.ShowDialog();
+}

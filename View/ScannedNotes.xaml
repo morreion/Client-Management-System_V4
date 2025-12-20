@@ -1,0 +1,344 @@
+<UserControl x:Class="Client_Management_System_V4.View.ScannedNotes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Client_Management_System_V4.ViewModel"
+             xmlns:utilities="clr-namespace:Client_Management_System_V4.Utilities"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             Style="{StaticResource Page_Style}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <UserControl.DataContext>
+        <vm:ScannedNotesVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <utilities:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        
+        <Style TargetType="DatePickerTextBox">
+            <Setter Property="Background" Value="#3F4347"/>
+            <Setter Property="Foreground" Value="#DBDBDB"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="15,60,15,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Client Selection and Search Row -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Client Dropdown -->
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Select Client" Foreground="#DBDBDB" Margin="0,0,0,5" FontWeight="SemiBold"/>
+                <ComboBox ItemsSource="{Binding Clients}"
+                          SelectedItem="{Binding SelectedClient}"
+                          DisplayMemberPath="Name"
+                          Style="{StaticResource MyCustomComboBoxStyle}"
+                          Height="38"/>
+            </StackPanel>
+
+            <!-- Search -->
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Search Documents" Foreground="#DBDBDB" Margin="0,0,0,5" FontWeight="SemiBold"/>
+                <TextBox Style="{StaticResource SearchTextBoxStyle}"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Tag="Search by document name..." 
+                         FontSize="14" Padding="10,8" Background="#2D3035"
+                         Foreground="#DBDBDB" BorderBrush="#3F4347" BorderThickness="1"
+                         IsEnabled="{Binding IsClientSelected}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Document List DataGrid -->
+        <Border Grid.Row="1" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="10">
+            <Grid>
+                <DataGrid ItemsSource="{Binding ScannedNotes}"
+                          SelectedItem="{Binding SelectedNote}"
+                          AutoGenerateColumns="False" CanUserAddRows="False"
+                          Background="#2D3035" Foreground="#DBDBDB"
+                          RowStyle="{StaticResource GlobalDataGridRowStyle}"
+                          CellStyle="{StaticResource GlobalDataGridCellStyle}"
+                          GridLinesVisibility="All" HeadersVisibility="Column" BorderThickness="0"
+                          HorizontalGridLinesBrush="#3F4347" VerticalGridLinesBrush="#3F4347">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="SeparatorVisibility" Value="Visible"/>
+                            <Setter Property="SeparatorBrush" Value="#555"/>
+                            <Setter Property="Background" Value="#3F4347"/>
+                            <Setter Property="Foreground" Value="#DBDBDB"/>
+                            <Setter Property="Padding" Value="10,5"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="#555"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridColumnHeader">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                            <Thumb x:Name="PART_RightHeaderGripper"
+                                                   HorizontalAlignment="Right"
+                                                   Cursor="SizeWE"
+                                                   Width="1"
+                                                   Background="{TemplateBinding SeparatorBrush}"
+                                                   Visibility="{TemplateBinding SeparatorVisibility}"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding ScannedNotesID}" Width="50"/>
+                        <DataGridTextColumn Header="Document Name" Binding="{Binding Document_Name}" Width="*"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Document_Date, StringFormat=d}" Width="100"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Document_Type}" Width="70"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Loading Indicator -->
+                <TextBlock Text="Loading..." 
+                           FontSize="18" Foreground="#3B82F6"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
+        </Border>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+            <Button Content="👁️ View Document" 
+                    Command="{Binding OpenViewerOverlayCommand}"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Background="#8B5CF6" Tag="#6D28D9"
+                    Foreground="White" BorderThickness="0"
+                    Margin="0,0,10,0" FontSize="14" Cursor="Hand"
+                    IsEnabled="{Binding IsNoteSelected}"/>
+            <Button Content="📤 Upload Document" 
+                    Command="{Binding UploadDocumentCommand}"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Background="#10B981" Tag="#0a4a0f"
+                    Foreground="White" BorderThickness="0"
+                    Margin="0,0,10,0" FontSize="14" Cursor="Hand"/>
+            <Button Content="💾 Save" 
+                    Command="{Binding SaveCommand}"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Background="#3B82F6" Tag="#25108f"
+                    Foreground="White" BorderThickness="0"
+                    Margin="0,0,10,0" FontSize="14" Cursor="Hand"
+                    IsEnabled="{Binding IsNoteSelected}"/>
+            <Button Content="🗑️ Delete" 
+                    Command="{Binding DeleteCommand}"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Background="#EF4444" Tag="#9c0505"
+                    Foreground="White" BorderThickness="0"
+                    Margin="0,0,10,0" FontSize="14" Cursor="Hand"
+                    IsEnabled="{Binding IsNoteSelected}"/>
+            <Button Content="❌ Cancel" 
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Background="#6B7280" Tag="#4a4a4f"
+                    Foreground="White" BorderThickness="0"
+                    FontSize="14" Cursor="Hand"/>
+        </StackPanel>
+
+        <!-- Edit Form -->
+        <Border Grid.Row="3" Background="#2D3035" BorderBrush="#3F4347" BorderThickness="1" CornerRadius="8" Padding="20">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Document Name -->
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Text="Document Name *" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedNote.Document_Name, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
+                                 IsEnabled="{Binding IsNoteSelected}"/>
+                    </StackPanel>
+
+                    <!-- Document Date -->
+                    <StackPanel Grid.Row="0" Grid.Column="2">
+                        <TextBlock Text="Document Date" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <DatePicker SelectedDate="{Binding SelectedNote.Document_Date}" Height="38"
+                                    Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
+                                    IsEnabled="{Binding IsNoteSelected}"/>
+                    </StackPanel>
+
+                    <!-- Document Type (Read Only) -->
+                    <StackPanel Grid.Row="0" Grid.Column="4">
+                        <TextBlock Text="Document Type" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedNote.Document_Type, Mode=OneWay}"
+                                 Padding="8" Background="#3F4347" Foreground="#9CA3AF" BorderBrush="#555"
+                                 IsReadOnly="True"/>
+                    </StackPanel>
+
+                    <!-- Description -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,15,0,0">
+                        <TextBlock Text="Description" Foreground="#DBDBDB" Margin="0,0,0,5"/>
+                        <TextBox Style="{StaticResource RoundedTextBoxStyle}" 
+                                 Text="{Binding SelectedNote.Description, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" Background="#3F4347" Foreground="#DBDBDB" BorderBrush="#555"
+                                 TextWrapping="Wrap" AcceptsReturn="True" MinHeight="80"
+                                 IsEnabled="{Binding IsNoteSelected}"/>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Border>
+
+        <!-- DOCUMENT VIEWER OVERLAY -->
+        <Grid Grid.Row="0" Grid.RowSpan="4" Panel.ZIndex="100" 
+              Tag="{Binding IsViewerOverlayOpen}"
+              Style="{StaticResource Overlay_Grid_Style}">
+            
+            <!-- Overlay Content - Full Width (No Drawer animation to avoid WebView2 conflict) -->
+            <Border HorizontalAlignment="Stretch" 
+                    Background="#212529" 
+                    BorderBrush="#3F4347" 
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Margin="10">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                        <Button Command="{Binding CloseViewerOverlayCommand}" 
+                                Style="{StaticResource RoundedButtonStyle}"
+                                Content="⬅ Back" 
+                                Background="#155DFC" 
+                                Tag="#193CB8" 
+                                Foreground="#DBDBDB" 
+                                BorderThickness="0" 
+                                Margin="0,0,20,0" 
+                                FontSize="16"
+                                Cursor="Hand"/>
+                        <TextBlock Text="Document Viewer" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Text=" - " Foreground="#9CA3AF" VerticalAlignment="Center" Margin="10,0"/>
+                        <TextBlock Text="{Binding SelectedNote.Document_Name, FallbackValue='No Document'}" 
+                                   FontSize="16" Foreground="#9CA3AF" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Document Viewer Content -->
+                    <Border Grid.Row="1" Background="#1a1a1a" CornerRadius="8">
+                        <Grid>
+                            <!-- No Document Message -->
+                            <TextBlock Text="No document selected" 
+                                       Foreground="#888" FontSize="18"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Visibility="{Binding IsNoteSelected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Inverted}"/>
+
+                            <!-- Image Viewer -->
+                            <Image Source="{Binding CurrentImage}" 
+                                   Stretch="Uniform" 
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   Visibility="{Binding IsImageDocument, Converter={StaticResource BoolToVis}}"
+                                   Margin="10"/>
+
+                            <!-- PDF Viewer using WebView2 -->
+                            <wv2:WebView2 x:Name="PdfWebView"
+                                          Source="{Binding TempPdfPath}"
+                                          Visibility="{Binding IsPdfDocument, Converter={StaticResource BoolToVis}}"
+                                          Margin="5"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Navigation and Actions Footer -->
+                    <Border Grid.Row="2" Background="#3F4347" CornerRadius="4" Padding="15" Margin="0,15,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto" MinWidth="100"/>
+                                <ColumnDefinition Width="Auto" MinWidth="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Navigation Buttons -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="◀ Previous" 
+                                        Command="{Binding PreviousDocumentCommand}"
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Background="#4B5563" Tag="#374151"
+                                        Foreground="White" BorderThickness="0"
+                                        FontSize="14" Padding="15,8" Cursor="Hand"
+                                        Margin="0,0,10,0"/>
+                                <TextBlock Text="{Binding NavigationDisplay}" 
+                                           Foreground="#DBDBDB" FontWeight="Bold" FontSize="16"
+                                           VerticalAlignment="Center" Margin="10,0"/>
+                                <Button Content="Next ▶" 
+                                        Command="{Binding NextDocumentCommand}"
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Background="#4B5563" Tag="#374151"
+                                        Foreground="White" BorderThickness="0"
+                                        FontSize="14" Padding="15,8" Cursor="Hand"
+                                        Margin="10,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- Document Date -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+                                <TextBlock Text="Date:" Foreground="#9CA3AF" Margin="0,0,5,0" FontSize="14"/>
+                                <TextBlock Text="{Binding SelectedNote.Document_Date, StringFormat=d, FallbackValue='-'}" 
+                                           Foreground="#DBDBDB" FontWeight="SemiBold" FontSize="14"/>
+                            </StackPanel>
+
+                            <!-- Document Type -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+                                <TextBlock Text="Type:" Foreground="#9CA3AF" Margin="0,0,5,0" FontSize="14"/>
+                                <TextBlock Text="{Binding SelectedNote.Document_Type, FallbackValue='-'}" 
+                                           Foreground="#DBDBDB" FontWeight="SemiBold" FontSize="14"/>
+                            </StackPanel>
+
+                            <!-- Print Button -->
+                            <Button Grid.Column="4" Content="🖨️ Print" 
+                                    Command="{Binding PrintCommand}"
+                                    Style="{StaticResource RoundedButtonStyle}"
+                                    Background="#6366F1" Tag="#4338CA"
+                                    Foreground="White" BorderThickness="0"
+                                    FontSize="14" Padding="15,8" Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

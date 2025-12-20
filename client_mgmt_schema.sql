@@ -241,10 +241,11 @@ CREATE TABLE IF NOT EXISTS "Treatment" (
 -- Stores scanned documents and notes as binary data
 CREATE TABLE IF NOT EXISTS "Scanned_Notes" (
 	"ScannedNotesID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	"Notes" BLOB,
-	"Upload_Date" DATE,
+	"Document_Name" VARCHAR(100),
+	"Document_Date" DATE,
 	"Document_Type" VARCHAR(100),
 	"Description" TEXT,
+	"Scanned_Document" BLOB,
 	"ClientID" INTEGER NOT NULL,
 	FOREIGN KEY ("ClientID") REFERENCES "Client"("ClientID")
 		ON UPDATE CASCADE ON DELETE CASCADE

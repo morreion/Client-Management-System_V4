@@ -1,0 +1,79 @@
+I've attached the sql file of my database in .md format. 
+The Scanned_Notes table is linked to the Client table, 
+in which 1 client can have many scanned notes. 
+
+Do i have to create a junction table or how do i go about it in 
+linking the 2 tables, or is the sql schema correct as it is now?
+
+
+
+Based on the SQL schema you provided, the schema is correct as it is.
+
+You do not need a junction table for this specific relationship.
+
+Why?
+
+In database design, the rule for relationships is:
+
+One-to-Many Relationship (1 Client -> Many Notes):
+You put a Foreign Key inside the "Many" table (the child table) 
+that points back to the "One" table (the parent).
+
+Your Setup: The Scanned_Notes table (the "Many") has a column ClientID 
+that points to the Client table.
+
+Result: This allows one Client to be referenced by unlimited rows in 
+the Scanned_Notes table.
+
+Many-to-Many Relationship:
+This is where you would need a junction table.
+
+Example in your schema: Med_Hx_Supplements. One Medical History has 
+many supplements, and one Supplement (e.g., Vitamin C) appears in 
+many Medical Histories. That is why you created a middle table there.
+
+Verification of your Code
+
+Your current code handles the link perfectly here:
+
+
+CREATE TABLE IF NOT EXISTS "Scanned_Notes" (
+    "ScannedNotesID" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- ... other columns ...
+    "ClientID" INTEGER NOT NULL, -- <--- This creates the link
+    FOREIGN KEY ("ClientID") REFERENCES "Client"("ClientID")
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+How it works in practice:
+
+Client A (ID: 1) has 3 documents.
+
+In the Scanned_Notes table, you will have 3 rows where the 
+ClientID column = 1.
+
+Client B (ID: 2) has 1 document.
+
+In the Scanned_Notes table, you will have 1 row where the
+ClientID column = 2.
+
+Connection to your PDF Viewer Feature
+
+This schema perfectly supports the "Lazy Loading" feature we 
+discussed earlier.
+
+To get the list of documents for the UI:
+
+
+SELECT ScannedNotesID, Document_Name, Document_Date, Description 
+FROM Scanned_Notes 
+WHERE ClientID = @SelectedClientID;
+
+To get the actual BLOB when the user clicks a document:
+
+
+SELECT Scanned_Document 
+FROM Scanned_Notes 
+WHERE ScannedNotesID = @SelectedNoteID;
+
+You are good to go!

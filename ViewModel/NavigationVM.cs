@@ -23,6 +23,7 @@ namespace Client_Management_System_V4.ViewModel
         public ICommand SupplementsCommand { get; }
         public ICommand DistributorCommand { get; }
         public ICommand ReportsCommand { get; }
+        public ICommand ScannedNotesCommand { get; }
 
         private void SafeNavigate(object viewModel)
         {
@@ -42,6 +43,7 @@ namespace Client_Management_System_V4.ViewModel
             BodySystemsOverviewCommand = new RelayCommand(_ => SafeNavigate(new BodySystemsOverviewVM()));
             EyeAnalysisCommand = new RelayCommand(_ => SafeNavigate(new EyeAnalysisVM()));
             ReportsCommand = new RelayCommand(_ => SafeNavigate(new ReportsVM()));
+            ScannedNotesCommand = new RelayCommand(_ => SafeNavigate(new ScannedNotesVM()));
 
             // Default view
             SafeNavigate(new ClientVM());

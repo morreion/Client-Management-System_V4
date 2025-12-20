@@ -7,7 +7,7 @@
         xmlns:Menu="clr-namespace:Client_Management_System_V4.Utilities"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="600"
+        Height="650"
         Width="950"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
@@ -206,6 +206,23 @@
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Supplements"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </Menu:Btn>
+
+                    <!--// Scanned Notes //-->
+
+                    <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding ScannedNotesCommand}">
+
+                        <Grid>
+
+                            <Image Source="Images/icons8-file-prescription-96.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Scanned Notes"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>

@@ -46,5 +46,9 @@
     <DataTemplate DataType="{x:Type vm:ReportsVM}">
         <view:Reports />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ScannedNotesVM}">
+        <view:ScannedNotes />
+    </DataTemplate>
     
 </ResourceDictionary>
