@@ -6,14 +6,18 @@
         xmlns:vm="clr-namespace:Client_Management_System_V4.ViewModel"
         xmlns:Menu="clr-namespace:Client_Management_System_V4.Utilities"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="Client Management System"
         Height="650"
         Width="950"
+        MinWidth="950"
+        MinHeight="650"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
         Background="Transparent"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        StateChanged="Window_StateChanged">
 
     <Window.DataContext>
         <vm:NavigationVM />
@@ -23,7 +27,8 @@
 
         <!--// Window Border //-->
 
-        <Border Background="#212529"
+        <Border x:Name="MainBorder"
+                Background="#212529"
                 CornerRadius="20"
                 BorderBrush="#3B82F6"
                 BorderThickness="1" />
@@ -34,7 +39,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250" />
-                <ColumnDefinition Width="700" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!--// Navigation Panel //-->
@@ -42,7 +47,8 @@
             <Grid HorizontalAlignment="Left"
                   Width="250">
 
-                <Border Background="#272B2F"
+                <Border x:Name="NavBorder"
+                        Background="#272B2F"
                         CornerRadius="20,0,0,20"
                         BorderBrush="#3B82F6"
                         BorderThickness="1" />
@@ -246,6 +252,10 @@
         <Button x:Name="MinimizeApp"
                 Style="{StaticResource MinimizeApp}"
                 Click="MinimizeApp_Click" />
+
+        <Button x:Name="MaximizeApp"
+                Style="{StaticResource MaximizeApp}"
+                Click="MaximizeApp_Click" />
 
         <Button x:Name="CloseApp"
                 Style="{StaticResource ExitApp}"

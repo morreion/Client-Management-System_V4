@@ -24,24 +24,80 @@
         </Grid.RowDefinitions>
 
         <!-- Search Bar -->
-        <Grid Grid.Row="0" Margin="0,0,0,10">
-            <!--Added Style="{StaticResource SearchTextBoxStyle}",
-            Tag="Enter name..." -->
-            <TextBox x:Name="SearchBox"
-                     Style="{StaticResource SearchTextBoxStyle}"
-                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Tag="Enter name..."
-                     FontSize="14"
-                     Padding="10,8"
-                     Background="#2D3035"
-                     Foreground="#DBDBDB"
-                     BorderBrush="#3F4347"
-                     BorderThickness="1">
-                <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
-                </TextBox.InputBindings>
-            </TextBox>
-        </Grid>
+        <!-- Search Bar & Filters -->
+        <Border Grid.Row="0" Margin="0,0,0,10" Background="#2D3035" CornerRadius="8" Padding="10" BorderBrush="#3F4347" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/> <!-- Search -->
+                    <ColumnDefinition Width="150"/> <!-- Gender -->
+                    <ColumnDefinition Width="Auto"/> <!-- Age -->
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/> <!-- Show All -->
+                </Grid.ColumnDefinitions>
+
+                <!-- 1. Text Search -->
+                <TextBox x:Name="SearchBox" Grid.Column="0"
+                         Style="{StaticResource SearchTextBoxStyle}"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Tag="Search Name..."
+                         FontSize="14"
+                         Padding="10,8"
+                         Background="#1F2226"
+                         Foreground="#DBDBDB"
+                         BorderBrush="#3F4347"
+                         BorderThickness="1"
+                         Margin="0,0,10,0">
+                     <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <!-- 2. Gender Filter -->
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding GenderFilters}"
+                          SelectedItem="{Binding SelectedGenderFilter}"
+                          Style="{StaticResource MyCustomComboBoxStyle}"
+                          Height="38"
+                          Margin="0,0,10,0"/>
+
+                <!-- 3. Age Filter -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <CheckBox Content="Age" IsChecked="{Binding FilterByAge}" 
+                              Style="{StaticResource ReportsCheckBoxStyle}"
+                              VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    
+                    <Border Visibility="{Binding FilterByAge, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Background="#1F2226" CornerRadius="4" BorderBrush="#3F4347" BorderThickness="1" Padding="5,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding MinAge, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource RoundedTextBoxStyle}" 
+                                     Width="40" Height="30" 
+                                     VerticalContentAlignment="Center" TextAlignment="Center"
+                                     Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="-" Foreground="#888" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBox Text="{Binding MaxAge, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource RoundedTextBoxStyle}" 
+                                     Width="40" Height="30" 
+                                     VerticalContentAlignment="Center" TextAlignment="Center"
+                                     Background="Transparent" BorderThickness="0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- 4. Show All Button -->
+                <Button Grid.Column="4"
+                        Content="🔄 Show All"
+                        Command="{Binding ShowAllCommand}"
+                        Style="{StaticResource RoundedButtonStyle}"
+                        Background="#3B82F6"
+                        Tag="#2563EB"
+                        Foreground="White"
+                        Height="38"
+                        Padding="15,0"
+                        BorderThickness="0"
+                        Cursor="Hand"/>
+            </Grid>
+        </Border>
 
         <!-- Client List DataGrid -->
         <Border Grid.Row="1" 

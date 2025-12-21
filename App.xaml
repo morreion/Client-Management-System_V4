@@ -6,27 +6,21 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- for custom datagrid style: -->
+                <!-- Converters MUST be first so other dictionaries can use StaticResource to them -->
+                <ResourceDictionary Source="Styles/GlobalConverters.xaml"/>
+                
                 <ResourceDictionary Source="Styles/DataGridStyles.xaml"/>
-                <!-- NEW: rounded custom TextBox style dictionary -->
                 <ResourceDictionary Source="Styles/RoundedTextBox.xaml"/>
-                <!-- custom  search textbox -->
                 <ResourceDictionary Source="Styles/TextBoxStyles.xaml"/>
-                 <!-- NEW: Merge your custom ScrollBar style dictionary -->
                 <ResourceDictionary Source="Styles/DarkThemeScrollBar.xaml"/>
-                <!-- Merge your custom ComboBox style dictionary -->
                 <ResourceDictionary Source="Styles/DarkThemeComboBox.xaml"/>
-                <ResourceDictionary Source="/Styles/Button.xaml"/>
-                <ResourceDictionary Source="/Styles/Image.xaml"/>
-                <ResourceDictionary Source="/Styles/Text.xaml"/>
-                <ResourceDictionary Source="/Styles/Page.xaml"/>
-                <ResourceDictionary Source="/Utilities/DataTemplate.xaml"/>
+                <ResourceDictionary Source="Styles/Button.xaml"/>
+                <ResourceDictionary Source="Styles/Image.xaml"/>
+                <ResourceDictionary Source="Styles/Text.xaml"/>
+                <ResourceDictionary Source="Styles/Page.xaml"/>
+                <ResourceDictionary Source="Utilities/DataTemplate.xaml"/>
+                <ResourceDictionary Source="Styles/CheckBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
-            <!-- Value Converters -->
-            <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
-            <local:NullToBoolConverter x:Key="NullToBoolConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
-            <local:IntToBoolConverter x:Key="IntToBoolConverter" xmlns:local="clr-namespace:Client_Management_System_V4.Utilities"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

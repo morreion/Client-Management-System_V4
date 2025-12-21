@@ -16,26 +16,7 @@
         <local:NullToBoolConverter x:Key="NullToBoolConverter" />
         <local:RadioButtonConverter x:Key="RadioButtonConverter" />
 
-        <!-- Simple Custom CheckBox Style -->
-        <Style x:Key="ReportsCheckBoxStyle" TargetType="CheckBox">
-            <Setter Property="Foreground" Value="#DBDBDB"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <StackPanel Orientation="Horizontal">
-                            <Border Width="20" Height="20" Background="#3F4347" CornerRadius="4" BorderBrush="#555" BorderThickness="1">
-                                <Path Data="M 2,10 L 8,16 L 18,4" Stroke="#10B981" StrokeThickness="2" 
-                                      VerticalAlignment="Center" HorizontalAlignment="Center"
-                                      Visibility="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            </Border>
-                            <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+
 
         <!-- Simple Custom RadioButton Style -->
         <Style x:Key="ReportsRadioButtonStyle" TargetType="RadioButton">
@@ -99,6 +80,7 @@
                     <StackPanel>
                         <TextBlock Text="Health Report Sections" FontSize="16" Foreground="#DBDBDB" Margin="0,0,0,15" FontWeight="SemiBold"/>
                         <CheckBox Content="Medical History" IsChecked="{Binding Options.IncludeMedicalHistory}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
+                        <CheckBox Content="Body Systems Overview" IsChecked="{Binding Options.IncludeBodySystems}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
                         <CheckBox Content="Anthropometrics" IsChecked="{Binding Options.IncludeAnthropometrics}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
                         <CheckBox Content="Diet Plan" IsChecked="{Binding Options.IncludeDiet}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>
                         <CheckBox Content="Treatment Plan" IsChecked="{Binding Options.IncludeTreatment}" Style="{StaticResource ReportsCheckBoxStyle}" Margin="0,0,0,10"/>

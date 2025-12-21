@@ -176,7 +176,7 @@
                 Stretch="None" />
 
     <ImageBrush x:Key="minimize_app_mo"
-                ImageSource="/Images/icons8-minimize-window-48_Blue.png"
+                ImageSource="/Images/icons8-minimize-window-32_Red.png"
                 Stretch="None" />
 
     <Style x:Key="MinimizeApp"
@@ -190,9 +190,9 @@
                 Value="Right" />
         <Setter Property="VerticalAlignment"
                 Value="Top" />
-        <!-- Positioned to the left of the Exit button (Exit Margin Right=15 + Width=40 + Gap=10 = 65) -->
+        <!-- Positioned to the left of Maximize button: Close(15) + Width(40) + Gap(10) + Max(40) + Gap(10) = 115, then +40+10 = 165 -->
         <Setter Property="Margin"
-                Value="0,15,65,0" />
+                Value="0,15,165,0" />
 
         <Setter Property="Template">
 
@@ -234,6 +234,48 @@
 
         </Setter>
 
+    </Style>
+
+    <!-- Maximize Button Resources -->
+    <ImageBrush x:Key="maximize_app_def"
+                ImageSource="/Images/icons8-maximize-window-50_White.png"
+                Stretch="None" />
+
+    <ImageBrush x:Key="maximize_app_mo"
+                ImageSource="/Images/icons8-maximize-window-50_Red.png"
+                Stretch="None" />
+
+    <Style x:Key="MaximizeApp"
+           TargetType="{x:Type Button}">
+
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <!-- Positioned between Minimize (margin 65) and Close (margin 15): 65 + 40 + 10 = 115 from right -->
+        <Setter Property="Margin" Value="0,15,115,0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border"
+                            BorderThickness="0"
+                            Background="{StaticResource maximize_app_def}">
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="border"
+                                    Value="{StaticResource maximize_app_mo}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="border"
+                                    Value="{StaticResource maximize_app_mo}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 

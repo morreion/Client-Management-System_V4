@@ -268,11 +268,19 @@
                                        Visibility="{Binding IsNoteSelected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Inverted}"/>
 
                             <!-- Image Viewer -->
-                            <Image Source="{Binding CurrentImage}" 
-                                   Stretch="Uniform" 
-                                   RenderOptions.BitmapScalingMode="HighQuality"
-                                   Visibility="{Binding IsImageDocument, Converter={StaticResource BoolToVis}}"
-                                   Margin="10"/>
+                            <ScrollViewer Visibility="{Binding IsImageDocument, Converter={StaticResource BoolToVis}}"
+                                          HorizontalScrollBarVisibility="Auto" 
+                                          VerticalScrollBarVisibility="Auto"
+                                          Background="Transparent">
+                                <Image Source="{Binding CurrentImage}" 
+                                       Stretch="Uniform" 
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       Margin="10">
+                                    <Image.LayoutTransform>
+                                        <ScaleTransform ScaleX="{Binding CurrentZoom}" ScaleY="{Binding CurrentZoom}" />
+                                    </Image.LayoutTransform>
+                                </Image>
+                            </ScrollViewer>
 
                             <!-- PDF Viewer using WebView2 -->
                             <wv2:WebView2 x:Name="PdfWebView"
@@ -326,6 +334,38 @@
                                 <TextBlock Text="Type:" Foreground="#9CA3AF" Margin="0,0,5,0" FontSize="14"/>
                                 <TextBlock Text="{Binding SelectedNote.Document_Type, FallbackValue='-'}" 
                                            Foreground="#DBDBDB" FontWeight="SemiBold" FontSize="14"/>
+                            </StackPanel>
+
+                            <!-- Zoom Controls -->
+                            <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Button Content="-" 
+                                        Command="{Binding ZoomOutCommand}"
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Background="#4B5563" Tag="#374151"
+                                        Foreground="White" BorderThickness="0"
+                                        FontSize="18" Padding="15,2" Cursor="Hand"
+                                        VerticalContentAlignment="Center"
+                                        ToolTip="Zoom Out"/>
+                                
+                                <Button Command="{Binding ResetZoomCommand}"
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Background="Transparent" Tag="#3F4347"
+                                        Foreground="#DBDBDB" BorderThickness="0"
+                                        Margin="5,0" Padding="10,5" Cursor="Hand"
+                                        ToolTip="Reset Zoom">
+                                    <TextBlock Text="{Binding ZoomPercentageDisplay}" 
+                                               FontWeight="Bold" FontSize="14"
+                                               VerticalAlignment="Center"/>
+                                </Button>
+
+                                <Button Content="+" 
+                                        Command="{Binding ZoomInCommand}"
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Background="#4B5563" Tag="#374151"
+                                        Foreground="White" BorderThickness="0"
+                                        FontSize="18" Padding="15,2" Cursor="Hand"
+                                        VerticalContentAlignment="Center"
+                                        ToolTip="Zoom In"/>
                             </StackPanel>
 
                             <!-- Print Button -->

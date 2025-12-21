@@ -88,6 +88,18 @@ namespace Client_Management_System_V4.Repositories
             return await connection.QueryAsync<BodySystemsOverview>(sql, new { Search = $"{searchTerm}%" });
         }
 
+        public async Task<IEnumerable<BodySystemsOverview>> GetByClientIdAsync(int clientId)
+        {
+            using var connection = DatabaseManager.GetConnection();
+            var sql = @"
+                SELECT b.*, c.Name as ClientName 
+                FROM Body_Systems_Overview b 
+                JOIN Client c ON b.ClientID = c.ClientID 
+                WHERE b.ClientID = @ClientId
+                ORDER BY b.Assessment_Date DESC";
+            return await connection.QueryAsync<BodySystemsOverview>(sql, new { ClientId = clientId });
+        }
+
         public async Task<int> CountAsync()
         {
             using var connection = DatabaseManager.GetConnection();

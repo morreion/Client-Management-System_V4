@@ -7,6 +7,7 @@ using Client_Management_System_V4.Data;
 using Client_Management_System_V4.Models;
 using Client_Management_System_V4.Repositories;
 using Client_Management_System_V4.Utilities;
+using System.Linq;
 
 namespace Client_Management_System_V4.ViewModel
 {
@@ -64,6 +65,57 @@ namespace Client_Management_System_V4.ViewModel
             }
         }
 
+        // Filters
+        public ObservableCollection<string> GenderFilters { get; set; } = new ObservableCollection<string> { "All Genders", "Male", "Female" };
+
+        private string _selectedGenderFilter = "All Genders";
+        public string SelectedGenderFilter
+        {
+            get => _selectedGenderFilter;
+            set 
+            { 
+                _selectedGenderFilter = value; 
+                OnPropertyChanged(); 
+                _ = SearchClientsAsync(); 
+            }
+        }
+
+        private bool _filterByAge;
+        public bool FilterByAge
+        {
+            get => _filterByAge;
+            set 
+            { 
+                _filterByAge = value; 
+                OnPropertyChanged(); 
+                _ = SearchClientsAsync(); 
+            }
+        }
+
+        private int _minAge = 0;
+        public int MinAge
+        {
+            get => _minAge;
+            set 
+            { 
+                _minAge = value; 
+                OnPropertyChanged(); 
+                if (FilterByAge) _ = SearchClientsAsync(); 
+            }
+        }
+
+        private int _maxAge = 100;
+        public int MaxAge
+        {
+            get => _maxAge;
+            set 
+            { 
+                _maxAge = value; 
+                OnPropertyChanged(); 
+                if (FilterByAge) _ = SearchClientsAsync(); 
+            }
+        }
+
         /// <summary>
         /// Loading indicator
         /// </summary>
@@ -94,6 +146,7 @@ namespace Client_Management_System_V4.ViewModel
         public ICommand LoadedCommand { get; }
         public ICommand LoadClientsCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand ShowAllCommand { get; }
         public ICommand AddNewCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -109,6 +162,11 @@ namespace Client_Management_System_V4.ViewModel
             LoadedCommand = new RelayCommand(async _ => await InitializeAsync());
             LoadClientsCommand = new RelayCommand(async _ => await LoadClientsAsync());
             SearchCommand = new RelayCommand(async _ => await SearchClientsAsync());
+            ShowAllCommand = new RelayCommand(async _ => 
+            {
+                SearchText = string.Empty;
+                await SearchClientsAsync();
+            });
             AddNewCommand = new RelayCommand(_ => AddNewClient());
             SaveCommand = new RelayCommand(async _ => await SaveClientAsync());
             DeleteCommand = new RelayCommand(async _ => await DeleteClientAsync());
@@ -171,15 +229,33 @@ namespace Client_Management_System_V4.ViewModel
             {
                 IsLoading = true;
                 
+                IEnumerable<Client> clients;
+
                 if (string.IsNullOrWhiteSpace(SearchText))
                 {
-                    await LoadClientsAsync();
+                    clients = await _repository.GetAllAsync();
                 }
                 else
                 {
-                    var clients = await _repository.SearchAsync(SearchText);
-                    Clients = new ObservableCollection<Client>(clients);
+                    clients = await _repository.SearchAsync(SearchText);
                 }
+
+                // Apply Filters
+                if (SelectedGenderFilter == "Male")
+                {
+                    clients = clients.Where(c => c.Gender == 1);
+                }
+                else if (SelectedGenderFilter == "Female")
+                {
+                    clients = clients.Where(c => c.Gender == 0);
+                }
+
+                if (FilterByAge)
+                {
+                    clients = clients.Where(c => c.Age.HasValue && c.Age.Value >= MinAge && c.Age.Value <= MaxAge);
+                }
+
+                Clients = new ObservableCollection<Client>(clients);
             }
             catch (Exception ex)
             {

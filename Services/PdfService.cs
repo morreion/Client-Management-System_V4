@@ -20,6 +20,7 @@ namespace Client_Management_System_V4.Services
         private readonly TreatmentRepository _treatmentRepo = new();
         private readonly EyeAnalysisRepository _eyeRepo = new();
         private readonly PrescriptionRepository _prescriptionRepo = new();
+        private readonly BodySystemsOverviewRepository _bodySystemsRepo = new();
 
         public PdfService()
         {
@@ -34,6 +35,7 @@ namespace Client_Management_System_V4.Services
             IEnumerable<Diet> dietList = options.IncludeDiet ? await _dietRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<Diet>();
             IEnumerable<Treatment> treatmentList = options.IncludeTreatment ? await _treatmentRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<Treatment>();
             IEnumerable<EyeAnalysis> eyeList = options.IncludeEyeAnalysis ? await _eyeRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<EyeAnalysis>();
+            IEnumerable<BodySystemsOverview> bodySystemsList = options.IncludeBodySystems ? await _bodySystemsRepo.GetByClientIdAsync(client.ClientID) : Enumerable.Empty<BodySystemsOverview>();
             
             // Prescription Preparation
             var prescriptionDetails = new List<(Prescription Rx, IEnumerable<PrescriptionSupplement> Supplements)>();
@@ -63,7 +65,7 @@ namespace Client_Management_System_V4.Services
 
                         page.Header().Element(ComposeHeader);
                         
-                        page.Content().Element(content => ComposeContent(content, client, options, medHxList, anthroList, dietList, treatmentList, eyeList, prescriptionDetails));
+                        page.Content().Element(content => ComposeContent(content, client, options, medHxList, anthroList, dietList, treatmentList, eyeList, bodySystemsList, prescriptionDetails));
 
                         page.Footer().Element(ComposeFooter);
                     });
@@ -326,6 +328,7 @@ namespace Client_Management_System_V4.Services
             IEnumerable<MedHx> medHxList, IEnumerable<Anthropometrics> anthroList, 
             IEnumerable<Diet> dietList, IEnumerable<Treatment> treatmentList, 
             IEnumerable<EyeAnalysis> eyeList,
+            IEnumerable<BodySystemsOverview> bodySystemsList,
             List<(Prescription Rx, IEnumerable<PrescriptionSupplement> Supplements)> prescriptionDetails)
         {
             container.PaddingVertical(10).Column(column =>
@@ -347,6 +350,9 @@ namespace Client_Management_System_V4.Services
 
                 if (options.IncludeEyeAnalysis)
                     column.Item().Element(c => ComposeEyeAnalysis(c, eyeList));
+
+                if (options.IncludeBodySystems)
+                    column.Item().Element(c => ComposeBodySystems(c, bodySystemsList));
 
                 if (options.IncludePrescriptions)
                     column.Item().Element(c => ComposePrescriptionDetails(c, prescriptionDetails));
@@ -397,6 +403,11 @@ namespace Client_Management_System_V4.Services
                     {
                         c.Item().Text($"Date: {item.Assessment_Date:yyyy-MM-dd}").Bold();
                         c.Item().Text($"Notes: {item.HistoryNotes}");
+                        if (!string.IsNullOrEmpty(item.Accidents_Previous_Illness)) c.Item().Text($"Accidents/Previous Illness: {item.Accidents_Previous_Illness}");
+                        if (!string.IsNullOrEmpty(item.Blood_Test_Results)) c.Item().Text($"Blood Test Results: {item.Blood_Test_Results}");
+                        if (!string.IsNullOrEmpty(item.Menstrual_Notes)) c.Item().Text($"Menstrual Notes: {item.Menstrual_Notes}");
+                        if (!string.IsNullOrEmpty(item.Vaccinations)) c.Item().Text($"Vaccinations: {item.Vaccinations}");
+                        if (!string.IsNullOrEmpty(item.Family_Med_Hx)) c.Item().Text($"Family Medical History: {item.Family_Med_Hx}");
                         if (!string.IsNullOrEmpty(item.Medication)) c.Item().Text($"Medication: {item.Medication}");
                         if (!string.IsNullOrEmpty(item.Supplements)) c.Item().Text($"Supplements: {item.Supplements}");
                     });
@@ -420,31 +431,46 @@ namespace Client_Management_System_V4.Services
                 {
                     table.ColumnsDefinition(columns =>
                     {
-                        columns.ConstantColumn(80); // Date
+                        columns.ConstantColumn(70); // Date
                         columns.RelativeColumn(); // Weight
+                        columns.RelativeColumn(); // Height
+                        columns.RelativeColumn(); // BMI
                         columns.RelativeColumn(); // BP
                         columns.RelativeColumn(); // Pulse
-                        columns.RelativeColumn(); // BMI
+                        columns.RelativeColumn(); // SpO2
+                        columns.RelativeColumn(); // Temp
+                        columns.RelativeColumn(1.5f); // Status
                     });
 
                     table.Header(header =>
                     {
                         header.Cell().Text("Date").Bold();
-                        header.Cell().Text("Weight").Bold();
+                        header.Cell().Text("Wt (kg)").Bold();
+                        header.Cell().Text("Ht (cm)").Bold();
+                        header.Cell().Text("BMI").Bold();
                         header.Cell().Text("BP").Bold();
                         header.Cell().Text("Pulse").Bold();
-                        header.Cell().Text("BMI").Bold();
+                        header.Cell().Text("SpO2").Bold();
+                        header.Cell().Text("Temp").Bold();
+                        header.Cell().Text("Zinc/NOX").Bold();
                     });
 
                     foreach (var item in list)
                     {
                         table.Cell().Text($"{item.Assessment_Date:yyyy-MM-dd}");
-                        table.Cell().Text($"{item.Weight} kg");
-                        table.Cell().Text(item.BP);
-                        table.Cell().Text(item.Pulse.ToString());
-                        // Calculate BMI or use property
+                        table.Cell().Text($"{item.Weight}");
+                        table.Cell().Text($"{item.Height}");
                         var bmi = item.BMI.HasValue ? item.BMI.Value.ToString("F1") : "-";
                         table.Cell().Text(bmi);
+                        table.Cell().Text(item.BP);
+                        table.Cell().Text(item.Pulse.ToString());
+                        table.Cell().Text(item.SpO2_Percent?.ToString() ?? "-");
+                        table.Cell().Text(item.Temp?.ToString() ?? "-");
+                        table.Cell().Column(col => 
+                        {
+                            if(!string.IsNullOrEmpty(item.Zinc_Status)) col.Item().Text($"Zn: {item.Zinc_Status}").FontSize(9);
+                            if(!string.IsNullOrEmpty(item.NOX_Status)) col.Item().Text($"NOX: {item.NOX_Status}").FontSize(9);
+                        });
                     }
                 });
             });
@@ -473,6 +499,11 @@ namespace Client_Management_System_V4.Services
                         c.Item().PaddingLeft(10).Text(item.Lunch);
                         c.Item().Text("Dinner:").SemiBold();
                         c.Item().PaddingLeft(10).Text(item.Dinner);
+                        if (!string.IsNullOrEmpty(item.Snacks))
+                        {
+                            c.Item().Text("Snacks:").SemiBold();
+                            c.Item().PaddingLeft(10).Text(item.Snacks);
+                        }
                     });
                 }
             });
@@ -493,6 +524,7 @@ namespace Client_Management_System_V4.Services
                     column.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).PaddingVertical(5).Column(c =>
                     {
                         c.Item().Text($"Date: {item.Treatment_Date:yyyy-MM-dd}").Bold();
+                        if (!string.IsNullOrEmpty(item.Expectations_of_Treatment)) c.Item().Text($"Expectations: {item.Expectations_of_Treatment}");
                         c.Item().Text($"Symptom: {item.Presenting_Symptoms}");
                         c.Item().Text($"Impression: {item.Impression}");
                         c.Item().Text($"Rx: {item.Rx}");
@@ -578,7 +610,71 @@ namespace Client_Management_System_V4.Services
                     {
                         c.Item().Text($"Analysis Date: {item.Analysis_Date:yyyy-MM-dd}").Bold();
                         c.Item().Text($"Constitution: {item.Iris_Colour} / {item.Texture}");
+                        c.Item().Text($"Type: {item.Type} | Pupil: {item.Pupil}");
+                        c.Item().Text($"S.I.T: {item.S_I_T} | ANW: {item.ANW} | Nerve Rings: {item.Nerve_Rings}");
                         c.Item().Text($"Tissues: {item.Stomach} (Stomach), {item.Bowel} (Bowel), {item.Organs} (Organs)");
+                        c.Item().Text($"Other: Scurf: {item.Scurf} | Radii: {item.Radii} | Psora: {item.Psora}");
+                        if (!string.IsNullOrEmpty(item.Nox)) c.Item().Text($"Nox: {item.Nox}");
+                        if (!string.IsNullOrEmpty(item.Urine)) c.Item().Text($"Urine: {item.Urine}");
+                        if (!string.IsNullOrEmpty(item.Meridian_Scan)) c.Item().Text($"Meridian Scan: {item.Meridian_Scan}");
+                    });
+                }
+            });
+        }
+
+        private void ComposeBodySystems(IContainer container, IEnumerable<BodySystemsOverview> list)
+        {
+            container.PaddingTop(20).Column(column =>
+            {
+                column.Item().Text("Body Systems Overview").FontSize(16).SemiBold().FontColor(Colors.Blue.Darken2);
+                if (!list.Any())
+                {
+                    column.Item().Text("No records found.");
+                    return;
+                }
+                foreach (var item in list)
+                {
+                    column.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten3).PaddingVertical(10).Column(c =>
+                    {
+                        c.Item().Text($"Date: {item.Assessment_Date:yyyy-MM-dd}").Bold();
+                        
+                        // Using a Grid for better layout of many fields
+                        c.Item().Table(table =>
+                        {
+                            table.ColumnsDefinition(cols =>
+                            {
+                                cols.RelativeColumn();
+                                cols.RelativeColumn();
+                            });
+
+                            table.Cell().Column(col => 
+                            {
+                                col.Item().Text($"Immune: {item.Immune}");
+                                col.Item().Text($"Allergy: {item.Allergy}");
+                                col.Item().Text($"Sleep: {item.Sleep}");
+                                col.Item().Text($"Snore: {item.Snore}");
+                                col.Item().Text($"Smoke/Alc: {item.Smoke_Alc}");
+                                col.Item().Text($"Exercise: {item.Exercise}");
+                                col.Item().Text($"Tongue: {item.Tongue}");
+                                col.Item().Text($"Cravings: {item.Cravings}");
+                                col.Item().Text($"Beverages: {item.Beverages}");
+                                col.Item().Text($"Digestion: {item.Digestion}");
+                                col.Item().Text($"Bowels: {item.Bowels}");
+                            });
+
+                            table.Cell().Column(col => 
+                            {
+                                col.Item().Text($"Urination: {item.Urination}");
+                                col.Item().Text($"Head: {item.Head}");
+                                col.Item().Text($"ENT: {item.ENT}");
+                                col.Item().Text($"Skin/Hair: {item.Skin_Hair}");
+                                col.Item().Text($"Nails: {item.Nails}");
+                                col.Item().Text($"Mind/Emotional: {item.Mind_Emotional}");
+                                col.Item().Text($"Thyroid: {item.Thyroid}");
+                                col.Item().Text($"Backache: {item.Backache}");
+                                col.Item().Text($"Joint Pain: {item.Joint_Pain}");
+                            });
+                        });
                     });
                 }
             });

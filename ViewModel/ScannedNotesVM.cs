@@ -41,6 +41,7 @@ namespace Client_Management_System_V4.ViewModel
         private BitmapImage? _currentImage;
         private string? _tempPdfPath;
         private bool _isViewerOverlayOpen;
+        private double _currentZoom = 1.0;
 
         #endregion
 
@@ -198,6 +199,25 @@ namespace Client_Management_System_V4.ViewModel
             set { _isViewerOverlayOpen = value; OnPropertyChanged(); }
         }
 
+        /// <summary>
+        /// Current zoom level for the document viewer (1.0 = 100%)
+        /// </summary>
+        public double CurrentZoom
+        {
+            get => _currentZoom;
+            set 
+            { 
+                _currentZoom = Math.Clamp(value, 0.5, 3.0); 
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ZoomPercentageDisplay));
+            }
+        }
+
+        /// <summary>
+        /// Display string for the current zoom level
+        /// </summary>
+        public string ZoomPercentageDisplay => $"{Math.Round(CurrentZoom * 100)}%";
+
         #endregion
 
         #region Commands
@@ -213,6 +233,9 @@ namespace Client_Management_System_V4.ViewModel
         public ICommand AddNewCommand { get; }
         public ICommand OpenViewerOverlayCommand { get; }
         public ICommand CloseViewerOverlayCommand { get; }
+        public ICommand ZoomInCommand { get; }
+        public ICommand ZoomOutCommand { get; }
+        public ICommand ResetZoomCommand { get; }
 
         #endregion
 
@@ -238,6 +261,9 @@ namespace Client_Management_System_V4.ViewModel
             AddNewCommand = new RelayCommand(_ => AddNewNote(), _ => IsClientSelected);
             OpenViewerOverlayCommand = new RelayCommand(_ => OpenViewerOverlay(), _ => IsNoteSelected);
             CloseViewerOverlayCommand = new RelayCommand(_ => CloseViewerOverlay());
+            ZoomInCommand = new RelayCommand(_ => ZoomIn(), _ => IsNoteSelected);
+            ZoomOutCommand = new RelayCommand(_ => ZoomOut(), _ => IsNoteSelected);
+            ResetZoomCommand = new RelayCommand(_ => ResetZoom(), _ => IsNoteSelected);
         }
 
         #endregion
@@ -730,6 +756,30 @@ namespace Client_Management_System_V4.ViewModel
         private void CloseViewerOverlay()
         {
             IsViewerOverlayOpen = false;
+        }
+
+        /// <summary>
+        /// Increases the zoom level
+        /// </summary>
+        private void ZoomIn()
+        {
+            CurrentZoom += 0.1;
+        }
+
+        /// <summary>
+        /// Decreases the zoom level
+        /// </summary>
+        private void ZoomOut()
+        {
+            CurrentZoom -= 0.1;
+        }
+
+        /// <summary>
+        /// Resets the zoom level to 100%
+        /// </summary>
+        private void ResetZoom()
+        {
+            CurrentZoom = 1.0;
         }
 
         #endregion
