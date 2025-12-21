@@ -241,8 +241,15 @@
             </Grid>
 
             <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/> <!-- Draggable Header Area -->
+                    <RowDefinition Height="*"/>  <!-- Protected Content Area -->
+                </Grid.RowDefinitions>
 
-                <ContentControl x:Name="Pages"
+                <!-- This border catches clicks in the content background and stops them from bubbling -->
+                <Border Grid.Row="1" Background="Transparent" MouseDown="ContentArea_MouseDown" />
+
+                <ContentControl Grid.Row="0" Grid.RowSpan="2" x:Name="Pages"
                                 Content="{Binding CurrentView}" />
 
             </Grid>

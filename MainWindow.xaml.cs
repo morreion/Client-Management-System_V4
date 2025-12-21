@@ -37,9 +37,35 @@ namespace Client_Management_System_V4
         private void MaximizeApp_Click(object sender, RoutedEventArgs e)
         {
             if (WindowState == WindowState.Maximized)
+            {
                 WindowState = WindowState.Normal;
+                CenterWindowOnScreen();
+            }
             else
+            {
                 WindowState = WindowState.Maximized;
+            }
+        }
+
+        /// <summary>
+        /// Prevents mouse clicks in the content area from bubbling up to the window dragging logic.
+        /// </summary>
+        private void ContentArea_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// Centers the window on the primary screen's work area.
+        /// </summary>
+        private void CenterWindowOnScreen()
+        {
+            this.Width = 950;
+            this.Height = 650;
+
+            var workArea = SystemParameters.WorkArea;
+            this.Left = (workArea.Width - this.Width) / 2 + workArea.Left;
+            this.Top = (workArea.Height - this.Height) / 2 + workArea.Top;
         }
 
         /// <summary>
@@ -50,30 +76,38 @@ namespace Client_Management_System_V4
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                // Double-click toggles maximize
+                var mousePos = e.GetPosition(this);
+                
+                // Draggable areas:
+                // 1. Sidebar (X < 250)
+                // 2. Title Bar area (Y < 60)
+                bool isSidebar = mousePos.X < 250;
+                bool isHeader = mousePos.Y < 60;
+
+                if (!isSidebar && !isHeader) return;
+
+                // Double-click toggles maximize/centered-restore
                 if (e.ClickCount == 2)
                 {
                     MaximizeApp_Click(sender, e);
                 }
                 else
                 {
-                    // If maximized, restore before dragging
+                    // If maximized, restore to center before starting drag
                     if (WindowState == WindowState.Maximized)
                     {
-                        // Get mouse position relative to window and screen
-                        var mousePos = e.GetPosition(this);
-                        var screenPos = PointToScreen(mousePos);
-                        var percentX = mousePos.X / ActualWidth;
-                        
-                        // Restore window
                         WindowState = WindowState.Normal;
-                        
-                        // Position window so mouse is at same relative X position
-                        Left = screenPos.X - (Width * percentX);
-                        Top = screenPos.Y - mousePos.Y;
+                        CenterWindowOnScreen();
                     }
                     
-                    DragMove();
+                    try
+                    {
+                        DragMove();
+                    }
+                    catch (Exception)
+                    {
+                        // Ignore if drag move cannot be initiated
+                    }
                 }
             }
         }
