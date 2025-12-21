@@ -28,25 +28,23 @@
         <Border Grid.Row="0" Margin="0,0,0,10" Background="#2D3035" CornerRadius="8" Padding="10" BorderBrush="#3F4347" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/> <!-- Search -->
-                    <ColumnDefinition Width="150"/> <!-- Gender -->
+                    <ColumnDefinition Width="*"/>    <!-- Search (Flexible) -->
+                    <ColumnDefinition Width="160"/>  <!-- Gender -->
                     <ColumnDefinition Width="Auto"/> <!-- Age -->
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/> <!-- Show All -->
                 </Grid.ColumnDefinitions>
 
                 <!-- 1. Text Search -->
                 <TextBox x:Name="SearchBox" Grid.Column="0"
                          Style="{StaticResource SearchTextBoxStyle}"
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                         Tag="Search Name..."
+                         Tag="Search for name, email or mobile..."
                          FontSize="14"
                          Padding="10,8"
                          Background="#1F2226"
                          Foreground="#DBDBDB"
                          BorderBrush="#3F4347"
                          BorderThickness="1"
-                         Margin="0,0,10,0">
+                         Margin="0,0,15,0">
                      <TextBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                     </TextBox.InputBindings>
@@ -58,10 +56,10 @@
                           SelectedItem="{Binding SelectedGenderFilter}"
                           Style="{StaticResource MyCustomComboBoxStyle}"
                           Height="38"
-                          Margin="0,0,10,0"/>
+                          Margin="0,0,15,0"/>
 
                 <!-- 3. Age Filter -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <CheckBox Content="Age" IsChecked="{Binding FilterByAge}" 
                               Style="{StaticResource ReportsCheckBoxStyle}"
                               VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -83,19 +81,6 @@
                         </StackPanel>
                     </Border>
                 </StackPanel>
-
-                <!-- 4. Show All Button -->
-                <Button Grid.Column="4"
-                        Content="🔄 Show All"
-                        Command="{Binding ShowAllCommand}"
-                        Style="{StaticResource RoundedButtonStyle}"
-                        Background="#3B82F6"
-                        Tag="#2563EB"
-                        Foreground="White"
-                        Height="38"
-                        Padding="15,0"
-                        BorderThickness="0"
-                        Cursor="Hand"/>
             </Grid>
         </Border>
 

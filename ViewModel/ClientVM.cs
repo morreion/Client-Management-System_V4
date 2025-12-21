@@ -146,7 +146,6 @@ namespace Client_Management_System_V4.ViewModel
         public ICommand LoadedCommand { get; }
         public ICommand LoadClientsCommand { get; }
         public ICommand SearchCommand { get; }
-        public ICommand ShowAllCommand { get; }
         public ICommand AddNewCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -162,11 +161,6 @@ namespace Client_Management_System_V4.ViewModel
             LoadedCommand = new RelayCommand(async _ => await InitializeAsync());
             LoadClientsCommand = new RelayCommand(async _ => await LoadClientsAsync());
             SearchCommand = new RelayCommand(async _ => await SearchClientsAsync());
-            ShowAllCommand = new RelayCommand(async _ => 
-            {
-                SearchText = string.Empty;
-                await SearchClientsAsync();
-            });
             AddNewCommand = new RelayCommand(_ => AddNewClient());
             SaveCommand = new RelayCommand(async _ => await SaveClientAsync());
             DeleteCommand = new RelayCommand(async _ => await DeleteClientAsync());
