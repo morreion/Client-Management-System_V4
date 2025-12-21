@@ -225,7 +225,7 @@
 
                         <Grid>
 
-                            <Image Source="Images/icons8-file-prescription-96.png"
+                            <Image Source="Images/icons8-moleskine-80.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Scanned Notes"
