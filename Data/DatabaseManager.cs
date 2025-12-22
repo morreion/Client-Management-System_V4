@@ -23,7 +23,18 @@ namespace Client_Management_System_V4.Data
             {
                 if (_connectionString == null)
                 {
-                    var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", DatabaseFileName);
+                    // Use LocalApplicationData (AppData/Local) to ensure we have write permissions in Program Files
+                    var appDataPath = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+                        "ClientManagementSystemV4");
+                    
+                    // Ensure the directory exists
+                    if (!Directory.Exists(appDataPath))
+                    {
+                        Directory.CreateDirectory(appDataPath);
+                    }
+
+                    var dbPath = Path.Combine(appDataPath, DatabaseFileName);
                     _connectionString = $"Data Source={dbPath};Version=3;";
                 }
                 return _connectionString;
@@ -37,7 +48,7 @@ namespace Client_Management_System_V4.Data
         {
             try
             {
-                // Default to schema file in bin directory
+                // Default to schema file in bin directory (where the .exe is)
                 if (string.IsNullOrEmpty(sqlScriptPath))
                 {
                     sqlScriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "client_mgmt_schema.sql");
@@ -48,11 +59,9 @@ namespace Client_Management_System_V4.Data
                     }
                 }
 
-                // Create Data directory
-                var dataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-                Directory.CreateDirectory(dataDir);
-                
-                var dbPath = Path.Combine(dataDir, DatabaseFileName);
+                // Get database path from ConnectionString (already points to AppData)
+                var builder = new SQLiteConnectionStringBuilder(ConnectionString);
+                var dbPath = builder.DataSource;
 
                 // Check if tables already exist
                 bool tablesExist = false;
@@ -68,7 +77,6 @@ namespace Client_Management_System_V4.Data
                     }
                     catch
                     {
-                        // If we can't check, assume we need to initialize
                         tablesExist = false;
                     }
                 }
@@ -80,8 +88,7 @@ namespace Client_Management_System_V4.Data
                     return;
                 }
 
-                // Use System.Data.SQLite to execute the schema directly
-                // This avoids issues with parsing and execution order
+                // Execute the schema directly
                 using var connection = new SQLiteConnection(ConnectionString);
                 connection.Open();
 
@@ -93,7 +100,6 @@ namespace Client_Management_System_V4.Data
                 command.CommandText = schema;
                 command.ExecuteNonQuery();
 
-                // Ensure migrations are applied even for new databases (in case schema is old)
                 PerformMigrations();
             }
             catch (Exception ex)

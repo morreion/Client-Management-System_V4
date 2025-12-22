@@ -14,6 +14,13 @@ namespace Client_Management_System_V4.Utilities
         {
             if (value is bool boolValue)
             {
+                // Support Inverted parameter
+                string? paramStr = parameter as string;
+                if (paramStr != null && paramStr.Equals("Inverted", StringComparison.OrdinalIgnoreCase))
+                {
+                    return boolValue ? Visibility.Collapsed : Visibility.Visible;
+                }
+
                 return boolValue ? Visibility.Visible : Visibility.Collapsed;
             }
             return Visibility.Collapsed;

@@ -5,7 +5,7 @@
            TargetType="TextBlock">
 
         <Setter Property="FontFamily"
-                Value="/Fonts/#Rubik" />
+                Value="pack://application:,,,/Fonts/#Rubik" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="HorizontalAlignment"

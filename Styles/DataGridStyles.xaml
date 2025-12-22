@@ -25,11 +25,13 @@
 
         <Style.Triggers>
             <!-- TRIGGER: When Parent ROW is Hovered -->
+            <!-- <Setter Property="BorderBrush" Value="#3B82F6"/>-->
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsMouseOver}" Value="True">
                 <Setter Property="BorderBrush" Value="#3B82F6"/> <!-- Light Blue Border -->
             </DataTrigger>
 
             <!-- TRIGGER: When Parent ROW is Selected -->
+            <!-- <Setter Property="BorderBrush" Value="#3B82F6"/>-->
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
                 <Setter Property="BorderBrush" Value="#3B82F6"/> <!-- Light Blue Border -->
                 <Setter Property="Foreground" Value="White"/>
@@ -47,13 +49,16 @@
     <!-- 2. The Row Style (Handles Background and Text Color) -->
     <Style x:Key="GlobalDataGridRowStyle" TargetType="DataGridRow">
         <Setter Property="Background" Value="#2D3035"/> <!-- Normal Background -->
-        <Setter Property="Foreground" Value="#DBDBDB"/> <!-- Normal Text -->
+        <Setter Property="Foreground" Value="White"/> <!-- Normal Text -->
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Padding" Value="0,5"/>
         
         <Style.Triggers>
             <!-- Mouse Hover Effect -->
+            <!--<Setter Property="Background" Value="#4B5563"/>
+            <Setter Property="Foreground" Value="White"/>
+            -->
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#4B5563"/> <!-- Lighter Grey on Hover -->
                 <Setter Property="Foreground" Value="White"/>    <!-- White Text on Hover -->

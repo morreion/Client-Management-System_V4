@@ -105,11 +105,11 @@
     </Style>
 
     <ImageBrush x:Key="close_app_def"
-                ImageSource="/Images/shutdown_def.png"
+                ImageSource="pack://application:,,,/Images/shutdown_def.png"
                 Stretch="None" />
 
     <ImageBrush x:Key="close_app_mo"
-                ImageSource="/Images/shutdown_mo.png"
+                ImageSource="pack://application:,,,/Images/shutdown_mo.png"
                 Stretch="None" />
 
     <Style x:Key="ExitApp"
@@ -172,11 +172,11 @@
 
     <!-- Minimize Button Resources -->
     <ImageBrush x:Key="minimize_app_def"
-                ImageSource="/Images/icons8-minimize-window-32_White.png"
+                ImageSource="pack://application:,,,/Images/icons8-minimize-window-32_White.png"
                 Stretch="None" />
 
     <ImageBrush x:Key="minimize_app_mo"
-                ImageSource="/Images/icons8-minimize-window-32_Red.png"
+                ImageSource="pack://application:,,,/Images/icons8-minimize-window-32_Red.png"
                 Stretch="None" />
 
     <Style x:Key="MinimizeApp"
@@ -238,11 +238,11 @@
 
     <!-- Maximize Button Resources -->
     <ImageBrush x:Key="maximize_app_def"
-                ImageSource="/Images/icons8-maximize-window-50_White.png"
+                ImageSource="pack://application:,,,/Images/icons8-maximize-window-50_White.png"
                 Stretch="None" />
 
     <ImageBrush x:Key="maximize_app_mo"
-                ImageSource="/Images/icons8-maximize-window-50_Red.png"
+                ImageSource="pack://application:,,,/Images/icons8-maximize-window-50_Red.png"
                 Stretch="None" />
 
     <Style x:Key="MaximizeApp"

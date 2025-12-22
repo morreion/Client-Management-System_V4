@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36717.8 d17.14
+VisualStudioVersion = 17.14.36717.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client-Management-System_V4", "Client-Management-System_V4.csproj", "{49905C68-A5CC-4E0C-AB02-B350A99748E1}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Client_Management_System_V4_Installer", "..\Client_Management_System_V4_Installer\Client_Management_System_V4_Installer.vdproj", "{E8CBBD73-A0A8-8E29-F584-6C0820733A0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{49905C68-A5CC-4E0C-AB02-B350A99748E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49905C68-A5CC-4E0C-AB02-B350A99748E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49905C68-A5CC-4E0C-AB02-B350A99748E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8CBBD73-A0A8-8E29-F584-6C0820733A0E}.Debug|Any CPU.ActiveCfg = Debug
+		{E8CBBD73-A0A8-8E29-F584-6C0820733A0E}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

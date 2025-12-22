@@ -421,9 +421,13 @@ namespace Client_Management_System_V4.ViewModel
                 // Save to temp file for WebView2
                 try
                 {
-                    var tempFolder = Path.Combine(Path.GetTempPath(), "ClientManagement");
-                    Directory.CreateDirectory(tempFolder);
-                    _tempPdfPath = Path.Combine(tempFolder, $"temp_{SelectedNote.ScannedNotesID}.pdf");
+                    var appDataPath = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "ClientManagementSystemV4",
+                        "TempDocuments");
+                        
+                    Directory.CreateDirectory(appDataPath);
+                    _tempPdfPath = Path.Combine(appDataPath, $"temp_{SelectedNote.ScannedNotesID}.pdf");
                     File.WriteAllBytes(_tempPdfPath, SelectedNote.Scanned_Document);
                     TempPdfPath = _tempPdfPath;
                 }

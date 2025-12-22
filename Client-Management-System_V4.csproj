@@ -7,15 +7,24 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\Health_Solutions-Icon -2.ico</ApplicationIcon>
+    
+    <!-- Publishing Properties for a clean installer output -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
   <ItemGroup>
     <Resource Include="Images\**\*" />
+    <Resource Include="Fonts\**\*" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="client_mgmt_schema.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
 
@@ -27,5 +36,4 @@
     <PackageReference Include="QuestPDF" Version="2025.12.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
   </ItemGroup>
-
 </Project>
