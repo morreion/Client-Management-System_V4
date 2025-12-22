@@ -5,8 +5,8 @@ I do make software as a hobby now, primarely C# WPF projects.
 Developing mainly card games, in unity as well, and some other learning projects, 
 like building a Bit Torrent client
 
-I do use AI to teach and analyze the code. I ask for solutions when stuck, 
-but make sure that the code is fully analyzed and understood so i can replicate it 
+I do use AI agents to teach , analyze and debog the code. I first try to find the solutions myself first,
+but ask for solutions when stuck. Use AI to analyze the code so its fully understood so i can replicate it 
 with a full understanding of the code.
 
 I did use a layout template for the design of the application from Github:
